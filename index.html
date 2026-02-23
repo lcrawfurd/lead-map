@@ -195,11 +195,13 @@ info.update = function (props, data, source) {
         this._div.innerHTML = `<h4>${label}</h4><p class="no-data">No data loaded</p>`;
         return;
     }
+    const popStr = data.population ? `<p class="ci">Population: ${Math.round(data.population).toLocaleString()}</p>` : '';
     this._div.innerHTML = `
         <h4>${label}</h4>
         <p>Proportion with BLL ≥ 5 µg/dL</p>
         <p class="value">${fmtPct(data.mean)}</p>
         <p class="ci">95% UI: ${fmtPct(data.lower)} – ${fmtPct(data.upper)}</p>
+        ${popStr}
         <p class="ci" style="margin-top:4px;">Age group: ${selectedAge || 'N/A'}</p>
         ${source ? `<p class="source-label">Source: ${source}-level data</p>` : ''}
     `;
@@ -251,8 +253,8 @@ fetch('uk_lads.json')
         ukGeoJSON = data;
         document.getElementById('loading-msg').remove();
         renderMap();
-        // Show upload dialog after map loads
-        setTimeout(() => overlay.classList.add('active'), 300);
+        // Auto-load bundled CSV
+        autoLoadCSV();
     })
     .catch(err => {
         document.getElementById('loading-msg').textContent = 'Error loading boundaries: ' + err.message;
@@ -339,6 +341,23 @@ function handleFile(file) {
     });
 }
 
+function autoLoadCSV() {
+    const csvFile = 'IHME_GBD_2021_LEAD_RISK_1990_2021_PROP_ABOVE_5_2021_BOTH_Y2024M06D05.CSV';
+    fetch(csvFile)
+        .then(r => {
+            if (!r.ok) throw new Error('Bundled CSV not found');
+            return r.text();
+        })
+        .then(text => {
+            const results = Papa.parse(text, { header: true, skipEmptyLines: true });
+            processCSV(results.data);
+        })
+        .catch(() => {
+            // No bundled CSV — show upload dialog
+            setTimeout(() => overlay.classList.add('active'), 300);
+        });
+}
+
 function processCSV(rows) {
     if (rows.length === 0) {
         statusMsg.textContent = 'CSV appears to be empty.';
@@ -352,6 +371,8 @@ function processCSV(rows) {
     const lowerCol = cols.find(c => /^lower$/i.test(c));
     const upperCol = cols.find(c => /^upper$/i.test(c));
     const ageCol = cols.find(c => /age_group_name/i.test(c)) || cols.find(c => /age_group/i.test(c)) || cols.find(c => /age/i.test(c));
+    const measureCol = cols.find(c => /measure_name/i.test(c));
+    const popCol = cols.find(c => /population/i.test(c));
 
     if (!locCol || !meanCol) {
         statusMsg.textContent = `Could not find required columns. Found: ${cols.join(', ')}. Need: location_name, mean/val.`;
@@ -367,13 +388,16 @@ function processCSV(rows) {
     NATIONS.forEach(n => featureNames.add(n));
     featureNames.add('United Kingdom');
 
-    // Parse all rows, keeping any that match a map feature name, nation, or UK
+    // Parse all rows, keeping proportion rows that match a UK location
     csvLocationData = {};
     const ageSet = new Set();
     let matchedLAs = 0;
     let matchedNations = 0;
 
     rows.forEach(row => {
+        // Filter to Proportion rows only (skip Prevalence/Number rows)
+        if (measureCol && row[measureCol] && row[measureCol].trim() !== 'Proportion') return;
+
         const loc = (row[locCol] || '').trim();
         if (!featureNames.has(loc)) return;
 
@@ -383,9 +407,15 @@ function processCSV(rows) {
         const lower = lowerCol ? parseFloat(row[lowerCol]) : null;
         const upper = upperCol ? parseFloat(row[upperCol]) : null;
         const age = ageCol ? (row[ageCol] || '').trim() : 'All';
+        const pop = popCol ? parseFloat(row[popCol]) : null;
 
         if (!csvLocationData[loc]) csvLocationData[loc] = {};
-        csvLocationData[loc][age] = { mean, lower: isNaN(lower) ? null : lower, upper: isNaN(upper) ? null : upper };
+        csvLocationData[loc][age] = {
+            mean,
+            lower: isNaN(lower) ? null : lower,
+            upper: isNaN(upper) ? null : upper,
+            population: isNaN(pop) ? null : pop
+        };
         ageSet.add(age);
 
         if (NATIONS.includes(loc) || loc === 'United Kingdom') matchedNations++;
@@ -399,7 +429,7 @@ function processCSV(rows) {
         return;
     }
 
-    // Auto-detect scale
+    // Auto-detect scale: if max mean > 1, values are already percentages
     let maxMean = 0;
     for (const loc of Object.values(csvLocationData)) {
         for (const ag of Object.values(loc)) {
@@ -418,8 +448,11 @@ function processCSV(rows) {
     });
     ageSelect.disabled = false;
 
-    const allAges = ageGroups.find(a => /all\s*ages/i.test(a));
-    selectedAge = allAges || ageGroups[0];
+    // Prefer "25 plus" > "All ages" > first option
+    const preferred = ageGroups.find(a => a === '25 plus')
+        || ageGroups.find(a => /all\s*ages/i.test(a))
+        || ageGroups[0];
+    selectedAge = preferred;
     ageSelect.value = selectedAge;
 
     const laNote = matchedLAs > 0 ? ` (${matchedLAs / ageGroups.length | 0} local authorities)` : ' (nation-level only)';
