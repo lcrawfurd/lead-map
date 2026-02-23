@@ -448,8 +448,9 @@ function processCSV(rows) {
     });
     ageSelect.disabled = false;
 
-    // Prefer "25 plus" > "All ages" > first option
-    const preferred = ageGroups.find(a => a === '25 plus')
+    // Prefer "<5" (children) > "0 to 14" > "All ages" > first option
+    const preferred = ageGroups.find(a => a === '<5')
+        || ageGroups.find(a => a === '0 to 14')
         || ageGroups.find(a => /all\s*ages/i.test(a))
         || ageGroups[0];
     selectedAge = preferred;
