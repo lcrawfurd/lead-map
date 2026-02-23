@@ -152,13 +152,30 @@ const NATIONS = ['England', 'Scotland', 'Wales', 'Northern Ireland'];
 
 // ── Color scale ─────────────────────────────────────────────────────
 const COLORS = ['#1a9850', '#66bd63', '#a6d96a', '#d9ef8b', '#fee08b', '#fdae61', '#f46d43', '#d73027'];
-const BREAKS = [0, 5, 10, 15, 20, 30, 40, 50];
+let colorBreaks = [0, 5, 10, 15, 20, 30, 40, 50]; // default, recalculated from data
+
+function computeColorBreaks() {
+    // Find max value across all locations for the selected age group
+    let maxPct = 0;
+    for (const loc of Object.values(csvLocationData)) {
+        if (loc[selectedAge] && loc[selectedAge].mean != null) {
+            const pct = loc[selectedAge].mean * dataScale;
+            if (pct > maxPct) maxPct = pct;
+        }
+    }
+    if (maxPct <= 0) maxPct = 50; // fallback
+    // Round up to nearest 0.5
+    maxPct = Math.ceil(maxPct * 2) / 2;
+    // Create 8 evenly spaced breaks from 0 to maxPct
+    const step = maxPct / COLORS.length;
+    colorBreaks = COLORS.map((_, i) => +(i * step).toFixed(2));
+}
 
 function getColor(val) {
     if (val == null || isNaN(val)) return '#444';
     const pct = val * dataScale;
-    for (let i = BREAKS.length - 1; i >= 0; i--) {
-        if (pct >= BREAKS[i]) return COLORS[i];
+    for (let i = colorBreaks.length - 1; i >= 0; i--) {
+        if (pct >= colorBreaks[i]) return COLORS[i];
     }
     return COLORS[0];
 }
@@ -211,14 +228,20 @@ info.addTo(map);
 // ── Legend ───────────────────────────────────────────────────────────
 const legend = L.control({ position: 'bottomright' });
 legend.onAdd = function () {
-    const div = L.DomUtil.create('div', 'legend');
-    div.innerHTML = '<h4>% with BLL ≥ 5 µg/dL</h4>';
-    const labels = ['0–5%', '5–10%', '10–15%', '15–20%', '20–30%', '30–40%', '40–50%', '50%+'];
+    this._div = L.DomUtil.create('div', 'legend');
+    this.refresh();
+    return this._div;
+};
+legend.refresh = function () {
+    let html = '<h4>% with BLL ≥ 5 µg/dL</h4>';
     for (let i = 0; i < COLORS.length; i++) {
-        div.innerHTML += `<div class="legend-item"><span class="legend-color" style="background:${COLORS[i]}"></span>${labels[i]}</div>`;
+        const lo = colorBreaks[i].toFixed(1);
+        const hi = i < COLORS.length - 1 ? colorBreaks[i + 1].toFixed(1) : '+';
+        const label = hi === '+' ? `${lo}%+` : `${lo}–${hi}%`;
+        html += `<div class="legend-item"><span class="legend-color" style="background:${COLORS[i]}"></span>${label}</div>`;
     }
-    div.innerHTML += `<div class="legend-item" style="margin-top:4px;"><span class="legend-color" style="background:#444"></span>No data</div>`;
-    return div;
+    html += `<div class="legend-item" style="margin-top:4px;"><span class="legend-color" style="background:#444"></span>No data</div>`;
+    this._div.innerHTML = html;
 };
 legend.addTo(map);
 
@@ -448,9 +471,9 @@ function processCSV(rows) {
     });
     ageSelect.disabled = false;
 
-    // Prefer "<5" (children) > "0 to 14" > "All ages" > first option
-    const preferred = ageGroups.find(a => a === '<5')
-        || ageGroups.find(a => a === '0 to 14')
+    // Prefer "0 to 14" (children) > "<5" > "All ages" > first option
+    const preferred = ageGroups.find(a => a === '0 to 14')
+        || ageGroups.find(a => a === '<5')
         || ageGroups.find(a => /all\s*ages/i.test(a))
         || ageGroups[0];
     selectedAge = preferred;
@@ -460,7 +483,9 @@ function processCSV(rows) {
     statusMsg.innerHTML = `Loaded ${locCount} location(s), ${ageGroups.length} age group(s)${laNote}.` + buildSummary();
     statusMsg.className = 'status-msg';
 
+    computeColorBreaks();
     renderMap();
+    legend.refresh();
     overlay.classList.remove('active');
 }
 
@@ -480,7 +505,9 @@ function buildSummary() {
 // Age group change
 ageSelect.addEventListener('change', () => {
     selectedAge = ageSelect.value;
+    computeColorBreaks();
     renderMap();
+    legend.refresh();
 });
 </script>
 </body>
