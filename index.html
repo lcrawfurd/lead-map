@@ -195,14 +195,20 @@ info.update = function (props, data, source) {
         this._div.innerHTML = `<h4>${label}</h4><p class="no-data">No data loaded</p>`;
         return;
     }
-    const popStr = data.population ? `<p class="ci">Population: ${Math.round(data.population).toLocaleString()}</p>` : '';
+    const isFallback = source && source !== 'local authority';
+    // Only show population for direct local authority matches — fallback population is for the whole nation, not this LAD
+    const popStr = (!isFallback && data.population) ? `<p class="ci">Population: ${Math.round(data.population).toLocaleString()}</p>` : '';
+    const fallbackWarning = isFallback
+        ? `<p style="color:#e94560; font-size:0.78rem; margin-top:4px;">No local data — showing ${source}-level estimate</p>`
+        : '';
     this._div.innerHTML = `
         <h4>${label}</h4>
         <p>Proportion with BLL ≥ 5 µg/dL</p>
-        <p class="value">${fmtPct(data.mean)}</p>
+        <p class="value" ${isFallback ? 'style="opacity:0.7"' : ''}>${fmtPct(data.mean)}</p>
         <p class="ci">95% UI: ${fmtPct(data.lower)} – ${fmtPct(data.upper)}</p>
         ${popStr}
         <p class="ci" style="margin-top:4px;">Age group: ${selectedAge || 'N/A'}</p>
+        ${fallbackWarning}
         ${source ? `<p class="source-label">Source: ${source}-level data</p>` : ''}
     `;
 };
@@ -218,7 +224,9 @@ legend.onAdd = function () {
         const hi = lo + 1;
         html += `<div class="legend-item"><span class="legend-color" style="background:${COLORS[i]}"></span>${lo}–${hi}%</div>`;
     }
-    html += `<div class="legend-item" style="margin-top:4px;"><span class="legend-color" style="background:#444"></span>No data</div>`;
+    html += `<div class="legend-item" style="margin-top:6px; border-top:1px solid #0f3460; padding-top:6px;"><span class="legend-color" style="background:#444"></span>No data</div>`;
+    html += `<div class="legend-item"><span class="legend-color" style="background:rgba(166,217,106,0.35); border:1px dashed #0f3460;"></span>Nation-level estimate</div>`;
+    html += `<div class="legend-item"><span class="legend-color" style="background:rgba(166,217,106,0.8);"></span>Local authority data</div>`;
     div.innerHTML = html;
     return div;
 };
@@ -275,13 +283,15 @@ function renderMap() {
 }
 
 function featureStyle(feature) {
-    const { data } = getDataForFeature(feature.properties);
+    const { data, source } = getDataForFeature(feature.properties);
+    const isFallback = source && source !== 'local authority';
     return {
         fillColor: data ? getColor(data.mean) : '#444',
-        weight: 1,
+        weight: isFallback ? 0.5 : 1,
         opacity: 0.8,
         color: '#0f3460',
-        fillOpacity: 0.8
+        fillOpacity: isFallback ? 0.35 : 0.8,
+        dashArray: isFallback ? '4 3' : null
     };
 }
 
