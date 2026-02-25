@@ -26,13 +26,6 @@
 
         .controls { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
 
-        .upload-btn {
-            background: #e94560; color: #fff; border: none; padding: 8px 16px;
-            border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-weight: 600;
-            transition: background 0.2s;
-        }
-        .upload-btn:hover { background: #c73650; }
-
         select {
             background: #1a1a2e; color: #e0e0e0; border: 1px solid #0f3460;
             padding: 6px 10px; border-radius: 6px; font-size: 0.85rem;
@@ -61,40 +54,6 @@
         .legend-item { display: flex; align-items: center; gap: 8px; }
         .legend-color { width: 20px; height: 14px; border-radius: 2px; flex-shrink: 0; }
 
-        .upload-overlay {
-            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.7); z-index: 2000; justify-content: center; align-items: center;
-        }
-        .upload-overlay.active { display: flex; }
-
-        .upload-modal {
-            background: #16213e; border: 2px solid #0f3460; border-radius: 12px;
-            padding: 32px; max-width: 520px; width: 90%; text-align: center;
-        }
-        .upload-modal h2 { color: #e94560; margin-bottom: 8px; }
-        .upload-modal p { color: #a0a0b0; margin-bottom: 20px; font-size: 0.9rem; }
-
-        .drop-zone {
-            border: 2px dashed #0f3460; border-radius: 8px; padding: 40px 20px;
-            cursor: pointer; transition: border-color 0.2s, background 0.2s; margin-bottom: 16px;
-        }
-        .drop-zone:hover, .drop-zone.dragover { border-color: #e94560; background: rgba(233, 69, 96, 0.05); }
-        .drop-zone p { margin: 0; color: #e0e0e0; }
-
-        #file-input { display: none; }
-        .status-msg { margin-top: 12px; font-size: 0.85rem; color: #4ecca3; }
-        .status-msg.error { color: #e94560; }
-
-        .data-summary {
-            background: #1a1a2e; border: 1px solid #0f3460; border-radius: 8px;
-            padding: 12px 16px; margin-top: 12px; font-size: 0.82rem; text-align: left;
-            max-height: 200px; overflow-y: auto;
-        }
-        .data-summary table { width: 100%; border-collapse: collapse; }
-        .data-summary th, .data-summary td { padding: 4px 8px; border-bottom: 1px solid #0f3460; text-align: left; }
-        .data-summary th { color: #e94560; font-weight: 600; }
-        .data-summary td.val { font-weight: 700; color: #fff; }
-
         .loading-msg {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
             z-index: 1000; background: rgba(22, 33, 62, 0.95); padding: 20px 30px;
@@ -117,27 +76,11 @@
                 <option value="">Load data first</option>
             </select>
         </div>
-        <button class="upload-btn" id="open-upload">Load CSV Data</button>
     </div>
 </div>
 
 <div id="map">
     <div class="loading-msg" id="loading-msg">Loading UK boundaries...</div>
-</div>
-
-<div class="upload-overlay" id="upload-overlay">
-    <div class="upload-modal">
-        <h2>Load IHME GBD Data</h2>
-        <p>Upload your IHME GBD 2021 Lead Risk CSV file.<br>
-        The map will display the proportion of the population with blood lead levels ≥ 5 µg/dL.<br>
-        <strong>Local authority data</strong> will be shown where available, falling back to nation-level.</p>
-        <div class="drop-zone" id="drop-zone">
-            <p>Drop CSV file here or click to browse</p>
-        </div>
-        <input type="file" id="file-input" accept=".csv,.CSV">
-        <div class="status-msg" id="status-msg"></div>
-        <button class="upload-btn" id="close-upload" style="margin-top:16px; background:#0f3460;">Close</button>
-    </div>
 </div>
 
 <script>
@@ -314,45 +257,8 @@ function onEachFeature(feature, layer) {
     });
 }
 
-// ── CSV upload ──────────────────────────────────────────────────────
-const overlay = document.getElementById('upload-overlay');
-const dropZone = document.getElementById('drop-zone');
-const fileInput = document.getElementById('file-input');
-const statusMsg = document.getElementById('status-msg');
+// ── CSV loading ─────────────────────────────────────────────────────
 const ageSelect = document.getElementById('age-select');
-
-document.getElementById('open-upload').addEventListener('click', () => overlay.classList.add('active'));
-document.getElementById('close-upload').addEventListener('click', () => overlay.classList.remove('active'));
-overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.classList.remove('active'); });
-
-dropZone.addEventListener('click', () => fileInput.click());
-dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('dragover'); });
-dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
-dropZone.addEventListener('drop', (e) => {
-    e.preventDefault(); dropZone.classList.remove('dragover');
-    if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
-});
-fileInput.addEventListener('change', () => { if (fileInput.files.length) handleFile(fileInput.files[0]); });
-
-function handleFile(file) {
-    statusMsg.textContent = 'Parsing CSV...';
-    statusMsg.className = 'status-msg';
-    Papa.parse(file, {
-        header: true, skipEmptyLines: true,
-        complete: function (results) {
-            if (results.errors.length > 5) {
-                statusMsg.textContent = 'Error parsing CSV: ' + results.errors[0].message;
-                statusMsg.className = 'status-msg error';
-                return;
-            }
-            processCSV(results.data);
-        },
-        error: function (err) {
-            statusMsg.textContent = 'Error reading file: ' + err.message;
-            statusMsg.className = 'status-msg error';
-        }
-    });
-}
 
 function autoLoadCSV() {
     const csvFile = 'IHME_GBD_2021_LEAD_RISK_1990_2021_PROP_ABOVE_5_2021_BOTH_Y2024M06D05.CSV';
@@ -365,18 +271,13 @@ function autoLoadCSV() {
             const results = Papa.parse(text, { header: true, skipEmptyLines: true });
             processCSV(results.data);
         })
-        .catch(() => {
-            // No bundled CSV — show upload dialog
-            setTimeout(() => overlay.classList.add('active'), 300);
+        .catch(err => {
+            console.error('Could not load bundled CSV:', err);
         });
 }
 
 function processCSV(rows) {
-    if (rows.length === 0) {
-        statusMsg.textContent = 'CSV appears to be empty.';
-        statusMsg.className = 'status-msg error';
-        return;
-    }
+    if (rows.length === 0) return;
 
     const cols = Object.keys(rows[0]);
     const locCol = cols.find(c => /location_name/i.test(c)) || cols.find(c => /location/i.test(c));
@@ -387,11 +288,7 @@ function processCSV(rows) {
     const measureCol = cols.find(c => /measure_name/i.test(c));
     const popCol = cols.find(c => /population/i.test(c));
 
-    if (!locCol || !meanCol) {
-        statusMsg.textContent = `Could not find required columns. Found: ${cols.join(', ')}. Need: location_name, mean/val.`;
-        statusMsg.className = 'status-msg error';
-        return;
-    }
+    if (!locCol || !meanCol) return;
 
     // Build a set of all feature names for matching
     const featureNames = new Set();
@@ -436,11 +333,7 @@ function processCSV(rows) {
     });
 
     const locCount = Object.keys(csvLocationData).length;
-    if (locCount === 0) {
-        statusMsg.textContent = 'No matching UK locations found in data.';
-        statusMsg.className = 'status-msg error';
-        return;
-    }
+    if (locCount === 0) return;
 
     // Auto-detect scale: if max mean > 1, values are already percentages
     let maxMean = 0;
@@ -469,25 +362,7 @@ function processCSV(rows) {
     selectedAge = preferred;
     ageSelect.value = selectedAge;
 
-    const laNote = matchedLAs > 0 ? ` (${matchedLAs / ageGroups.length | 0} local authorities)` : ' (nation-level only)';
-    statusMsg.innerHTML = `Loaded ${locCount} location(s), ${ageGroups.length} age group(s)${laNote}.` + buildSummary();
-    statusMsg.className = 'status-msg';
-
     renderMap();
-    overlay.classList.remove('active');
-}
-
-function buildSummary() {
-    const locs = ['England', 'Scotland', 'Wales', 'Northern Ireland', 'United Kingdom'];
-    let html = '<div class="data-summary"><table><tr><th>Location</th><th>Mean</th><th>95% UI</th></tr>';
-    for (const loc of locs) {
-        if (csvLocationData[loc] && csvLocationData[loc][selectedAge]) {
-            const d = csvLocationData[loc][selectedAge];
-            html += `<tr><td>${loc}</td><td class="val">${fmtPct(d.mean)}</td><td>${fmtPct(d.lower)} – ${fmtPct(d.upper)}</td></tr>`;
-        }
-    }
-    html += '</table></div>';
-    return html;
 }
 
 // Age group change
