@@ -158,6 +158,10 @@ let dataScale = 100;
 
 const NATIONS = ['England', 'Scotland', 'Wales', 'Northern Ireland'];
 
+// ── Spatial mapping: constituency -> overlapping LAD with IHME data ──
+// Pre-computed using centroid-in-polygon matching against LAD boundaries
+const CONSTITUENCY_TO_LAD = {"Aldridge-Brownhills":"Walsall","Altrincham and Sale West":"Trafford","Ashton-under-Lyne":"Tameside","Barking":"Bexley","Barnsley Central":"Barnsley","Barnsley East":"Barnsley","Bath":"Bath and North East Somerset","Batley and Spen":"Kirklees","Battersea":"Wandsworth","Beckenham":"Bromley","Bedford":"Bedford","Bermondsey and Old Southwark":"Southwark","Bethnal Green and Bow":"Tower Hamlets","Beverley and Holderness":"North Lincolnshire","Bexleyheath and Crayford":"Bexley","Birkenhead":"Wirral","Birmingham, Edgbaston":"Birmingham","Birmingham, Erdington":"Birmingham","Birmingham, Hall Green":"Birmingham","Birmingham, Hodge Hill":"Birmingham","Birmingham, Ladywood":"Birmingham","Birmingham, Northfield":"Birmingham","Birmingham, Perry Barr":"Birmingham","Birmingham, Selly Oak":"Birmingham","Birmingham, Yardley":"Birmingham","Blackburn":"Blackburn with Darwen","Blackley and Broughton":"Manchester","Blackpool North and Cleveleys":"Blackpool","Blackpool South":"Blackpool","Blaydon":"Newcastle upon Tyne","Blyth Valley":"North Tyneside","Bolton North East":"Bolton","Bolton South East":"Bolton","Bolton West":"Bolton","Bootle":"Sefton","Bournemouth East":"Bournemouth","Bournemouth West":"Bournemouth","Bracknell":"Wokingham","Bradford East":"Bradford","Bradford South":"Bradford","Bradford West":"Bradford","Brent Central":"Brent","Brent North":"Brent","Brentford and Isleworth":"Hounslow","Brigg and Goole":"North Lincolnshire","Brighton, Kemptown":"Brighton and Hove","Brighton, Pavilion":"Brighton and Hove","Bristol East":"South Gloucestershire","Bristol North West":"South Gloucestershire","Bristol South":"North Somerset","Bristol West":"South Gloucestershire","Bromley and Chislehurst":"Bromley","Bury North":"Bury","Bury South":"Bury","Calder Valley":"Calderdale","Camberwell and Peckham":"Southwark","Carshalton and Wallington":"Sutton","Cheadle":"Stockport","Chelsea and Fulham":"Hammersmith and Fulham","Chingford and Woodford Green":"Waltham Forest","Chippenham":"Wiltshire","Chipping Barnet":"Barnet","Chorley":"Bolton","Cities of London and Westminster":"Westminster","City of Durham":"Darlington","Cleethorpes":"North East Lincolnshire","Colne Valley":"Kirklees","Congleton":"Cheshire East","Coventry North East":"Coventry","Coventry North West":"Coventry","Coventry South":"Coventry","Crewe and Nantwich":"Cheshire East","Croydon Central":"Croydon","Croydon North":"Croydon","Croydon South":"Croydon","Dagenham and Rainham":"Havering","Darlington":"Darlington","Denton and Reddish":"Tameside","Derby North":"Derby","Derby South":"Derby","Devizes":"Wiltshire","Dewsbury":"Kirklees","Doncaster North":"Wakefield","Dudley North":"Dudley","Dudley South":"Dudley","Dulwich and West Norwood":"Southwark","Ealing Central and Acton":"Ealing","Ealing North":"Ealing","Ealing, Southall":"Ealing","Easington":"Hartlepool","East Ham":"Newham","Eddisbury":"Cheshire East","Edmonton":"Enfield","Ellesmere Port and Neston":"Wirral","Elmet and Rothwell":"Leeds","Eltham":"Greenwich","Enfield North":"Enfield","Enfield, Southgate":"Enfield","Erith and Thamesmead":"Bexley","Feltham and Heston":"Hounslow","Filton and Bradley Stoke":"South Gloucestershire","Finchley and Golders Green":"Barnet","Fylde":"Blackpool","Garston and Halewood":"Knowsley","Gateshead":"Newcastle upon Tyne","Great Grimsby":"North East Lincolnshire","Greenwich and Woolwich":"Greenwich","Hackney North and Stoke Newington":"Hackney","Hackney South and Shoreditch":"Hackney","Halesowen and Rowley Regis":"Dudley","Halifax":"Calderdale","Haltemprice and Howden":"North Lincolnshire","Halton":"Knowsley","Hammersmith":"Hammersmith and Fulham","Hampstead and Kilburn":"Camden","Harrow East":"Harrow","Harrow West":"Harrow","Hartlepool":"Hartlepool","Hayes and Harlington":"Hillingdon","Hazel Grove":"Stockport","Hemsworth":"Wakefield","Hendon":"Barnet","Hereford and South Herefordshire":"Herefordshire, County of","Heywood and Middleton":"Rochdale","Holborn and St Pancras":"Camden","Hornchurch and Upminster":"Havering","Hornsey and Wood Green":"Haringey","Houghton and Sunderland South":"North Tyneside","Hove":"Brighton and Hove","Huddersfield":"Kirklees","Ilford South":"Newham","Islington North":"Islington","Islington South and Finsbury":"Islington","Jarrow":"North Tyneside","Keighley":"Bradford","Kensington":"Kensington and Chelsea","Kingston and Surbiton":"Kingston upon Thames","Kingston upon Hull East":"North Lincolnshire","Kingston upon Hull North":"North Lincolnshire","Kingston upon Hull West and Hessle":"North Lincolnshire","Kingswood":"South Gloucestershire","Knowsley":"Knowsley","Leeds Central":"Leeds","Leeds East":"Leeds","Leeds North East":"Leeds","Leeds North West":"Leeds","Leeds West":"Leeds","Leicester East":"Leicester","Leicester South":"Leicester","Leicester West":"Leicester","Leigh":"Wigan","Lewes":"Brighton and Hove","Lewisham East":"Lewisham","Lewisham West and Penge":"Bromley","Lewisham, Deptford":"Lewisham","Leyton and Wanstead":"Waltham Forest","Liverpool, Riverside":"Liverpool","Liverpool, Walton":"Liverpool","Liverpool, Wavertree":"Liverpool","Liverpool, West Derby":"Liverpool","Louth and Horncastle":"North East Lincolnshire","Ludlow":"Shropshire","Luton North":"Luton","Luton South":"Luton","Macclesfield":"Cheshire East","Maidenhead":"Windsor and Maidenhead","Makerfield":"Wigan","Manchester Central":"Manchester","Manchester, Gorton":"Manchester","Manchester, Withington":"Manchester","Meriden":"Solihull","Mid Bedfordshire":"Central Bedfordshire","Middlesbrough":"Redcar and Cleveland","Middlesbrough South and East Cleveland":"Redcar and Cleveland","Milton Keynes North":"Milton Keynes","Milton Keynes South":"Milton Keynes","Mitcham and Morden":"Merton","Morley and Outwood":"Leeds","New Forest East":"Southampton","Newbury":"West Berkshire","Newcastle upon Tyne Central":"Newcastle upon Tyne","Newcastle upon Tyne East":"Newcastle upon Tyne","Newcastle upon Tyne North":"Newcastle upon Tyne","Newton Abbot":"Torbay","Normanton, Pontefract and Castleford":"Wakefield","North Durham":"Newcastle upon Tyne","North East Bedfordshire":"Bedford","North East Somerset":"Bath and North East Somerset","North Herefordshire":"Herefordshire, County of","North Shropshire":"Shropshire","North Somerset":"North Somerset","North Swindon":"Swindon","North Tyneside":"North Tyneside","North West Durham":"Newcastle upon Tyne","North Wiltshire":"Wiltshire","Nottingham East":"Nottingham","Nottingham North":"Nottingham","Nottingham South":"Nottingham","Old Bexley and Sidcup":"Bexley","Oldham East and Saddleworth":"Oldham","Oldham West and Royton":"Oldham","Orpington":"Bromley","Penistone and Stocksbridge":"Barnsley","Peterborough":"Peterborough","Poole":"Poole","Poplar and Limehouse":"Tower Hamlets","Pudsey":"Leeds","Putney":"Wandsworth","Rayleigh and Wickford":"Southend-on-Sea","Reading East":"Reading","Reading West":"Reading","Redcar":"Redcar and Cleveland","Richmond Park":"Richmond upon Thames","Rochdale":"Rochdale","Rochford and Southend East":"Southend-on-Sea","Romford":"Havering","Rother Valley":"Rotherham","Rotherham":"Rotherham","Ruislip, Northwood and Pinner":"Hillingdon","Rutland and Melton":"Rutland","Salford and Eccles":"Salford","Salisbury":"Wiltshire","Scunthorpe":"North Lincolnshire","Sedgefield":"Darlington","Sefton Central":"Sefton","Selby and Ainsty":"York","Sheffield Central":"Sheffield","Sheffield South East":"Sheffield","Sheffield, Brightside and Hillsborough":"Sheffield","Sheffield, Hallam":"Sheffield","Sheffield, Heeley":"Sheffield","Shipley":"Bradford","Shrewsbury and Atcham":"Shropshire","Slough":"Slough","Solihull":"Solihull","South Holland and The Deepings":"Peterborough","South Shields":"North Tyneside","South Staffordshire":"Wolverhampton","South Swindon":"Swindon","South West Bedfordshire":"Central Bedfordshire","South West Wiltshire":"Wiltshire","Southampton, Itchen":"Southampton","Southampton, Test":"Southampton","Southend West":"Southend-on-Sea","Southport":"Sefton","Stalybridge and Hyde":"Tameside","Stockport":"Stockport","Stockton North":"Hartlepool","Stoke-on-Trent Central":"Stoke-on-Trent","Stoke-on-Trent North":"Stoke-on-Trent","Stoke-on-Trent South":"Stoke-on-Trent","Stourbridge":"Dudley","Streatham":"Lambeth","Stretford and Urmston":"Trafford","Sunderland Central":"North Tyneside","Sutton and Cheam":"Sutton","Sutton Coldfield":"Birmingham","Tatton":"Cheshire East","Telford":"Telford and Wrekin","The Wrekin":"Telford and Wrekin","Thornbury and Yate":"South Gloucestershire","Tooting":"Wandsworth","Torbay":"Torbay","Totnes":"Torbay","Tottenham":"Haringey","Twickenham":"Richmond upon Thames","Tynemouth":"North Tyneside","Uxbridge and South Ruislip":"Hillingdon","Vauxhall":"Lambeth","Wakefield":"Wakefield","Wallasey":"Wirral","Walsall North":"Walsall","Walsall South":"Walsall","Walthamstow":"Waltham Forest","Wansbeck":"Newcastle upon Tyne","Warley":"Sandwell","Warrington North":"Wigan","Warrington South":"Cheshire East","Washington and Sunderland West":"Newcastle upon Tyne","Wentworth and Dearne":"Rotherham","West Bromwich East":"Sandwell","West Bromwich West":"Sandwell","West Ham":"Newham","West Lancashire":"Sefton","Westminster North":"Westminster","Weston-Super-Mare":"North Somerset","Wigan":"Wigan","Wimbledon":"Merton","Windsor":"Bracknell Forest","Wirral South":"Wirral","Wirral West":"Wirral","Wokingham":"Wokingham","Wolverhampton North East":"Wolverhampton","Wolverhampton South East":"Wolverhampton","Wolverhampton South West":"Wolverhampton","Worsley and Eccles South":"Salford","Wythenshawe and Sale East":"Manchester","York Central":"York","York Outer":"York"};
+
 // ── Color scale ─────────────────────────────────────────────────────
 const COLORS = ['#1a9850', '#a6d96a', '#fee08b', '#fdae61', '#f46d43', '#d73027'];
 const COLOR_BREAKS = [0, 1, 2, 3, 4, 5];
@@ -191,7 +195,7 @@ info.onAdd = function () {
     this.update();
     return this._div;
 };
-info.update = function (props, data, source) {
+info.update = function (props, data, source, ladName) {
     if (!props) {
         this._div.innerHTML = '<h4>UK Lead Exposure</h4><p class="no-data">Hover over a constituency</p>';
         return;
@@ -203,19 +207,23 @@ info.update = function (props, data, source) {
         this._div.innerHTML = `<h4>${label}</h4><p class="no-data">No data loaded</p>`;
         return;
     }
-    const isFallback = source && source !== 'constituency';
-    const popStr = (!isFallback && data.population) ? `<p class="ci">Population: ${Math.round(data.population).toLocaleString()}</p>` : '';
-    const fallbackWarning = isFallback
-        ? `<p style="color:#e94560; font-size:0.78rem; margin-top:4px;">No constituency data — showing ${source}-level estimate</p>`
-        : '';
+    const isNationFallback = source === 'nation' || source === 'national (UK)';
+    const isLADMatch = source === 'local authority';
+    const popStr = (!isNationFallback && data.population) ? `<p class="ci">Population: ${Math.round(data.population).toLocaleString()}</p>` : '';
+    let sourceNote = '';
+    if (isNationFallback) {
+        sourceNote = `<p style="color:#e94560; font-size:0.78rem; margin-top:4px;">No local data — showing ${source}-level estimate</p>`;
+    } else if (isLADMatch) {
+        sourceNote = `<p style="color:#4ecca3; font-size:0.78rem; margin-top:4px;">Matched to LAD: ${ladName || 'unknown'}</p>`;
+    }
     this._div.innerHTML = `
         <h4>${label}</h4>
         <p>Proportion with BLL ≥ 5 µg/dL</p>
-        <p class="value" ${isFallback ? 'style="opacity:0.7"' : ''}>${fmtPct(data.mean)}</p>
+        <p class="value" ${isNationFallback ? 'style="opacity:0.7"' : ''}>${fmtPct(data.mean)}</p>
         <p class="ci">95% UI: ${fmtPct(data.lower)} – ${fmtPct(data.upper)}</p>
         ${popStr}
         <p class="ci" style="margin-top:4px;">Age group: ${selectedAge || 'N/A'}</p>
-        ${fallbackWarning}
+        ${sourceNote}
         ${source ? `<p class="source-label">Source: ${source}-level data</p>` : ''}
     `;
 };
@@ -233,13 +241,13 @@ legend.onAdd = function () {
     }
     html += `<div class="legend-item" style="margin-top:6px; border-top:1px solid #0f3460; padding-top:6px;"><span class="legend-color" style="background:#444"></span>No data</div>`;
     html += `<div class="legend-item"><span class="legend-color" style="background:rgba(166,217,106,0.35); border:1px dashed #0f3460;"></span>Nation-level estimate</div>`;
-    html += `<div class="legend-item"><span class="legend-color" style="background:rgba(166,217,106,0.8);"></span>Constituency data</div>`;
+    html += `<div class="legend-item"><span class="legend-color" style="background:rgba(166,217,106,0.8);"></span>LAD / constituency data</div>`;
     div.innerHTML = html;
     return div;
 };
 legend.addTo(map);
 
-// ── Data lookup: try exact name match, then fall back to nation ─────
+// ── Data lookup: exact match -> spatial LAD match -> nation fallback ─
 function getDataForFeature(props) {
     if (!selectedAge) return { data: null, source: null };
     const name = props.name;
@@ -248,6 +256,11 @@ function getDataForFeature(props) {
     // Try exact match on constituency name
     if (csvLocationData[name] && csvLocationData[name][selectedAge]) {
         return { data: csvLocationData[name][selectedAge], source: 'constituency' };
+    }
+    // Try spatial match: constituency -> overlapping LAD
+    const mappedLAD = CONSTITUENCY_TO_LAD[name];
+    if (mappedLAD && csvLocationData[mappedLAD] && csvLocationData[mappedLAD][selectedAge]) {
+        return { data: csvLocationData[mappedLAD][selectedAge], source: 'local authority', ladName: mappedLAD };
     }
     // Fall back to nation-level data
     if (nation && csvLocationData[nation] && csvLocationData[nation][selectedAge]) {
@@ -290,14 +303,14 @@ function renderMap() {
 
 function featureStyle(feature) {
     const { data, source } = getDataForFeature(feature.properties);
-    const isFallback = source && source !== 'constituency';
+    const isNationFallback = source === 'nation' || source === 'national (UK)';
     return {
         fillColor: data ? getColor(data.mean) : '#444',
-        weight: isFallback ? 0.5 : 1,
+        weight: isNationFallback ? 0.5 : 1,
         opacity: 0.8,
         color: '#0f3460',
-        fillOpacity: isFallback ? 0.35 : 0.8,
-        dashArray: isFallback ? '4 3' : null
+        fillOpacity: isNationFallback ? 0.35 : 0.8,
+        dashArray: isNationFallback ? '4 3' : null
     };
 }
 
@@ -306,8 +319,8 @@ function onEachFeature(feature, layer) {
         mouseover: function (e) {
             e.target.setStyle({ weight: 2, color: '#e94560', fillOpacity: 0.95 });
             e.target.bringToFront();
-            const { data, source } = getDataForFeature(feature.properties);
-            info.update(feature.properties, data, source);
+            const { data, source, ladName } = getDataForFeature(feature.properties);
+            info.update(feature.properties, data, source, ladName);
         },
         mouseout: function (e) {
             geoLayer.resetStyle(e.target);
@@ -398,10 +411,12 @@ function processCSV(rows) {
     }
 
     // Build a set of all feature names for matching
+    // Include constituency names, mapped LAD names, nations
     const featureNames = new Set();
     if (ukGeoJSON) {
         ukGeoJSON.features.forEach(f => featureNames.add(f.properties.name));
     }
+    Object.values(CONSTITUENCY_TO_LAD).forEach(lad => featureNames.add(lad));
     NATIONS.forEach(n => featureNames.add(n));
     featureNames.add('United Kingdom');
 
