@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UK Lead Exposure Map — IHME GBD 2021</title>
+    <title>UK Lead Exposure Map (Constituencies) — IHME GBD 2021</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://unpkg.com/papaparse@5.4.1/papaparse.min.js"></script>
@@ -32,6 +32,13 @@
             transition: background 0.2s;
         }
         .upload-btn:hover { background: #c73650; }
+
+        .nav-link {
+            color: #a0a0b0; font-size: 0.82rem; text-decoration: none;
+            border: 1px solid #0f3460; padding: 6px 12px; border-radius: 6px;
+            transition: color 0.2s, border-color 0.2s;
+        }
+        .nav-link:hover { color: #e94560; border-color: #e94560; }
 
         select {
             background: #1a1a2e; color: #e0e0e0; border: 1px solid #0f3460;
@@ -106,11 +113,11 @@
 
 <div id="header">
     <div>
-        <h1>UK Lead Exposure Map</h1>
+        <h1>UK Lead Exposure Map — Parliamentary Constituencies</h1>
         <div class="subtitle">IHME Global Burden of Disease 2021 — Proportion with Blood Lead ≥ 5 µg/dL</div>
     </div>
     <div class="controls">
-        <a href="constituencies.html" style="color:#a0a0b0; font-size:0.82rem; text-decoration:none; border:1px solid #0f3460; padding:6px 12px; border-radius:6px;">View by Constituency</a>
+        <a href="index.html" class="nav-link">View by Local Authority</a>
         <div>
             <label for="age-select">Age Group:</label>
             <select id="age-select" disabled>
@@ -122,7 +129,7 @@
 </div>
 
 <div id="map">
-    <div class="loading-msg" id="loading-msg">Loading UK boundaries...</div>
+    <div class="loading-msg" id="loading-msg">Loading constituency boundaries...</div>
 </div>
 
 <div class="upload-overlay" id="upload-overlay">
@@ -130,7 +137,7 @@
         <h2>Load IHME GBD Data</h2>
         <p>Upload your IHME GBD 2021 Lead Risk CSV file.<br>
         The map will display the proportion of the population with blood lead levels ≥ 5 µg/dL.<br>
-        <strong>Local authority data</strong> will be shown where available, falling back to nation-level.</p>
+        <strong>Constituency data</strong> will be shown where available, falling back to nation-level.</p>
         <div class="drop-zone" id="drop-zone">
             <p>Drop CSV file here or click to browse</p>
         </div>
@@ -143,7 +150,7 @@
 <script>
 // ── State ───────────────────────────────────────────────────────────
 let ukGeoJSON = null;
-let csvLocationData = {};  // { locationName: { ageGroup: { mean, lower, upper } } }
+let csvLocationData = {};
 let ageGroups = [];
 let selectedAge = '';
 let geoLayer = null;
@@ -153,7 +160,7 @@ const NATIONS = ['England', 'Scotland', 'Wales', 'Northern Ireland'];
 
 // ── Color scale ─────────────────────────────────────────────────────
 const COLORS = ['#1a9850', '#a6d96a', '#fee08b', '#fdae61', '#f46d43', '#d73027'];
-const COLOR_BREAKS = [0, 1, 2, 3, 4, 5]; // fixed 1% bins: 0-1, 1-2, 2-3, 3-4, 4-5, 5-6
+const COLOR_BREAKS = [0, 1, 2, 3, 4, 5];
 
 function getColor(val) {
     if (val == null || isNaN(val)) return '#444';
@@ -173,7 +180,7 @@ function fmtPct(val) {
 const map = L.map('map', { center: [55.3, -3.5], zoom: 6, zoomControl: true });
 
 L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/attributions">CARTO</a> | Data: <a href="https://ghdx.healthdata.org/record/ihme-data/gbd-2021-lead-exposure-estimates-1990-2021">IHME GBD 2021</a>',
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/attributions">CARTO</a> | Data: <a href="https://ghdx.healthdata.org/record/ihme-data/gbd-2021-lead-exposure-estimates-1990-2021">IHME GBD 2021</a> | Boundaries: <a href="https://geoportal.statistics.gov.uk/">ONS</a>',
     subdomains: 'abcd', maxZoom: 14
 }).addTo(map);
 
@@ -186,7 +193,7 @@ info.onAdd = function () {
 };
 info.update = function (props, data, source) {
     if (!props) {
-        this._div.innerHTML = '<h4>UK Lead Exposure</h4><p class="no-data">Hover over a region</p>';
+        this._div.innerHTML = '<h4>UK Lead Exposure</h4><p class="no-data">Hover over a constituency</p>';
         return;
     }
     const name = props.name;
@@ -196,11 +203,10 @@ info.update = function (props, data, source) {
         this._div.innerHTML = `<h4>${label}</h4><p class="no-data">No data loaded</p>`;
         return;
     }
-    const isFallback = source && source !== 'local authority';
-    // Only show population for direct local authority matches — fallback population is for the whole nation, not this LAD
+    const isFallback = source && source !== 'constituency';
     const popStr = (!isFallback && data.population) ? `<p class="ci">Population: ${Math.round(data.population).toLocaleString()}</p>` : '';
     const fallbackWarning = isFallback
-        ? `<p style="color:#e94560; font-size:0.78rem; margin-top:4px;">No local data — showing ${source}-level estimate</p>`
+        ? `<p style="color:#e94560; font-size:0.78rem; margin-top:4px;">No constituency data — showing ${source}-level estimate</p>`
         : '';
     this._div.innerHTML = `
         <h4>${label}</h4>
@@ -227,7 +233,7 @@ legend.onAdd = function () {
     }
     html += `<div class="legend-item" style="margin-top:6px; border-top:1px solid #0f3460; padding-top:6px;"><span class="legend-color" style="background:#444"></span>No data</div>`;
     html += `<div class="legend-item"><span class="legend-color" style="background:rgba(166,217,106,0.35); border:1px dashed #0f3460;"></span>Nation-level estimate</div>`;
-    html += `<div class="legend-item"><span class="legend-color" style="background:rgba(166,217,106,0.8);"></span>Local authority data</div>`;
+    html += `<div class="legend-item"><span class="legend-color" style="background:rgba(166,217,106,0.8);"></span>Constituency data</div>`;
     div.innerHTML = html;
     return div;
 };
@@ -239,9 +245,9 @@ function getDataForFeature(props) {
     const name = props.name;
     const nation = props.nation;
 
-    // Try exact match on LA/district name
+    // Try exact match on constituency name
     if (csvLocationData[name] && csvLocationData[name][selectedAge]) {
-        return { data: csvLocationData[name][selectedAge], source: 'local authority' };
+        return { data: csvLocationData[name][selectedAge], source: 'constituency' };
     }
     // Fall back to nation-level data
     if (nation && csvLocationData[nation] && csvLocationData[nation][selectedAge]) {
@@ -254,17 +260,16 @@ function getDataForFeature(props) {
     return { data: null, source: null };
 }
 
-// ── Load GeoJSON (external file) ────────────────────────────────────
-fetch('uk_lads.json')
+// ── Load GeoJSON (constituency boundaries) ──────────────────────────
+fetch('uk_constituencies.json')
     .then(r => {
-        if (!r.ok) throw new Error('Failed to load uk_lads.json');
+        if (!r.ok) throw new Error('Failed to load uk_constituencies.json');
         return r.json();
     })
     .then(data => {
         ukGeoJSON = data;
         document.getElementById('loading-msg').remove();
         renderMap();
-        // Auto-load bundled CSV
         autoLoadCSV();
     })
     .catch(err => {
@@ -285,7 +290,7 @@ function renderMap() {
 
 function featureStyle(feature) {
     const { data, source } = getDataForFeature(feature.properties);
-    const isFallback = source && source !== 'local authority';
+    const isFallback = source && source !== 'constituency';
     return {
         fillColor: data ? getColor(data.mean) : '#444',
         weight: isFallback ? 0.5 : 1,
@@ -366,7 +371,6 @@ function autoLoadCSV() {
             processCSV(results.data);
         })
         .catch(() => {
-            // No bundled CSV — show upload dialog
             setTimeout(() => overlay.classList.add('active'), 300);
         });
 }
@@ -404,11 +408,10 @@ function processCSV(rows) {
     // Parse all rows, keeping proportion rows that match a UK location
     csvLocationData = {};
     const ageSet = new Set();
-    let matchedLAs = 0;
+    let matchedConstituencies = 0;
     let matchedNations = 0;
 
     rows.forEach(row => {
-        // Filter to Proportion rows only (skip Prevalence/Number rows)
         if (measureCol && row[measureCol] && row[measureCol].trim() !== 'Proportion') return;
 
         const loc = (row[locCol] || '').trim();
@@ -432,7 +435,7 @@ function processCSV(rows) {
         ageSet.add(age);
 
         if (NATIONS.includes(loc) || loc === 'United Kingdom') matchedNations++;
-        else matchedLAs++;
+        else matchedConstituencies++;
     });
 
     const locCount = Object.keys(csvLocationData).length;
@@ -442,7 +445,7 @@ function processCSV(rows) {
         return;
     }
 
-    // Auto-detect scale: if max mean > 1, values are already percentages
+    // Auto-detect scale
     let maxMean = 0;
     for (const loc of Object.values(csvLocationData)) {
         for (const ag of Object.values(loc)) {
@@ -461,7 +464,6 @@ function processCSV(rows) {
     });
     ageSelect.disabled = false;
 
-    // Prefer "0 to 14" (children) > "<5" > "All ages" > first option
     const preferred = ageGroups.find(a => a === '0 to 14')
         || ageGroups.find(a => a === '<5')
         || ageGroups.find(a => /all\s*ages/i.test(a))
@@ -469,8 +471,8 @@ function processCSV(rows) {
     selectedAge = preferred;
     ageSelect.value = selectedAge;
 
-    const laNote = matchedLAs > 0 ? ` (${matchedLAs / ageGroups.length | 0} local authorities)` : ' (nation-level only)';
-    statusMsg.innerHTML = `Loaded ${locCount} location(s), ${ageGroups.length} age group(s)${laNote}.` + buildSummary();
+    const cNote = matchedConstituencies > 0 ? ` (${matchedConstituencies / ageGroups.length | 0} constituencies)` : ' (nation-level only)';
+    statusMsg.innerHTML = `Loaded ${locCount} location(s), ${ageGroups.length} age group(s)${cNote}.` + buildSummary();
     statusMsg.className = 'status-msg';
 
     renderMap();
