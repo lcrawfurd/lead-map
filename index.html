@@ -66,7 +66,7 @@
 <div id="header">
     <div>
         <h1>UK Lead Exposure Map</h1>
-        <div class="subtitle">IHME Global Burden of Disease 2021 — Proportion with Blood Lead ≥ 5 µg/dL</div>
+        <div class="subtitle">IHME Global Burden of Disease 2021 — Proportion with Blood Lead ≥ 5 µg/dL (County / UA level)</div>
     </div>
     <div class="controls">
         <a href="constituencies.html" style="color:#a0a0b0; font-size:0.82rem; text-decoration:none; border:1px solid #0f3460; padding:6px 12px; border-radius:6px;">View by Constituency</a>
@@ -139,8 +139,8 @@ info.update = function (props, data, source) {
         this._div.innerHTML = `<h4>${label}</h4><p class="no-data">No data loaded</p>`;
         return;
     }
-    const isFallback = source && source !== 'local authority';
-    // Only show population for direct local authority matches — fallback population is for the whole nation, not this LAD
+    const isFallback = source && source !== 'direct';
+    // Only show population for direct matches — fallback population is for the whole nation, not this area
     const popStr = (!isFallback && data.population) ? `<p class="ci">Population: ${Math.round(data.population).toLocaleString()}</p>` : '';
     const fallbackWarning = isFallback
         ? `<p style="color:#e94560; font-size:0.78rem; margin-top:4px;">No local data — showing ${source}-level estimate</p>`
@@ -170,7 +170,7 @@ legend.onAdd = function () {
     }
     html += `<div class="legend-item" style="margin-top:6px; border-top:1px solid #0f3460; padding-top:6px;"><span class="legend-color" style="background:#444"></span>No data</div>`;
     html += `<div class="legend-item"><span class="legend-color" style="background:rgba(166,217,106,0.35); border:1px dashed #0f3460;"></span>Nation-level estimate</div>`;
-    html += `<div class="legend-item"><span class="legend-color" style="background:rgba(166,217,106,0.8);"></span>Local authority data</div>`;
+    html += `<div class="legend-item"><span class="legend-color" style="background:rgba(166,217,106,0.8);"></span>County / UA data</div>`;
     div.innerHTML = html;
     return div;
 };
@@ -182,9 +182,9 @@ function getDataForFeature(props) {
     const name = props.name;
     const nation = props.nation;
 
-    // Try exact match on LA/district name
+    // Try exact match on county/UA name
     if (csvLocationData[name] && csvLocationData[name][selectedAge]) {
-        return { data: csvLocationData[name][selectedAge], source: 'local authority' };
+        return { data: csvLocationData[name][selectedAge], source: 'direct' };
     }
     // Fall back to nation-level data
     if (nation && csvLocationData[nation] && csvLocationData[nation][selectedAge]) {
@@ -198,9 +198,9 @@ function getDataForFeature(props) {
 }
 
 // ── Load GeoJSON (external file) ────────────────────────────────────
-fetch('uk_lads.json')
+fetch('uk_counties.json')
     .then(r => {
-        if (!r.ok) throw new Error('Failed to load uk_lads.json');
+        if (!r.ok) throw new Error('Failed to load uk_counties.json');
         return r.json();
     })
     .then(data => {
@@ -228,7 +228,7 @@ function renderMap() {
 
 function featureStyle(feature) {
     const { data, source } = getDataForFeature(feature.properties);
-    const isFallback = source && source !== 'local authority';
+    const isFallback = source && source !== 'direct';
     return {
         fillColor: data ? getColor(data.mean) : '#444',
         weight: isFallback ? 0.5 : 1,
