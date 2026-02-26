@@ -95,7 +95,7 @@ let dataScale = 100;
 const NATIONS = ['England', 'Scotland', 'Wales', 'Northern Ireland'];
 
 // ── Color scale ─────────────────────────────────────────────────────
-const COLORS = ['#1a9850', '#a6d96a', '#fee08b', '#fdae61', '#f46d43', '#d73027'];
+const COLORS = ['#ffffb2', '#fed976', '#feb24c', '#fd8d3c', '#f03b20', '#bd0026'];
 const COLOR_BREAKS = [0, 1, 2, 3, 4, 5]; // fixed 1% bins: 0-1, 1-2, 2-3, 3-4, 4-5, 5-6
 
 function getColor(val) {
@@ -169,8 +169,7 @@ legend.onAdd = function () {
         html += `<div class="legend-item"><span class="legend-color" style="background:${COLORS[i]}"></span>${lo}–${hi}%</div>`;
     }
     html += `<div class="legend-item" style="margin-top:6px; border-top:1px solid #0f3460; padding-top:6px;"><span class="legend-color" style="background:#444"></span>No data</div>`;
-    html += `<div class="legend-item"><span class="legend-color" style="background:rgba(166,217,106,0.35); border:1px dashed #0f3460;"></span>Nation-level estimate</div>`;
-    html += `<div class="legend-item"><span class="legend-color" style="background:rgba(166,217,106,0.8);"></span>County / UA data</div>`;
+    html += `<div class="legend-item"><span class="legend-color" style="background:rgba(254,217,118,0.35); border:1px dashed #0f3460;"></span>Nation-level estimate</div>`;
     div.innerHTML = html;
     return div;
 };
