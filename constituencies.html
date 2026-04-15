@@ -130,7 +130,7 @@
 <div id="header">
     <div>
         <h1>UK Constituency Map — Lead Risk Indicators</h1>
-        <div class="subtitle" id="header-subtitle">VOA CTSOP 2023 — pre-1992 dwellings (England & Wales only). UK consumer lead paint banned 1992 (EU Dir. 89/677/EEC).</div>
+        <div class="subtitle" id="header-subtitle">IHME Global Burden of Disease 2021 — Proportion with Blood Lead ≥ 5 µg/dL</div>
     </div>
     <div class="controls">
         <a href="index.html" class="nav-link">View by County / UA</a>
@@ -138,15 +138,15 @@
         <div>
             <label for="indicator-select">Indicator:</label>
             <select id="indicator-select">
-                <option value="bll">Blood lead ≥ 5 µg/dL</option>
-                <option value="pre_1992" selected>Housing pre-1992 (lead paint era)</option>
+                <option value="bll" selected>Blood lead ≥ 5 µg/dL</option>
+                <option value="pre_1992">Housing pre-1992 (lead paint era)</option>
                 <option value="pre_1972">Housing pre-1972 (lead pipes era)</option>
                 <option value="pre_1945">Housing pre-1945 (lead-pigment peak)</option>
                 <option value="pre_1900">Housing pre-1900 (Victorian)</option>
                 <option value="mines">Historic metal mines (Macklin 2023)</option>
             </select>
         </div>
-        <div id="age-wrap" style="display:none;">
+        <div id="age-wrap">
             <label for="age-select">Age Group:</label>
             <select id="age-select" disabled>
                 <option value="">Load data first</option>
@@ -178,7 +178,7 @@ let dataScale = 100;
 let housingData = {};
 let minesData = {};
 let profileData = {};   // PCON24NM -> merged row from constituency_profile.csv
-let selectedIndicator = 'pre_1992';  // 'bll' | 'pre_1900' | 'pre_1945' | 'pre_1972' | 'pre_1992' | 'mines'
+let selectedIndicator = 'bll';  // 'bll' | 'pre_1900' | 'pre_1945' | 'pre_1972' | 'pre_1992' | 'mines'
 
 const NATIONS = ['England', 'Scotland', 'Wales', 'Northern Ireland'];
 
