@@ -66,6 +66,63 @@
             z-index: 1000; background: rgba(22, 33, 62, 0.95); padding: 20px 30px;
             border-radius: 8px; border: 1px solid #0f3460; color: #e0e0e0;
         }
+
+        /* ── Profile panel (click-to-open) ───────────────────────── */
+        #profile-panel {
+            position: fixed; top: 70px; right: 0; width: 360px; max-width: 92vw;
+            height: calc(100vh - 70px); background: #16213e;
+            border-left: 2px solid #0f3460; box-shadow: -4px 0 20px rgba(0,0,0,0.5);
+            color: #e0e0e0; font-size: 0.85rem; line-height: 1.5;
+            transform: translateX(100%); transition: transform 0.25s ease-out;
+            z-index: 1100; overflow-y: auto; padding: 0 18px 24px 18px;
+        }
+        #profile-panel.open { transform: translateX(0); }
+        #profile-panel .close {
+            position: sticky; top: 0; background: #16213e; padding: 12px 0 8px 0;
+            text-align: right; z-index: 2; border-bottom: 1px solid #0f3460;
+        }
+        #profile-panel .close button {
+            background: none; border: 1px solid #0f3460; color: #a0a0b0;
+            padding: 4px 12px; border-radius: 6px; cursor: pointer; font-size: 0.85rem;
+        }
+        #profile-panel .close button:hover { color: #e94560; border-color: #e94560; }
+        #profile-panel h2 {
+            color: #e94560; font-size: 1.15rem; margin: 8px 0 2px 0; line-height: 1.3;
+        }
+        #profile-panel .nation { color: #6c7a89; font-size: 0.78rem; margin-bottom: 14px; }
+        #profile-panel section {
+            margin-top: 14px; padding-top: 12px; border-top: 1px solid #0f3460;
+        }
+        #profile-panel section:first-of-type { border-top: none; }
+        #profile-panel h3 {
+            font-size: 0.78rem; color: #e94560; text-transform: uppercase;
+            letter-spacing: 0.04em; margin: 0 0 8px 0; font-weight: 700;
+        }
+        #profile-panel .row {
+            display: flex; justify-content: space-between; gap: 8px;
+            padding: 3px 0; border-bottom: 1px dotted #0f3460;
+        }
+        #profile-panel .row:last-child { border-bottom: none; }
+        #profile-panel .row .k { color: #a0a0b0; }
+        #profile-panel .row .v { color: #fff; font-weight: 600; text-align: right; white-space: nowrap; }
+        #profile-panel .row .v.alt { color: #4ecca3; }
+        #profile-panel .row .v.warn { color: #e94560; }
+        #profile-panel .empty { color: #6c7a89; font-style: italic; font-size: 0.8rem; }
+        #profile-panel a { color: #6baed6; text-decoration: none; }
+        #profile-panel a:hover { text-decoration: underline; }
+        #profile-panel .party-Lab { color: #d50000; }
+        #profile-panel .party-Con { color: #0087dc; }
+        #profile-panel .party-LD { color: #faa61a; }
+        #profile-panel .party-SNP { color: #fff95d; }
+        #profile-panel .party-Green { color: #6ab023; }
+        #profile-panel .party-Reform { color: #12b6cf; }
+        #profile-panel .party-PC { color: #008142; }
+        #profile-panel .party-Ind { color: #c0c0c0; }
+        #profile-panel .bar {
+            height: 6px; background: #0f3460; border-radius: 3px; margin-top: 4px;
+            overflow: hidden;
+        }
+        #profile-panel .bar-fill { height: 100%; background: linear-gradient(90deg, #6baed6, #e94560); }
     </style>
 </head>
 <body>
@@ -101,6 +158,11 @@
     <div class="loading-msg" id="loading-msg">Loading constituency boundaries...</div>
 </div>
 
+<aside id="profile-panel" aria-hidden="true">
+    <div class="close"><button id="profile-close" type="button">Close ✕</button></div>
+    <div id="profile-body"></div>
+</aside>
+
 <script>
 // ── State ───────────────────────────────────────────────────────────
 let ukGeoJSON = null;
@@ -114,6 +176,7 @@ let dataScale = 100;
 // e.g. housingData['Kensington and Bayswater'] = { pct_pre_1945: 71.8, ... }
 let housingData = {};
 let minesData = {};
+let profileData = {};   // PCON24NM -> merged row from constituency_profile.csv
 let selectedIndicator = 'pre_1992';  // 'bll' | 'pre_1900' | 'pre_1945' | 'pre_1972' | 'pre_1992' | 'mines'
 
 const NATIONS = ['England', 'Scotland', 'Wales', 'Northern Ireland'];
@@ -373,6 +436,7 @@ fetch('uk_constituencies.json')
         autoLoadCSV();
         loadHousingCSV();
         loadMinesCSV();
+        loadProfileCSV();
     })
     .catch(err => {
         document.getElementById('loading-msg').textContent = 'Error loading boundaries: ' + err.message;
@@ -397,6 +461,20 @@ function loadHousingCSV() {
             if (isHousingIndicator(selectedIndicator)) renderMap();
         })
         .catch(err => console.error('Could not load housing CSV:', err));
+}
+
+// ── Load merged constituency profile CSV (everything joined) ────────
+function loadProfileCSV() {
+    fetch('constituency_profile.csv')
+        .then(r => { if (!r.ok) throw new Error('profile CSV not found'); return r.text(); })
+        .then(text => {
+            const results = Papa.parse(text, { header: true, skipEmptyLines: true, dynamicTyping: true });
+            results.data.forEach(row => {
+                if (row.PCON24NM) profileData[row.PCON24NM] = row;
+            });
+            console.log(`Loaded profile data for ${Object.keys(profileData).length} constituencies`);
+        })
+        .catch(err => console.error('Could not load profile CSV:', err));
 }
 
 // ── Load combined UK mines CSV (Macklin + EA IoCMWF) ────────────────
@@ -451,7 +529,8 @@ function onEachFeature(feature, layer) {
             info.update();
         },
         click: function (e) {
-            map.fitBounds(e.target.getBounds());
+            openProfile(feature.properties.name);
+            // Don't auto-zoom - let user keep map context
         }
     });
 }
@@ -569,6 +648,134 @@ ageSelect.addEventListener('change', () => {
     selectedAge = ageSelect.value;
     renderMap();
 });
+
+// ── Profile panel ───────────────────────────────────────────────────
+const profilePanel = document.getElementById('profile-panel');
+const profileBody = document.getElementById('profile-body');
+document.getElementById('profile-close').addEventListener('click', closeProfile);
+
+function closeProfile() {
+    profilePanel.classList.remove('open');
+    profilePanel.setAttribute('aria-hidden', 'true');
+}
+
+function partyClass(party) {
+    if (!party) return '';
+    const p = party.toLowerCase();
+    if (p.includes('labour')) return 'party-Lab';
+    if (p.includes('conservative')) return 'party-Con';
+    if (p.includes('liberal democrat') || p === 'lib dem') return 'party-LD';
+    if (p.includes('snp') || p.includes('scottish national')) return 'party-SNP';
+    if (p.includes('green')) return 'party-Green';
+    if (p.includes('reform')) return 'party-Reform';
+    if (p.includes('plaid')) return 'party-PC';
+    if (p.includes('independent')) return 'party-Ind';
+    return '';
+}
+
+function row(k, v, opts) {
+    if (v == null || v === '' || (typeof v === 'number' && isNaN(v))) return '';
+    const cls = opts && opts.cls ? ' ' + opts.cls : '';
+    return `<div class="row"><span class="k">${k}</span><span class="v${cls}">${v}</span></div>`;
+}
+function fmtPctVal(v, digits) {
+    if (v == null || v === '' || isNaN(v)) return null;
+    return (+v).toFixed(digits != null ? digits : 1) + '%';
+}
+function fmtNum(v) {
+    if (v == null || v === '' || isNaN(v)) return null;
+    return Math.round(+v).toLocaleString();
+}
+
+function openProfile(name) {
+    const p = profileData[name] || { PCON24NM: name };
+    const housing = housingData[name];
+    const mines = minesData[name];
+    const bllRow = (csvLocationData[name] && selectedAge && csvLocationData[name][selectedAge]) || null;
+
+    const nation = p.nation || '';
+    const partyCls = partyClass(p.mp_party);
+
+    let html = `
+        <h2>${name}</h2>
+        <div class="nation">${nation}${p.la_name ? ' · within LA: ' + p.la_name : ''}</div>
+    `;
+
+    // ── MP section ──
+    if (p.mp_name) {
+        html += `<section><h3>Member of Parliament</h3>
+            ${row('Name', p.mp_name)}
+            ${row('Party', `<span class="${partyCls}">${p.mp_party || ''}</span>`)}
+            ${row('Email', p.mp_email ? `<a href="mailto:${p.mp_email}">${p.mp_email}</a>` : null)}
+        </section>`;
+    }
+
+    // ── Demographics & deprivation ──
+    let demoRows = '';
+    demoRows += row('Children aged 0–19', fmtNum(p.child_pop_0_19));
+    demoRows += row('IMD decile (1=most deprived)', p.imd_decile);
+    demoRows += row('IMD quintile', p.imd_quintile);
+    if (p.imd_score) demoRows += row('Deprivation score', (+p.imd_score).toFixed(1));
+    if (demoRows) html += `<section><h3>Demographics & deprivation</h3>${demoRows}</section>`;
+
+    // ── Lead exposure (BLL + model estimate) ──
+    let leadRows = '';
+    if (bllRow) {
+        leadRows += row(`BLL ≥ 5 µg/dL (${selectedAge})`,
+            `<span class="warn">${(bllRow.mean * dataScale).toFixed(2)}%</span>`);
+        if (bllRow.lower != null && bllRow.upper != null) {
+            leadRows += row('95% UI', `${(bllRow.lower * dataScale).toFixed(2)}–${(bllRow.upper * dataScale).toFixed(2)}%`);
+        }
+    }
+    if (p.estimated_children_bl_5plus) {
+        leadRows += row('Modelled children with BLL ≥ 5',
+            `<span class="warn">${fmtNum(p.estimated_children_bl_5plus)}</span>`);
+    }
+    if (p.rate_per_1000_bl_5plus) {
+        leadRows += row('Rate per 1,000 children', (+p.rate_per_1000_bl_5plus).toFixed(1));
+    }
+    if (leadRows) html += `<section><h3>Estimated lead exposure</h3>${leadRows}
+        <div style="font-size:0.7rem; color:#6c7a89; margin-top:6px;">
+            BLL: IHME GBD 2021 (county/UA proxy). Model estimate: housing-age × IMD scaling of national IHME total.
+        </div></section>`;
+
+    // ── Housing age ──
+    let houseRows = '';
+    if (p.pct_pre_1900 != null) houseRows += row('Pre-1900 (Victorian)', fmtPctVal(p.pct_pre_1900));
+    if (p.pct_pre_1945 != null) houseRows += row('Pre-1945 (lead-pigment peak)', fmtPctVal(p.pct_pre_1945));
+    if (p.pct_pre_1972 != null) houseRows += row('Pre-1972 (lead pipes)', fmtPctVal(p.pct_pre_1972));
+    if (p.pct_pre_1992 != null) houseRows += row('Pre-1992 (lead paint ban)', fmtPctVal(p.pct_pre_1992));
+    if (p.n_dwellings_voa) houseRows += row('Total dwellings (VOA)', fmtNum(p.n_dwellings_voa));
+    if (p.pct_non_decent_homes) {
+        const v = +p.pct_non_decent_homes;
+        const pct = v < 1 ? (v * 100) : v;  // some sources are fraction, some pct
+        houseRows += row('Non-decent homes', pct.toFixed(1) + '%');
+    }
+    if (houseRows) html += `<section><h3>Housing</h3>${houseRows}
+        <div style="font-size:0.7rem; color:#6c7a89; margin-top:6px;">
+            Source: VOA CTSOP 4.0 (2023), England & Wales only.
+        </div></section>`;
+    else if (nation === 'Scotland' || nation === 'Northern Ireland')
+        html += `<section><h3>Housing</h3><p class="empty">No dwelling-age data — VOA covers England & Wales only.</p></section>`;
+
+    // ── Mines ──
+    let mineRows = '';
+    if (p.n_mines_total) mineRows += row('Total historic mine sites',
+        `<span class="warn">${p.n_mines_total}</span>`);
+    if (p.n_iocmwf_metalliferous) mineRows += row('EA closed metal mines', p.n_iocmwf_metalliferous);
+    if (p.n_iocmwf_water_pollution) mineRows += row('— polluting waters', p.n_iocmwf_water_pollution);
+    if (p.n_macklin) mineRows += row('Macklin/WAPHA mine sites', p.n_macklin);
+    if (p.n_macklin_pb_relevant) mineRows += row('— Pb/Zn/Cu/Ag/Ba relevant', p.n_macklin_pb_relevant);
+    if (mineRows) html += `<section><h3>Historic metal mining</h3>${mineRows}
+        <div style="font-size:0.7rem; color:#6c7a89; margin-top:6px;">
+            Sources: Macklin et al. 2023 (Science) + EA Inventory of Closed Mining Waste Facilities 2014.
+        </div></section>`;
+    else html += `<section><h3>Historic metal mining</h3><p class="empty">No mines recorded in this constituency.</p></section>`;
+
+    profileBody.innerHTML = html;
+    profilePanel.classList.add('open');
+    profilePanel.setAttribute('aria-hidden', 'false');
+}
 
 // Indicator change
 const indicatorSelect = document.getElementById('indicator-select');

@@ -10,49 +10,47 @@ Ashton-under-Lyne,0,0,0,0,0
 Aylesbury,0,0,0,0,0
 Banbury,0,0,0,0,0
 Barking,0,0,0,0,0
-Barnsley Central,0,0,0,0,0
-Barnsley East,0,0,0,0,0
+Barnsley North,0,0,0,0,0
+Barnsley South,0,0,0,0,0
 Barrow and Furness,0,0,0,0,0
 Basildon and Billericay,0,0,0,0,0
 Basingstoke,0,0,0,0,0
 Bassetlaw,0,0,0,0,0
 Bath,0,0,0,0,0
-Batley and Spen,0,0,0,0,0
 Battersea,0,0,0,0,0
 Beaconsfield,0,0,0,0,0
-Beckenham,0,0,0,0,0
+Beckenham and Penge,0,0,0,0,0
 Bedford,0,0,0,0,0
 Bermondsey and Old Southwark,0,0,0,0,0
-Berwick-upon-Tweed,1,0,0,0,1
-Bethnal Green and Bow,0,0,0,0,0
+Bethnal Green and Stepney,0,0,0,0,0
 Beverley and Holderness,0,0,0,0,0
 Bexhill and Battle,0,0,0,0,0
 Bexleyheath and Crayford,0,0,0,0,0
+Bicester and Woodstock,0,0,0,0,0
 Birkenhead,0,0,0,0,0
-"Birmingham, Edgbaston",0,0,0,0,0
-"Birmingham, Erdington",0,0,0,0,0
-"Birmingham, Hall Green",0,0,0,0,0
-"Birmingham, Hodge Hill",0,0,0,0,0
-"Birmingham, Ladywood",0,0,0,0,0
-"Birmingham, Northfield",0,0,0,0,0
-"Birmingham, Perry Barr",0,0,0,0,0
-"Birmingham, Selly Oak",0,0,0,0,0
-"Birmingham, Yardley",0,0,0,0,0
-Bishop Auckland,13,2,2,11,11
+Birmingham Edgbaston,0,0,0,0,0
+Birmingham Erdington,0,0,0,0,0
+Birmingham Hall Green and Moseley,0,0,0,0,0
+Birmingham Hodge Hill and Solihull North,0,0,0,0,0
+Birmingham Ladywood,0,0,0,0,0
+Birmingham Northfield,0,0,0,0,0
+Birmingham Perry Barr,0,0,0,0,0
+Birmingham Selly Oak,0,0,0,0,0
+Birmingham Yardley,0,0,0,0,0
+Bishop Auckland,24,5,5,18,21
 Blackburn,0,0,0,0,0
-Blackley and Broughton,0,0,0,0,0
-Blackpool North and Cleveleys,0,0,0,0,0
+Blackley and Middleton South,0,0,0,0,0
+Blackpool North and Fleetwood,0,0,0,0,0
 Blackpool South,0,0,0,0,0
-Blaydon,1,0,0,0,0
-Blyth Valley,1,0,0,0,1
+Blaydon and Consett,1,0,0,0,0
+Blyth and Ashington,0,0,0,0,0
 Bognor Regis and Littlehampton,0,0,0,0,0
 Bolsover,0,0,0,0,0
 Bolton North East,0,0,0,0,0
-Bolton South East,0,0,0,0,0
+Bolton South and Walkden,0,0,0,0,0
 Bolton West,0,0,0,0,0
 Bootle,0,0,0,0,0
 Boston and Skegness,0,0,0,0,0
-Bosworth,0,0,0,0,0
 Bournemouth East,0,0,0,0,0
 Bournemouth West,0,0,0,0,0
 Bracknell,0,0,0,0,0
@@ -60,32 +58,33 @@ Bradford East,0,0,0,0,0
 Bradford South,0,0,0,0,0
 Bradford West,0,0,0,0,0
 Braintree,0,0,0,0,0
-Brent Central,0,0,0,0,0
-Brent North,0,0,0,0,0
+Brent East,0,0,0,0,0
+Brent West,0,0,0,0,0
 Brentford and Isleworth,0,0,0,0,0
 Brentwood and Ongar,0,0,0,0,0
-Bridgwater and West Somerset,0,0,0,0,0
-Brigg and Goole,0,0,0,0,0
-"Brighton, Kemptown",0,0,0,0,0
-"Brighton, Pavilion",0,0,0,0,0
+Bridgwater,0,0,0,0,0
+Bridlington and The Wolds,0,0,0,0,0
+Brigg and Immingham,0,0,0,0,0
+Brighton Kemptown and Peacehaven,0,0,0,0,0
+Brighton Pavilion,0,0,0,0,0
+Bristol Central,0,0,0,0,0
 Bristol East,0,0,0,0,0
+Bristol North East,0,0,0,0,0
 Bristol North West,0,0,0,0,0
 Bristol South,0,0,0,0,0
-Bristol West,0,0,0,0,0
-Broadland,0,0,0,0,0
-Bromley and Chislehurst,0,0,0,0,0
+Broadland and Fakenham,0,0,0,0,0
+Bromley and Biggin Hill,0,0,0,0,0
 Bromsgrove,0,0,0,0,0
 Broxbourne,0,0,0,0,0
 Broxtowe,0,0,0,0,0
-Buckingham,0,0,0,0,0
+Buckingham and Bletchley,0,0,0,0,0
 Burnley,1,0,0,0,2
-Burton,0,0,0,0,0
+Burton and Uttoxeter,0,0,0,0,0
 Bury North,0,0,0,0,0
 Bury South,0,0,0,0,0
-Bury St Edmunds,0,0,0,0,0
+Bury St Edmunds and Stowmarket,0,0,0,0,0
 Calder Valley,0,0,0,0,0
-Camberwell and Peckham,0,0,0,0,0
-Camborne and Redruth,5,3,0,2,2
+Camborne and Redruth,8,4,0,4,4
 Cambridge,0,0,0,0,0
 Cannock Chase,0,0,0,0,0
 Canterbury,0,0,0,0,0
@@ -94,111 +93,118 @@ Carshalton and Wallington,0,0,0,0,0
 Castle Point,0,0,0,0,0
 Central Devon,1,2,2,1,1
 Central Suffolk and North Ipswich,0,0,0,0,0
-Charnwood,0,0,0,0,0
 Chatham and Aylesford,0,0,0,0,0
 Cheadle,0,0,0,0,0
 Chelmsford,0,0,0,0,0
 Chelsea and Fulham,0,0,0,0,0
 Cheltenham,0,0,0,0,0
 Chesham and Amersham,0,0,0,0,0
+Chester North and Neston,0,0,0,0,0
+Chester South and Eddisbury,0,0,0,0,0
 Chesterfield,0,0,0,0,0
 Chichester,0,0,0,0,0
 Chingford and Woodford Green,0,0,0,0,0
 Chippenham,0,0,0,0,0
 Chipping Barnet,0,0,0,0,0
-Chorley,3,0,0,0,3
+Chorley,2,0,0,0,2
 Christchurch,0,0,0,0,0
 Cities of London and Westminster,0,0,0,0,0
-City of Chester,0,0,0,0,0
 City of Durham,3,5,5,0,0
 Clacton,0,0,0,0,0
-Cleethorpes,0,0,0,0,0
+Clapham and Brixton Hill,0,0,0,0,0
 Colchester,0,0,0,0,0
 Colne Valley,0,0,0,0,0
 Congleton,1,1,1,0,0
-Copeland,4,1,1,4,4
-Corby,0,0,0,0,0
-Coventry North East,0,0,0,0,0
+Corby and East Northamptonshire,0,0,0,0,0
+Coventry East,0,0,0,0,0
 Coventry North West,0,0,0,0,0
 Coventry South,0,0,0,0,0
+Cramlington and Killingworth,2,1,1,0,1
 Crawley,0,0,0,0,0
 Crewe and Nantwich,0,0,0,0,0
-Croydon Central,0,0,0,0,0
-Croydon North,0,0,0,0,0
+Croydon East,0,0,0,0,0
 Croydon South,0,0,0,0,0
+Croydon West,0,0,0,0,0
 Dagenham and Rainham,0,0,0,0,0
 Darlington,0,0,0,0,0
 Dartford,1,2,2,0,0
 Daventry,0,0,0,0,0
-Denton and Reddish,0,0,0,0,0
 Derby North,0,0,0,0,0
 Derby South,0,0,0,0,0
 Derbyshire Dales,6,7,7,0,0
-Devizes,0,0,0,0,0
-Dewsbury,0,0,0,0,0
-Don Valley,0,0,0,0,0
+Dewsbury and Batley,0,0,0,0,0
+Didcot and Wantage,0,0,0,0,0
 Doncaster Central,0,0,0,0,0
+Doncaster East and the Isle of Axholme,0,0,0,0,0
 Doncaster North,0,0,0,0,0
-Dover,0,0,0,0,0
-Dudley North,0,0,0,0,0
-Dudley South,0,0,0,0,0
+Dorking and Horley,0,0,0,0,0
+Dover and Deal,0,0,0,0,0
+Droitwich and Evesham,0,0,0,0,0
+Dudley,0,0,0,0,0
 Dulwich and West Norwood,0,0,0,0,0
+Dunstable and Leighton Buzzard,0,0,0,0,0
 Ealing Central and Acton,0,0,0,0,0
 Ealing North,0,0,0,0,0
-"Ealing, Southall",0,0,0,0,0
+Ealing Southall,0,0,0,0,0
+Earley and Woodley,0,0,0,0,0
 Easington,0,0,0,0,0
-East Devon,0,0,0,0,0
+East Grinstead and Uckfield,0,0,0,0,0
 East Ham,0,0,0,0,0
 East Hampshire,0,0,0,0,0
 East Surrey,0,0,0,0,0
+East Thanet,0,0,0,0,0
+East Wiltshire,0,0,0,0,0
 East Worthing and Shoreham,0,0,0,0,0
-East Yorkshire,0,0,0,0,0
 Eastbourne,0,0,0,0,0
 Eastleigh,0,0,0,0,0
-Eddisbury,0,0,0,0,0
-Edmonton,0,0,0,0,0
-Ellesmere Port and Neston,0,0,0,0,0
-Elmet and Rothwell,0,0,0,0,0
-Eltham,0,0,0,0,0
+Edmonton and Winchmore Hill,0,0,0,0,0
+Ellesmere Port and Bromborough,0,0,0,0,0
+Eltham and Chislehurst,0,0,0,0,0
+Ely and East Cambridgeshire,0,0,0,0,0
 Enfield North,0,0,0,0,0
-"Enfield, Southgate",0,0,0,0,0
 Epping Forest,0,0,0,0,0
 Epsom and Ewell,0,0,0,0,0
 Erewash,0,0,0,0,0
 Erith and Thamesmead,0,0,0,0,0
 Esher and Walton,0,0,0,0,0
 Exeter,0,0,0,0,0
-Fareham,0,0,0,0,0
+Exmouth and Exeter East,0,0,0,0,0
+Fareham and Waterlooville,0,0,0,0,0
+Farnham and Bordon,0,0,0,0,0
 Faversham and Mid Kent,0,0,0,0,0
 Feltham and Heston,0,0,0,0,0
 Filton and Bradley Stoke,0,0,0,0,0
 Finchley and Golders Green,0,0,0,0,0
 Folkestone and Hythe,0,0,0,0,0
 Forest of Dean,0,0,0,0,0
+Frome and East Somerset,0,0,0,0,0
 Fylde,0,0,0,0,0
 Gainsborough,0,0,0,0,0
-Garston and Halewood,0,0,0,0,0
-Gateshead,0,0,0,0,0
+Gateshead Central and Whickham,0,0,0,0,0
 Gedling,0,0,0,0,0
 Gillingham and Rainham,0,0,0,0,0
+Glastonbury and Somerton,0,0,0,0,0
 Gloucester,0,0,0,0,0
+Godalming and Ash,0,0,0,0,0
+Goole and Pocklington,0,0,0,0,0
+Gorton and Denton,0,0,0,0,0
 Gosport,0,0,0,0,0
-Grantham and Stamford,0,0,0,0,0
+Grantham and Bourne,0,0,0,0,0
 Gravesham,0,0,0,0,0
-Great Grimsby,0,0,0,0,0
+Great Grimsby and Cleethorpes,0,0,0,0,0
 Great Yarmouth,0,0,0,0,0
 Greenwich and Woolwich,0,0,0,0,0
 Guildford,0,0,0,0,0
 Hackney North and Stoke Newington,0,0,0,0,0
 Hackney South and Shoreditch,0,0,0,0,0
-Halesowen and Rowley Regis,0,0,0,0,0
+Halesowen,0,0,0,0,0
 Halifax,0,0,0,0,0
-Haltemprice and Howden,0,0,0,0,0
-Halton,0,0,0,0,0
-Hammersmith,0,0,0,0,0
-Hampstead and Kilburn,0,0,0,0,0
-Harborough,0,0,0,0,0
+Hamble Valley,0,0,0,0,0
+Hammersmith and Chiswick,0,0,0,0,0
+Hampstead and Highgate,0,0,0,0,0
+"Harborough, Oadby and Wigston",0,0,0,0,0
 Harlow,0,0,0,0,0
+Harpenden and Berkhamsted,0,0,0,0,0
 Harrogate and Knaresborough,0,0,0,0,0
 Harrow East,0,0,0,0,0
 Harrow West,0,0,0,0,0
@@ -209,166 +215,175 @@ Havant,0,0,0,0,0
 Hayes and Harlington,0,0,0,0,0
 Hazel Grove,0,0,0,0,0
 Hemel Hempstead,0,0,0,0,0
-Hemsworth,0,0,0,0,0
 Hendon,0,0,0,0,0
-Henley,0,0,0,0,0
+Henley and Thame,0,0,0,0,0
 Hereford and South Herefordshire,0,0,0,0,0
+Herne Bay and Sandwich,0,0,0,0,0
 Hertford and Stortford,0,0,0,0,0
 Hertsmere,0,0,0,0,0
 Hexham,9,7,7,7,7
-Heywood and Middleton,0,0,0,0,0
+Heywood and Middleton North,0,0,0,0,0
 High Peak,2,3,3,0,0
-Hitchin and Harpenden,0,0,0,0,0
+Hinckley and Bosworth,0,0,0,0,0
+Hitchin,0,0,0,0,0
 Holborn and St Pancras,0,0,0,0,0
+Honiton and Sidmouth,0,0,0,0,0
 Hornchurch and Upminster,0,0,0,0,0
-Hornsey and Wood Green,0,0,0,0,0
+Hornsey and Friern Barnet,0,0,0,0,0
 Horsham,0,0,0,0,0
 Houghton and Sunderland South,0,0,0,0,0
-Hove,0,0,0,0,0
+Hove and Portslade,0,0,0,0,0
 Huddersfield,0,0,0,0,0
 Huntingdon,0,0,0,0,0
 Hyndburn,0,0,0,0,0
 Ilford North,0,0,0,0,0
 Ilford South,0,0,0,0,0
 Ipswich,0,0,0,0,0
-Isle of Wight,0,0,0,0,0
+Isle of Wight East,0,0,0,0,0
+Isle of Wight West,0,0,0,0,0
 Islington North,0,0,0,0,0
 Islington South and Finsbury,0,0,0,0,0
-Jarrow,0,0,0,0,0
-Keighley,0,0,0,0,0
+Jarrow and Gateshead East,0,0,0,0,0
+Keighley and Ilkley,0,0,0,0,0
 Kenilworth and Southam,0,0,0,0,0
-Kensington,0,0,0,0,0
+Kensington and Bayswater,0,0,0,0,0
 Kettering,0,0,0,0,0
 Kingston and Surbiton,0,0,0,0,0
 Kingston upon Hull East,0,0,0,0,0
-Kingston upon Hull North,0,0,0,0,0
-Kingston upon Hull West and Hessle,0,0,0,0,0
-Kingswood,0,0,0,0,0
+Kingston upon Hull North and Cottingham,0,0,0,0,0
+Kingston upon Hull West and Haltemprice,0,0,0,0,0
+Kingswinford and South Staffordshire,0,0,0,0,0
 Knowsley,0,0,0,0,0
-Lancaster and Fleetwood,0,0,0,0,0
-Leeds Central,0,0,0,0,0
+Lancaster and Wyre,0,0,0,0,0
+Leeds Central and Headingley,0,0,0,0,0
 Leeds East,0,0,0,0,0
 Leeds North East,0,0,0,0,0
 Leeds North West,0,0,0,0,0
-Leeds West,0,0,0,0,0
+Leeds South,0,0,0,0,0
+Leeds South West and Morley,0,0,0,0,0
+Leeds West and Pudsey,0,0,0,0,0
 Leicester East,0,0,0,0,0
 Leicester South,0,0,0,0,0
 Leicester West,0,0,0,0,0
-Leigh,1,0,0,0,1
+Leigh and Atherton,1,0,0,0,1
 Lewes,0,0,0,0,0
 Lewisham East,0,0,0,0,0
-Lewisham West and Penge,0,0,0,0,0
-"Lewisham, Deptford",0,0,0,0,0
+Lewisham North,0,0,0,0,0
+Lewisham West and East Dulwich,0,0,0,0,0
 Leyton and Wanstead,0,0,0,0,0
 Lichfield,0,0,0,0,0
 Lincoln,0,0,0,0,0
-"Liverpool, Riverside",0,0,0,0,0
-"Liverpool, Walton",0,0,0,0,0
-"Liverpool, Wavertree",0,0,0,0,0
-"Liverpool, West Derby",0,0,0,0,0
+Liverpool Garston,0,0,0,0,0
+Liverpool Riverside,0,0,0,0,0
+Liverpool Walton,0,0,0,0,0
+Liverpool Wavertree,0,0,0,0,0
+Liverpool West Derby,0,0,0,0,0
 Loughborough,0,0,0,0,0
 Louth and Horncastle,0,0,0,0,0
-Ludlow,7,1,1,7,7
+Lowestoft,0,0,0,0,0
 Luton North,0,0,0,0,0
-Luton South,0,0,0,0,0
+Luton South and South Bedfordshire,0,0,0,0,0
 Macclesfield,0,0,0,0,0
 Maidenhead,0,0,0,0,0
-Maidstone and The Weald,0,0,0,0,0
+Maidstone and Malling,0,0,0,0,0
 Makerfield,0,0,0,0,0
 Maldon,0,0,0,0,0
 Manchester Central,0,0,0,0,0
-"Manchester, Gorton",0,0,0,0,0
-"Manchester, Withington",0,0,0,0,0
+Manchester Rusholme,0,0,0,0,0
+Manchester Withington,0,0,0,0,0
 Mansfield,0,0,0,0,0
-Meon Valley,0,0,0,0,0
-Meriden,0,0,0,0,0
+Melksham and Devizes,0,0,0,0,0
+Melton and Syston,0,0,0,0,0
+Meriden and Solihull East,0,0,0,0,0
 Mid Bedfordshire,0,0,0,0,0
+Mid Buckinghamshire,0,0,0,0,0
+Mid Cheshire,0,0,0,0,0
 Mid Derbyshire,0,0,0,0,0
 Mid Dorset and North Poole,0,0,0,0,0
+Mid Leicestershire,0,0,0,0,0
 Mid Norfolk,0,0,0,0,0
 Mid Sussex,0,0,0,0,0
-Mid Worcestershire,0,0,0,0,0
-Middlesbrough,0,0,0,0,0
+Middlesbrough and Thornaby East,0,0,0,0,0
 Middlesbrough South and East Cleveland,0,0,0,0,0
+Milton Keynes Central,0,0,0,0,0
 Milton Keynes North,0,0,0,0,0
-Milton Keynes South,0,0,0,0,0
 Mitcham and Morden,0,0,0,0,0
-Mole Valley,0,0,0,0,0
 Morecambe and Lunesdale,0,0,0,0,0
-Morley and Outwood,0,0,0,0,0
 New Forest East,0,0,0,0,0
 New Forest West,0,0,0,0,0
 Newark,0,0,0,0,0
 Newbury,0,0,0,0,0
-Newcastle upon Tyne Central,0,0,0,0,0
-Newcastle upon Tyne East,0,0,0,0,0
+Newcastle upon Tyne Central and West,0,0,0,0,0
+Newcastle upon Tyne East and Wallsend,0,0,0,0,0
 Newcastle upon Tyne North,0,0,0,0,0
 Newcastle-under-Lyme,0,0,0,0,0
 Newton Abbot,0,0,0,0,0
-"Normanton, Pontefract and Castleford",0,0,0,0,0
+Newton Aycliffe and Spennymoor,0,0,0,0,0
+Normanton and Hemsworth,0,0,0,0,0
+North Bedfordshire,0,0,0,0,0
 North Cornwall,2,0,0,2,2
+North Cotswolds,0,0,0,0,0
 North Devon,0,0,0,0,0
 North Dorset,0,0,0,0,0
 North Durham,4,5,5,0,0
-North East Bedfordshire,0,0,0,0,0
 North East Cambridgeshire,0,0,0,0,0
 North East Derbyshire,0,0,0,0,0
 North East Hampshire,0,0,0,0,0
 North East Hertfordshire,0,0,0,0,0
-North East Somerset,0,0,0,0,0
+North East Somerset and Hanham,0,0,0,0,0
 North Herefordshire,0,0,0,0,0
 North Norfolk,0,0,0,0,0
+North Northumberland,1,0,0,0,1
 North Shropshire,0,0,0,0,0
 North Somerset,0,0,0,0,0
-North Swindon,0,0,0,0,0
-North Thanet,0,0,0,0,0
-North Tyneside,0,0,0,0,0
-North Warwickshire,0,0,0,0,0
+North Warwickshire and Bedworth,0,0,0,0,0
 North West Cambridgeshire,0,0,0,0,0
-North West Durham,11,3,3,7,10
+North West Essex,0,0,0,0,0
 North West Hampshire,0,0,0,0,0
 North West Leicestershire,0,0,0,0,0
 North West Norfolk,0,0,0,0,0
-North Wiltshire,0,0,0,0,0
 Northampton North,0,0,0,0,0
 Northampton South,0,0,0,0,0
 Norwich North,0,0,0,0,0
 Norwich South,0,0,0,0,0
 Nottingham East,0,0,0,0,0
-Nottingham North,0,0,0,0,0
+Nottingham North and Kimberley,0,0,0,0,0
 Nottingham South,0,0,0,0,0
 Nuneaton,0,0,0,0,0
 Old Bexley and Sidcup,0,0,0,0,0
 Oldham East and Saddleworth,0,0,0,0,0
-Oldham West and Royton,0,0,0,0,0
+"Oldham West, Chadderton and Royton",0,0,0,0,0
 Orpington,0,0,0,0,0
+Ossett and Denby Dale,0,0,0,0,0
 Oxford East,0,0,0,0,0
 Oxford West and Abingdon,0,0,0,0,0
-Pendle,0,0,0,0,0
+Peckham,0,0,0,0,0
+Pendle and Clitheroe,1,1,1,0,0
 Penistone and Stocksbridge,2,0,0,0,2
-Penrith and The Border,17,6,6,13,15
+Penrith and Solway,16,4,4,13,15
 Peterborough,0,0,0,0,0
-"Plymouth, Moor View",0,0,0,0,0
-"Plymouth, Sutton and Devonport",0,0,0,0,0
+Plymouth Moor View,0,0,0,0,0
+Plymouth Sutton and Devonport,0,0,0,0,0
+"Pontefract, Castleford and Knottingley",0,0,0,0,0
 Poole,0,0,0,0,0
 Poplar and Limehouse,0,0,0,0,0
 Portsmouth North,0,0,0,0,0
 Portsmouth South,0,0,0,0,0
 Preston,0,0,0,0,0
-Pudsey,0,0,0,0,0
 Putney,0,0,0,0,0
+Queen's Park and Maida Vale,0,0,0,0,0
+Rawmarsh and Conisbrough,0,0,0,0,0
 Rayleigh and Wickford,0,0,0,0,0
-Reading East,0,0,0,0,0
-Reading West,0,0,0,0,0
+Reading Central,0,0,0,0,0
+Reading West and Mid Berkshire,0,0,0,0,0
 Redcar,0,0,0,0,0
 Redditch,0,0,0,0,0
 Reigate,0,0,0,0,0
-Ribble Valley,2,3,1,0,0
-Richmond (Yorks),16,1,1,15,15
+Ribble Valley,1,2,0,0,0
+Richmond and Northallerton,16,1,1,15,15
 Richmond Park,0,0,0,0,0
 Rochdale,1,0,0,0,0
 Rochester and Strood,0,0,0,0,0
-Rochford and Southend East,0,0,0,0,0
 Romford,0,0,0,0,0
 Romsey and Southampton North,0,0,0,0,0
 Rossendale and Darwen,0,0,0,0,0
@@ -376,143 +391,140 @@ Rother Valley,0,0,0,0,0
 Rotherham,0,0,0,0,0
 Rugby,0,0,0,0,0
 "Ruislip, Northwood and Pinner",0,0,0,0,0
+Runcorn and Helsby,0,0,0,0,0
 Runnymede and Weybridge,0,0,0,0,0
 Rushcliffe,0,0,0,0,0
-Rutland and Melton,0,0,0,0,0
-Saffron Walden,0,0,0,0,0
-Salford and Eccles,0,0,0,0,0
+Rutland and Stamford,0,0,0,0,0
+Salford,0,0,0,0,0
 Salisbury,0,0,0,0,0
 Scarborough and Whitby,0,0,0,0,0
 Scunthorpe,0,0,0,0,0
-Sedgefield,0,0,0,0,0
 Sefton Central,0,0,0,0,0
-Selby and Ainsty,0,0,0,0,0
+Selby,0,0,0,0,0
 Sevenoaks,0,0,0,0,0
+Sheffield Brightside and Hillsborough,0,0,0,0,0
 Sheffield Central,0,0,0,0,0
+Sheffield Hallam,0,0,0,0,0
+Sheffield Heeley,0,0,0,0,0
 Sheffield South East,0,0,0,0,0
-"Sheffield, Brightside and Hillsborough",0,0,0,0,0
-"Sheffield, Hallam",0,0,0,0,0
-"Sheffield, Heeley",0,0,0,0,0
-Sherwood,0,0,0,0,0
+Sherwood Forest,0,0,0,0,0
 Shipley,0,0,0,0,0
-Shrewsbury and Atcham,1,1,1,0,0
+Shrewsbury,1,1,1,0,0
 Sittingbourne and Sheppey,0,0,0,0,0
 Skipton and Ripon,9,24,24,4,4
 Sleaford and North Hykeham,0,0,0,0,0
 Slough,0,0,0,0,0
-Solihull,0,0,0,0,0
-Somerton and Frome,0,0,0,0,0
+Smethwick,0,0,0,0,0
+Solihull West and Shirley,0,0,0,0,0
 South Basildon and East Thurrock,0,0,0,0,0
 South Cambridgeshire,0,0,0,0,0
+South Cotswolds,0,0,0,0,0
 South Derbyshire,0,0,0,0,0
+South Devon,1,0,0,1,1
 South Dorset,0,0,0,0,0
-South East Cambridgeshire,0,0,0,0,0
 South East Cornwall,6,2,2,5,5
 South Holland and The Deepings,0,0,0,0,0
 South Leicestershire,0,0,0,0,0
 South Norfolk,0,0,0,0,0
 South Northamptonshire,0,0,0,0,0
-South Ribble,0,0,0,0,0
+South Ribble,1,0,0,0,1
 South Shields,0,0,0,0,0
-South Staffordshire,0,0,0,0,0
+South Shropshire,7,1,1,7,7
 South Suffolk,0,0,0,0,0
-South Swindon,0,0,0,0,0
-South Thanet,0,0,0,0,0
-South West Bedfordshire,0,0,0,0,0
 South West Devon,0,0,0,0,0
 South West Hertfordshire,0,0,0,0,0
 South West Norfolk,0,0,0,0,0
-South West Surrey,0,0,0,0,0
 South West Wiltshire,0,0,0,0,0
-"Southampton, Itchen",0,0,0,0,0
-"Southampton, Test",0,0,0,0,0
-Southend West,0,0,0,0,0
+Southampton Itchen,0,0,0,0,0
+Southampton Test,0,0,0,0,0
+Southend East and Rochford,0,0,0,0,0
+Southend West and Leigh,0,0,0,0,0
+Southgate and Wood Green,0,0,0,0,0
 Southport,0,0,0,0,0
 Spelthorne,0,0,0,0,0
+Spen Valley,0,0,0,0,0
 St Albans,0,0,0,0,0
 St Austell and Newquay,0,0,0,0,0
 St Helens North,0,0,0,0,0
 St Helens South and Whiston,0,0,0,0,0
 St Ives,5,3,1,3,3
+St Neots and Mid Cambridgeshire,0,0,0,0,0
 Stafford,0,0,0,0,0
 Staffordshire Moorlands,0,0,0,0,0
 Stalybridge and Hyde,0,0,0,0,0
 Stevenage,0,0,0,0,0
 Stockport,0,0,0,0,0
 Stockton North,0,0,0,0,0
-Stockton South,0,0,0,0,0
+Stockton West,0,0,0,0,0
 Stoke-on-Trent Central,0,0,0,0,0
 Stoke-on-Trent North,0,0,0,0,0
 Stoke-on-Trent South,0,0,0,0,0
-Stone,0,0,0,0,0
+"Stone, Great Wyrley and Penkridge",0,0,0,0,0
 Stourbridge,0,0,0,0,0
+Stratford and Bow,0,0,0,0,0
 Stratford-on-Avon,0,0,0,0,0
-Streatham,0,0,0,0,0
+Streatham and Croydon North,0,0,0,0,0
 Stretford and Urmston,0,0,0,0,0
 Stroud,0,0,0,0,0
 Suffolk Coastal,0,0,0,0,0
 Sunderland Central,0,0,0,0,0
 Surrey Heath,0,0,0,0,0
+Sussex Weald,0,0,0,0,0
 Sutton and Cheam,0,0,0,0,0
 Sutton Coldfield,0,0,0,0,0
+Swindon North,0,0,0,0,0
+Swindon South,0,0,0,0,0
 Tamworth,0,0,0,0,0
 Tatton,0,0,0,0,0
-Taunton Deane,0,0,0,0,0
+Taunton and Wellington,0,0,0,0,0
 Telford,0,0,0,0,0
 Tewkesbury,0,0,0,0,0
-The Cotswolds,0,0,0,0,0
 The Wrekin,0,0,0,0,0
 Thirsk and Malton,0,0,0,0,0
 Thornbury and Yate,0,0,0,0,0
 Thurrock,0,0,0,0,0
-Tiverton and Honiton,0,0,0,0,0
-Tonbridge and Malling,0,0,0,0,0
+Tipton and Wednesbury,0,0,0,0,0
+Tiverton and Minehead,0,0,0,0,0
+Tonbridge,0,0,0,0,0
 Tooting,0,0,0,0,0
 Torbay,0,0,0,0,0
-Torridge and West Devon,3,0,0,3,3
-Totnes,1,0,0,1,1
+Torridge and Tavistock,3,0,0,3,3
 Tottenham,0,0,0,0,0
-Truro and Falmouth,7,2,1,5,5
+Truro and Falmouth,4,1,1,3,3
 Tunbridge Wells,0,0,0,0,0
 Twickenham,0,0,0,0,0
-Tynemouth,1,1,1,0,0
+Tynemouth,0,0,0,0,0
 Uxbridge and South Ruislip,0,0,0,0,0
-Vauxhall,0,0,0,0,0
-Wakefield,0,0,0,0,0
+Vauxhall and Camberwell Green,0,0,0,0,0
+Wakefield and Rothwell,0,0,0,0,0
 Wallasey,0,0,0,0,0
-Walsall North,0,0,0,0,0
-Walsall South,0,0,0,0,0
+Walsall and Bloxwich,0,0,0,0,0
 Walthamstow,0,0,0,0,0
-Wansbeck,0,0,0,0,0
-Wantage,0,0,0,0,0
-Warley,0,0,0,0,0
 Warrington North,0,0,0,0,0
 Warrington South,0,0,0,0,0
 Warwick and Leamington,0,0,0,0,0
-Washington and Sunderland West,0,0,0,0,0
+Washington and Gateshead South,0,0,0,0,0
 Watford,0,0,0,0,0
-Waveney,0,0,0,0,0
-Wealden,0,0,0,0,0
-Weaver Vale,0,0,0,0,0
-Wellingborough,0,0,0,0,0
-Wells,0,0,0,0,0
+Waveney Valley,0,0,0,0,0
+Weald of Kent,0,0,0,0,0
+Wellingborough and Rushden,0,0,0,0,0
+Wells and Mendip Hills,0,0,0,0,0
 Welwyn Hatfield,0,0,0,0,0
-Wentworth and Dearne,0,0,0,0,0
-West Bromwich East,0,0,0,0,0
-West Bromwich West,0,0,0,0,0
+West Bromwich,0,0,0,0,0
 West Dorset,0,0,0,0,0
-West Ham,0,0,0,0,0
+West Ham and Beckton,0,0,0,0,0
 West Lancashire,0,0,0,0,0
 West Suffolk,0,0,0,0,0
 West Worcestershire,0,0,0,0,0
-Westminster North,0,0,0,0,0
-Westmorland and Lonsdale,2,0,0,3,3
-Weston-Super-Mare,0,0,0,0,0
+Westmorland and Lonsdale,8,3,3,7,8
+Weston-super-Mare,0,0,0,0,0
+Wetherby and Easingwold,0,0,0,0,0
+Whitehaven and Workington,0,0,0,0,0
+Widnes and Halewood,0,0,0,0,0
 Wigan,0,0,0,0,0
 Wimbledon,0,0,0,0,0
 Winchester,0,0,0,0,0
 Windsor,0,0,0,0,0
-Wirral South,0,0,0,0,0
 Wirral West,0,0,0,0,0
 Witham,0,0,0,0,0
 Witney,0,0,0,0,0
@@ -520,132 +532,120 @@ Woking,0,0,0,0,0
 Wokingham,0,0,0,0,0
 Wolverhampton North East,0,0,0,0,0
 Wolverhampton South East,0,0,0,0,0
-Wolverhampton South West,0,0,0,0,0
+Wolverhampton West,0,0,0,0,0
 Worcester,0,0,0,0,0
-Workington,1,0,0,0,1
-Worsley and Eccles South,0,0,0,0,0
+Worsley and Eccles,0,0,0,0,0
 Worthing West,0,0,0,0,0
 Wycombe,0,0,0,0,0
-Wyre and Preston North,0,0,0,0,0
 Wyre Forest,0,0,0,0,0
 Wythenshawe and Sale East,0,0,0,0,0
 Yeovil,0,0,0,0,0
 York Central,0,0,0,0,0
 York Outer,0,0,0,0,0
+Belfast East,0,0,0,0,0
+Belfast North,0,0,0,0,0
+Belfast South and Mid Down,0,0,0,0,0
+Belfast West,0,0,0,0,0
+East Antrim,0,0,0,0,0
+East Londonderry,0,0,0,0,0
+Fermanagh and South Tyrone,0,0,0,0,0
+Foyle,0,0,0,0,0
+Lagan Valley,0,0,0,0,0
+Mid Ulster,0,0,0,0,0
+Newry and Armagh,0,0,0,0,0
+North Antrim,0,0,0,0,0
+North Down,0,0,0,0,0
+South Antrim,0,0,0,0,0
+South Down,0,0,0,0,0
+Strangford,0,0,0,0,0
+Upper Bann,0,0,0,0,0
+West Tyrone,0,0,0,0,0
+East Renfrewshire,1,1,1,0,0
+Na h-Eileanan an Iar,0,0,0,0,0
+Midlothian,0,0,0,0,0
+North Ayrshire and Arran,2,3,3,0,0
+Orkney and Shetland,0,0,0,0,0
 Aberdeen North,0,0,0,0,0
 Aberdeen South,0,0,0,0,0
+Aberdeenshire North and Moray East,0,0,0,0,0
 Airdrie and Shotts,0,0,0,0,0
-Angus,0,0,0,0,0
-Argyll and Bute,0,0,0,0,0
-"Ayr, Carrick and Cumnock",0,0,0,0,0
-Banff and Buchan,0,0,0,0,0
-"Berwickshire, Roxburgh and Selkirk",0,0,0,0,0
+Alloa and Grangemouth,0,0,0,0,0
+Angus and Perthshire Glens,2,3,3,0,0
+Arbroath and Broughty Ferry,0,0,0,0,0
+"Argyll, Bute and South Lochaber",1,2,2,0,0
+Bathgate and Linlithgow,0,0,0,0,0
 "Caithness, Sutherland and Easter Ross",0,0,0,0,0
-Central Ayrshire,0,0,0,0,0
-"Coatbridge, Chryston and Bellshill",0,0,0,0,0
-"Cumbernauld, Kilsyth and Kirkintilloch East",0,0,0,0,0
+Coatbridge and Bellshill,0,0,0,0,0
+Cowdenbeath and Kirkcaldy,0,0,0,0,0
+Cumbernauld and Kirkintilloch,0,0,0,0,0
 Dumfries and Galloway,1,4,4,0,0
 "Dumfriesshire, Clydesdale and Tweeddale",1,1,1,0,0
-Dundee East,0,0,0,0,0
-Dundee West,0,0,0,0,0
-Dunfermline and West Fife,0,0,0,0,0
-East Dunbartonshire,0,0,0,0,0
-"East Kilbride, Strathaven and Lesmahagow",0,0,0,0,0
-East Lothian,0,0,0,0,0
-East Renfrewshire,1,1,1,0,0
-Edinburgh East,0,0,0,0,0
+Dundee Central,0,0,0,0,0
+Dunfermline and Dollar,0,0,0,0,0
+East Kilbride and Strathaven,0,0,0,0,0
+Edinburgh East and Musselburgh,0,0,0,0,0
 Edinburgh North and Leith,0,0,0,0,0
 Edinburgh South,0,0,0,0,0
 Edinburgh South West,0,0,0,0,0
 Edinburgh West,0,0,0,0,0
-Na h-Eileanan an Iar,0,0,0,0,0
 Falkirk,0,0,0,0,0
-Glasgow Central,0,0,0,0,0
 Glasgow East,0,0,0,0,0
 Glasgow North,0,0,0,0,0
 Glasgow North East,0,0,0,0,0
-Glasgow North West,0,0,0,0,0
 Glasgow South,0,0,0,0,0
 Glasgow South West,0,0,0,0,0
-Glenrothes,0,0,0,0,0
-Gordon,0,0,0,0,0
-Inverclyde,0,0,0,0,0
-"Inverness, Nairn, Badenoch and Strathspey",1,1,1,0,0
-Kilmarnock and Loudoun,6,21,21,0,0
-Kirkcaldy and Cowdenbeath,0,0,0,0,0
-Lanark and Hamilton East,0,0,0,0,0
-Linlithgow and East Falkirk,0,0,0,0,0
+Glasgow West,0,0,0,0,0
+Glenrothes and Mid Fife,0,0,0,0,0
+Gordon and Buchan,0,0,0,0,0
+Hamilton and Clyde Valley,0,0,0,0,0
+Inverclyde and Renfrewshire West,0,0,0,0,0
+"Inverness, Skye and West Ross-shire",0,0,0,0,0
 Livingston,0,0,0,0,0
-Midlothian,0,0,0,0,0
-Moray,0,0,0,0,0
-Motherwell and Wishaw,0,0,0,0,0
-North Ayrshire and Arran,2,3,3,0,0
+Lothian East,0,0,0,0,0
+Mid Dunbartonshire,0,0,0,0,0
+"Moray West, Nairn and Strathspey",1,1,1,0,0
+"Motherwell, Wishaw and Carluke",0,0,0,0,0
 North East Fife,0,0,0,0,0
-Ochil and South Perthshire,0,0,0,0,0
-Orkney and Shetland,0,0,0,0,0
 Paisley and Renfrewshire North,0,0,0,0,0
 Paisley and Renfrewshire South,2,4,4,0,0
-Perth and North Perthshire,2,3,3,0,0
-"Ross, Skye and Lochaber",1,2,2,0,0
-Rutherglen and Hamilton West,0,0,0,0,0
-Stirling,0,0,0,0,0
-West Aberdeenshire and Kincardine,0,0,0,0,0
+Perth and Kinross-shire,0,0,0,0,0
+Rutherglen,0,0,0,0,0
+Stirling and Strathallan,0,0,0,0,0
 West Dunbartonshire,0,0,0,0,0
-Ynys Mon,1,0,0,1,1
-Delyn,0,0,0,0,0
+"Ayr, Carrick and Cumnock",0,0,0,0,0
+"Berwickshire, Roxburgh and Selkirk",0,0,0,0,0
+Central Ayrshire,0,0,0,0,0
+Kilmarnock and Loudoun,6,21,21,0,0
+West Aberdeenshire and Kincardine,0,0,0,0,0
+Aberafan Maesteg,0,0,0,0,0
 Alyn and Deeside,0,0,0,0,0
-Wrexham,0,0,0,0,0
-Llanelli,0,0,0,0,0
-Gower,0,0,0,0,0
-Swansea West,0,0,0,0,0
-Swansea East,0,0,0,0,0
-Aberavon,0,0,0,0,0
-Cardiff Central,0,0,0,0,0
-Cardiff North,0,0,0,0,0
-Rhondda,0,0,0,0,0
-Torfaen,0,0,0,0,0
-Monmouth,0,0,0,0,0
-Newport East,0,0,0,0,0
-Newport West,0,0,0,0,0
-Arfon,0,0,0,0,0
-Aberconwy,5,1,1,6,6
-Clwyd West,0,0,0,0,0
-Vale of Clwyd,0,0,0,0,0
-Dwyfor Meirionnydd,1,1,1,0,0
-Clwyd South,0,0,0,0,0
-Montgomeryshire,10,9,9,7,7
-Ceredigion,23,0,0,23,23
-Preseli Pembrokeshire,1,0,0,1,1
-Carmarthen West and South Pembrokeshire,0,0,0,0,0
-Carmarthen East and Dinefwr,2,1,0,1,1
-Brecon and Radnorshire,0,0,0,0,0
-Neath,0,0,0,0,0
-Cynon Valley,0,0,0,0,0
-Merthyr Tydfil and Rhymney,0,0,0,0,0
-Blaenau Gwent,0,0,0,0,0
+Bangor Aberconwy,5,1,1,6,6
+Blaenau Gwent and Rhymney,0,0,0,0,0
+"Brecon, Radnor and Cwm Tawe",0,0,0,0,0
 Bridgend,0,0,0,0,0
-Ogmore,0,0,0,0,0
-Pontypridd,0,0,0,0,0
+Caerfyrddin,2,1,0,1,1
 Caerphilly,0,0,0,0,0
-Islwyn,0,0,0,0,0
-Vale of Glamorgan,0,0,0,0,0
-Cardiff West,0,0,0,0,0
+Cardiff East,0,0,0,0,0
+Cardiff North,0,0,0,0,0
 Cardiff South and Penarth,0,0,0,0,0
-North Down,0,0,0,0,0
-Upper Bann,0,0,0,0,0
-East Antrim,0,0,0,0,0
-North Antrim,0,0,0,0,0
-South Down,0,0,0,0,0
-Mid Ulster,0,0,0,0,0
-Newry And Armagh,0,0,0,0,0
-West Tyrone,0,0,0,0,0
-Belfast East,0,0,0,0,0
-Belfast South,0,0,0,0,0
-Strangford,0,0,0,0,0
-Belfast West,0,0,0,0,0
-Lagan Valley,0,0,0,0,0
-South Antrim,0,0,0,0,0
-Belfast North,0,0,0,0,0
-East Londonderry,0,0,0,0,0
-Fermanagh And South Tyrone,0,0,0,0,0
-Foyle,0,0,0,0,0
+Cardiff West,0,0,0,0,0
+Ceredigion Preseli,24,0,0,24,24
+Clwyd East,0,0,0,0,0
+Clwyd North,0,0,0,0,0
+Dwyfor Meirionnydd,1,1,1,0,0
+Gower,0,0,0,0,0
+Llanelli,0,0,0,0,0
+Merthyr Tydfil and Aberdare,0,0,0,0,0
+Mid and South Pembrokeshire,0,0,0,0,0
+Monmouthshire,0,0,0,0,0
+Montgomeryshire and Glyndwr,10,9,9,7,7
+Neath and Swansea East,0,0,0,0,0
+Newport East,0,0,0,0,0
+Newport West and Islwyn,0,0,0,0,0
+Pontypridd,0,0,0,0,0
+Rhondda and Ogmore,0,0,0,0,0
+Swansea West,0,0,0,0,0
+Torfaen,0,0,0,0,0
+Vale of Glamorgan,0,0,0,0,0
+Wrexham,0,0,0,0,0
+Ynys Môn,1,0,0,1,1
