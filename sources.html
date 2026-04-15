@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UK Lead Risk Map — Data sources & methods</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #1a1a2e; color: #e0e0e0; line-height: 1.55;
+        }
+        #header {
+            background: #16213e; padding: 16px 24px; border-bottom: 2px solid #0f3460;
+            display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+        }
+        #header h1 { font-size: 1.3rem; color: #e94560; font-weight: 700; }
+        #header .subtitle { font-size: 0.85rem; color: #a0a0b0; }
+        .nav-link {
+            color: #a0a0b0; font-size: 0.82rem; text-decoration: none;
+            border: 1px solid #0f3460; padding: 6px 12px; border-radius: 6px;
+            transition: color 0.2s, border-color 0.2s;
+        }
+        .nav-link:hover { color: #e94560; border-color: #e94560; }
+
+        main { max-width: 800px; margin: 0 auto; padding: 28px 24px 64px 24px; font-size: 0.95rem; }
+        main h2 {
+            color: #e94560; font-size: 1.4rem; margin: 32px 0 12px 0; padding-bottom: 6px;
+            border-bottom: 1px solid #0f3460;
+        }
+        main h2:first-child { margin-top: 0; }
+        main h3 { color: #6baed6; font-size: 1.05rem; margin: 22px 0 6px 0; }
+        main p { margin: 8px 0; color: #cfcfcf; }
+        main a { color: #6baed6; text-decoration: none; }
+        main a:hover { text-decoration: underline; }
+        main ul { margin: 8px 0 8px 22px; }
+        main li { margin: 4px 0; }
+        main code {
+            background: #0f1c30; padding: 1px 6px; border-radius: 3px;
+            font-size: 0.85em; color: #fed976;
+        }
+        main blockquote {
+            border-left: 3px solid #e94560; padding: 8px 14px; margin: 12px 0;
+            background: #16213e; font-size: 0.9rem; color: #a0a0b0;
+        }
+        table {
+            width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 0.88rem;
+        }
+        th, td { padding: 6px 10px; text-align: left; border-bottom: 1px solid #0f3460; }
+        th { color: #e94560; font-weight: 600; }
+        td.warn { color: #e94560; }
+        .lead { font-size: 1rem; color: #fff; margin-bottom: 18px; }
+    </style>
+</head>
+<body>
+
+<div id="header">
+    <div>
+        <h1>UK Lead Risk Map — Data sources & methods</h1>
+        <div class="subtitle">Provenance and limitations for every layer on the map</div>
+    </div>
+    <div>
+        <a href="constituencies.html" class="nav-link">← Back to map</a>
+    </div>
+</div>
+
+<main>
+
+<p class="lead">
+This map combines several open datasets to give a constituency-level picture of
+likely childhood lead-exposure risk in the UK. Each indicator is sourced and
+caveated below. Where coverage is partial (Scotland and Northern Ireland in
+particular), the limitation is documented alongside what was used as a fallback.
+</p>
+
+<h2>Geography</h2>
+<h3>Parliamentary constituency boundaries (2024)</h3>
+<p>
+Westminster Parliamentary Constituencies July 2024 (UK BGC), from the
+<a href="https://geoportal.statistics.gov.uk/datasets/ons::westminster-parliamentary-constituencies-july-2024-boundaries-uk-bgc/about">ONS Open Geography Portal</a>.
+650 features, post-Boundary-Review names (PCON24NM, e.g. "Aberafan Maesteg"
+not pre-2024 "Aberavon"). Geometry simplified to ~2 MB at 0.002° tolerance using
+Shapely topology-preserving simplification — visually identical at country zoom.
+</p>
+
+<h2>Indicators</h2>
+
+<h3>Blood lead ≥ 5 µg/dL (BLL)</h3>
+<p>
+Source: <a href="https://ghdx.healthdata.org/record/ihme-data/gbd-2021-lead-exposure-estimates-1990-2021">IHME Global Burden of Disease 2021 — Lead Exposure Estimates</a>.
+Mean and 95% uncertainty interval for the proportion of the population with
+blood lead ≥ 5 µg/dL, by age group.
+</p>
+<blockquote>
+IHME publishes this at <strong>county / unitary-authority</strong> resolution
+in the UK, not at parliamentary-constituency level. The constituency map shows
+the value of the parent county / UA for each constituency (centroid-in-polygon
+match). Where no local data exists, falls back to nation-level (England,
+Scotland, Wales, NI) shown with reduced opacity.
+</blockquote>
+
+<h3>Modelled children with BLL ≥ 5</h3>
+<p>
+A constituency-level allocation of the IHME national total for children 0–19
+(~352,000 in the UK), produced in <code>lead_exposure_model_FINAL.py</code>
+in this project. Risk weights:
+</p>
+<ul>
+    <li>Pre-1950 housing share — odds ratio 1.92 (US CDC literature)</li>
+    <li>IMD decile — odds ratio 1.44 for high deprivation</li>
+</ul>
+<p>
+Each constituency's relative risk × child population gives a risk-weighted
+population; the IHME national total is allocated proportionally. This is
+illustrative; not a clinical estimate.
+</p>
+
+<h3>Housing built pre-1900 / pre-1945 / pre-1972 / pre-1992</h3>
+<p>
+The map exposes four cutoffs because UK lead-exposure pathways span
+different eras:
+</p>
+<table>
+    <tr><th>Cutoff</th><th>Pathway</th></tr>
+    <tr><td>Pre-1900</td><td>Lead service pipes + lead-pigment paint at peak</td></tr>
+    <tr><td>Pre-1945</td><td>Lead-pigment paint dominant (US "pre-1950" CDC threshold)</td></tr>
+    <tr><td>Pre-1972</td><td>Lead service pipes era (copper-with-lead-solder until 1987)</td></tr>
+    <tr><td>Pre-1992</td><td>Any lead-paint exposure — UK consumer ban June 1992 (EU Dir. 89/677/EEC)</td></tr>
+</table>
+<p>Three sources are stitched together by nation:</p>
+
+<h4 style="color:#fff; margin: 14px 0 6px 0; font-size:0.95rem;">England & Wales — VOA CTSOP 4.0 (2023)</h4>
+<p>
+<a href="https://www.gov.uk/government/statistics/council-tax-stock-of-properties-2023">Valuation Office Agency Council Tax Stock of Properties</a>,
+table CTSOP4.0 (build period × council-tax band). LAD-level dwelling counts
+across detailed bands: pre-1900, 1900–1918, 1919–1929, 1930–1939, 1945–1954,
+1955–1964, 1965–1972, 1973–1982, 1983–1992, etc. Aggregated to constituency
+via the <a href="https://geoportal.statistics.gov.uk/">ONS ward → constituency
+→ LAD lookup</a>, weighted by ward count.
+</p>
+<blockquote>
+Approximation: split-LAD constituencies (most of London, big metros) inherit
+each parent LAD's overall age profile in proportion to ward count. LSOA-level
+VOA data (CTSOP4.1) would give a sharper split-constituency result.
+</blockquote>
+
+<h4 style="color:#fff; margin: 14px 0 6px 0; font-size:0.95rem;">Scotland — SHCS 2017–2019</h4>
+<p>
+<a href="https://www.gov.scot/publications/scottish-house-condition-survey-local-authority-analysis-2017-2019/">Scottish House Condition Survey: Local Authority Analysis 2017-2019</a>,
+Stock Profile sheet. Sample-based estimates at LA level. <strong>Only the
+pre-1945 vs post-1945 split is published</strong> at LA level — the other
+cutoffs (pre-1900, pre-1972, pre-1992) are <strong>not available</strong>
+for Scotland and show as "no data" on those layers.
+</p>
+<blockquote>
+SHCS uses sample-based 3-year rolling estimates with confidence intervals.
+The 2017-2019 release is the most recent LA-level publication: 2020 had no
+survey, 2021 had non-comparable data, and the next LA release (2022-2024)
+won't appear until 2025.
+</blockquote>
+
+<h4 style="color:#fff; margin: 14px 0 6px 0; font-size:0.95rem;">Northern Ireland — NIHCS 2023 (NI-wide)</h4>
+<p>
+<a href="https://www.nihe.gov.uk/working-with-us/research/house-condition-survey">NI House Condition Survey 2023 Preliminary Report</a>,
+Table 4. Bands: pre-1919, 1919-1944, 1945-1964, 1965-1980, 1981-1990,
+1991-2002, 2003-2023. <strong>Only NI-wide values are published</strong>
+(the 2011 district-level report covers other measures, not age). The same
+NI-wide values are applied to all 18 NI constituencies.
+</p>
+
+<h4 style="color:#fff; margin: 14px 0 6px 0; font-size:0.95rem;">Non-decent homes (Decent Homes Standard)</h4>
+<p>
+England: <a href="https://www.gov.uk/government/statistics/english-housing-survey-2023-to-2024-stock-condition">English Housing Survey: Local Authority Stock Modelling 2023</a>,
+LA-level model based on EHS sample data combined with administrative records.
+A home fails the standard if any of the four criteria fail: HHSRS Category 1
+hazard (which includes lead), disrepair of key components, lacks modern
+facilities, or inadequate thermal comfort.
+</p>
+
+<h3>Historic metal mines</h3>
+<p>The map combines two open inventories, deduplicated by ~500 m proximity:</p>
+<ul>
+    <li>
+        <a href="https://datadryad.org/dataset/doi:10.5061/dryad.j3tx95xmg">Macklin et al. (2023). WAPHA Global Metal Mines Database</a>
+        — supplementary data for the <em>Science</em> paper "Impacts of metal mining on
+        river systems: a global assessment". UK subset: 137 sites.
+    </li>
+    <li>
+        <a href="https://www.data.gov.uk/dataset/e81078ea-b16d-4534-a662-d85fe32b6414/inventory-of-closed-mining-waste-facilities2">EA Inventory of Closed Mining Waste Facilities (2014)</a>
+        — Environment Agency / NRW open data under the Mining Waste Directive
+        (2006/21/EC). 150 sites in E&W, 132 metalliferous, 146 flagged for
+        water pollution. Open Government Licence v3.0.
+    </li>
+</ul>
+<p>
+Combined: <strong>211 unique sites in 51 constituencies</strong>, mapped via
+point-in-polygon onto the 2024 boundaries. Lead-relevant commodities flagged
+(Pb, Zn, Cu, Ag, Ba/witherite — Pb often co-occurs in polymetallic veins).
+</p>
+<blockquote>
+Coverage gap: <a href="https://www.bgs.ac.uk/datasets/britpits/">BGS BRITPITS</a>
+holds &gt;260,000 records including all historic UK workings (the comprehensive
+inventory) but is licensed by NERC and not openly downloadable. Cornwall is
+under-represented here as a result — the Camborne–Redruth historic tin/copper
+fields had thousands of small workings that aren't priority-polluting closures.
+</blockquote>
+
+<h2>Constituency context</h2>
+
+<h3>MP — name, party, email</h3>
+<p>
+Pulled from the <a href="https://members-api.parliament.uk/">UK Parliament Members API</a>
+(January 2026 snapshot). Constituency names match the post-July-2024 boundaries.
+</p>
+
+<h3>Children aged 0–19</h3>
+<p>
+ONS mid-year population estimates aggregated to 2024 parliamentary constituencies.
+</p>
+
+<h3>IMD decile and deprivation score</h3>
+<p>
+Both come from the
+<a href="https://pages.mysociety.org/composite_uk_imd/">mySociety Composite UK IMD</a>,
+which produces UK-wide comparable Index of Multiple Deprivation rankings (the
+nation-specific IMDs use different methodologies, so a composite is needed for
+cross-UK comparisons).
+</p>
+<ul>
+    <li><strong>IMD decile</strong>: 1 = most deprived 10% of UK constituencies, 10 = least deprived.</li>
+    <li><strong>Deprivation score</strong>: 0–100, higher = more deprived. Population-weighted percentile rank of LSOAs within UK.</li>
+</ul>
+
+<h2>Methodology notes & known limitations</h2>
+<ul>
+    <li><strong>BLL is a county-level proxy</strong>. IHME doesn't publish constituency-level BLL; the value shown is the parent county / UA.</li>
+    <li><strong>Modelled children with BLL ≥ 5 is illustrative</strong>. It's a rough scaling of the IHME national total using housing-age and IMD risk weights from US CDC literature. Actual UK exposure rates and risk gradients may differ.</li>
+    <li><strong>Housing data is uneven across UK nations</strong>. England & Wales have rich VOA data with all four cutoffs; Scotland has only pre-1945 from SHCS LA tables; NI has all four cutoffs but applied uniformly NI-wide (no sub-NI data exists).</li>
+    <li><strong>Mines layer is not exhaustive</strong>. Only Macklin + EA closed waste — actual UK historic-mine inventory (BRITPITS) is much larger but licensed.</li>
+    <li><strong>Ward-weighting is an approximation</strong>. Constituencies that span multiple LADs are aggregated by ward count rather than dwelling count — fine for stable areas, less reliable in complex London/metro splits.</li>
+</ul>
+
+<h2>Data files in this repository</h2>
+<table>
+    <tr><th>File</th><th>What it contains</th></tr>
+    <tr><td><code>uk_constituencies.json</code></td><td>650 simplified 2024 constituency polygons</td></tr>
+    <tr><td><code>IHME_GBD_2021_LEAD_RISK_*.CSV</code></td><td>BLL values by area and age group</td></tr>
+    <tr><td><code>constituency_prewar_housing.csv</code></td><td>Housing-age cutoffs per constituency (E&W: VOA, Scot: SHCS, NI: NIHCS)</td></tr>
+    <tr><td><code>constituency_uk_mines.csv</code></td><td>Mine counts (Macklin + EA IoCMWF, deduplicated)</td></tr>
+    <tr><td><code>constituency_profile.csv</code></td><td>Single merged file all of the above plus MP, IMD, child population, model estimate</td></tr>
+</table>
+
+<p style="margin-top: 32px; font-size: 0.85rem; color: #6c7a89;">
+Author: Lee Crawfurd, Center for Global Development. Source code:
+<a href="https://github.com/lcrawfurd/lead-map">github.com/lcrawfurd/lead-map</a>.
+</p>
+
+</main>
+
+</body>
+</html>

@@ -1,651 +1,651 @@
-PCON24NM,pct_pre_1900,pct_pre_1945,pct_pre_1972,pct_pre_1992,n_dwellings
-Aberafan Maesteg,12.44,41.2,69.93,82.53,36600
-Aberdeen North,,,,,
-Aberdeen South,,,,,
-Aberdeenshire North and Moray East,,,,,
-Airdrie and Shotts,,,,,
-Aldershot,7.77,22.11,52.94,72.91,49751
-Aldridge-Brownhills,8.56,29.83,71.05,83.46,44838
-Alloa and Grangemouth,,,,,
-Altrincham and Sale West,12.69,49.82,75.36,84.76,44203
-Alyn and Deeside,11.39,28.51,62.87,77.49,42600
-Amber Valley,21.02,41.14,63.51,78.85,38870
-Angus and Perthshire Glens,,,,,
-Arbroath and Broughty Ferry,,,,,
-"Argyll, Bute and South Lochaber",,,,,
-Arundel and South Downs,12.12,25.5,52.33,71.86,49628
-Ashfield,9.67,35.66,61.85,76.15,47310
-Ashford,14.86,24.94,48.95,66.0,43142
-Ashton-under-Lyne,18.02,41.32,71.21,84.47,43642
-Aylesbury,8.89,22.93,55.2,74.53,40607
-"Ayr, Carrick and Cumnock",,,,,
-Banbury,12.87,19.14,45.52,67.59,45264
-Bangor Aberconwy,28.72,46.96,69.34,84.25,49393
-Barking,1.23,55.4,74.09,78.8,43008
-Barnsley North,13.61,37.47,63.81,76.19,49114
-Barnsley South,13.61,37.47,63.81,76.19,49114
-Barrow and Furness,,,,,
-Basildon and Billericay,0.56,4.73,48.65,76.93,44356
-Basingstoke,5.99,12.13,42.89,70.37,46524
-Bassetlaw,11.44,29.7,57.77,73.18,44768
-Bath,25.26,38.63,66.69,79.07,41619
-Bathgate and Linlithgow,,,,,
-Battersea,33.11,52.1,69.84,78.35,53010
-Beaconsfield,8.89,22.93,55.2,74.53,45119
-Beckenham and Penge,12.12,47.1,73.91,87.55,37020
-Bedford,13.65,27.01,53.5,68.88,38516
-Belfast East,,,,,
-Belfast North,,,,,
-Belfast South and Mid Down,,,,,
-Belfast West,,,,,
-Bermondsey and Old Southwark,22.65,32.31,53.15,66.03,51214
-"Berwickshire, Roxburgh and Selkirk",,,,,
-Bethnal Green and Stepney,10.9,16.13,34.95,47.34,58592
-Beverley and Holderness,14.43,29.68,54.93,74.34,36182
-Bexhill and Battle,21.45,38.89,66.43,82.67,43310
-Bexleyheath and Crayford,6.9,52.0,74.2,87.11,41617
-Bicester and Woodstock,12.87,19.14,45.52,67.59,45264
-Birkenhead,15.49,48.24,74.84,88.54,45963
-Birmingham Edgbaston,11.67,47.2,70.36,81.58,31840
-Birmingham Erdington,11.67,47.2,70.36,81.58,50943
-Birmingham Hall Green and Moseley,11.67,47.2,70.36,81.58,38208
-Birmingham Hodge Hill and Solihull North,9.17,40.25,68.89,81.2,49403
-Birmingham Ladywood,11.67,47.2,70.36,81.58,50943
-Birmingham Northfield,11.67,47.2,70.36,81.58,50943
-Birmingham Perry Barr,11.67,47.2,70.36,81.58,50943
-Birmingham Selly Oak,11.67,47.2,70.36,81.58,50943
-Birmingham Yardley,11.67,47.2,70.36,81.58,44575
-Bishop Auckland,13.72,35.98,64.71,78.73,43464
-Blackburn,30.83,46.88,65.42,80.79,44506
-Blackley and Middleton South,15.59,41.57,62.0,74.43,49252
-Blackpool North and Fleetwood,10.94,40.24,70.55,82.77,48547
-Blackpool South,15.0,62.88,82.72,90.47,53417
-Blaenau Gwent and Rhymney,32.08,50.28,75.24,86.93,48234
-Blaydon and Consett,13.45,36.91,68.56,81.69,45292
-Blyth and Ashington,15.38,33.94,61.16,79.1,50715
-Bognor Regis and Littlehampton,6.97,26.0,58.35,78.24,51847
-Bolsover,13.03,33.69,60.43,76.57,52365
-Bolton North East,18.88,41.31,65.24,82.46,42487
-Bolton South and Walkden,16.56,38.77,62.2,77.96,56832
-Bolton West,18.88,41.31,65.24,82.46,47798
-Bootle,21.72,48.22,75.95,88.45,45259
-Boston and Skegness,16.65,30.49,53.91,71.43,52661
-Bournemouth East,10.84,36.18,60.23,80.3,51559
-Bournemouth West,10.84,36.18,60.23,80.3,45830
-Bracknell,3.19,6.31,37.43,70.56,39495
-Bradford East,23.66,46.45,68.66,79.52,42908
-Bradford South,23.66,46.45,68.66,79.52,50059
-Bradford West,23.66,46.45,68.66,79.52,42908
-Braintree,12.13,23.62,49.59,69.49,48715
-"Brecon, Radnor and Cwm Tawe",30.37,42.54,62.93,79.93,47555
-Brent East,20.69,61.01,68.8,75.22,48175
-Brent West,20.69,61.01,68.8,75.22,60218
-Brentford and Isleworth,11.66,47.24,65.12,77.41,54542
-Brentwood and Ongar,7.28,22.53,67.02,81.56,47134
-Bridgend,13.86,32.27,61.01,77.96,43169
-Bridgwater,,,,,
-Bridlington and the Wolds,14.43,29.68,54.93,74.34,42213
-Brigg and Immingham,12.66,33.39,65.04,80.96,42549
-Brighton Kemptown and Peacehaven,26.38,46.9,73.81,86.36,48420
-Brighton Pavilion,33.24,56.76,80.16,87.93,49444
-Bristol Central,9.71,51.19,72.78,80.59,43128
-Bristol East,9.71,51.19,72.78,80.59,55451
-Bristol North East,8.67,34.75,60.26,75.64,42608
-Bristol North West,9.71,51.19,72.78,80.59,43128
-Bristol South,9.71,51.19,72.78,80.59,43128
-Broadland and Fakenham,10.83,22.86,50.52,71.8,49409
-Bromley and Biggin Hill,12.12,47.1,73.91,87.55,47597
-Bromsgrove,8.88,26.57,58.45,75.88,42790
-Broxbourne,6.58,18.61,54.09,76.07,46567
-Broxtowe,9.5,33.34,67.11,86.05,41666
-Buckingham and Bletchley,6.89,15.58,37.74,66.87,43698
-Burnley,34.01,56.72,73.23,85.01,49592
-Burton and Uttoxeter,15.27,32.75,55.09,70.95,45833
-Bury North,17.95,43.81,71.3,85.01,42455
-Bury South,17.33,42.81,69.83,83.41,49007
-Bury St Edmunds and Stowmarket,15.24,20.96,45.94,69.07,43794
-Caerfyrddin,24.72,46.33,66.35,79.13,50960
-Caerphilly,21.47,42.14,67.5,81.38,40305
-"Caithness, Sutherland and Easter Ross",,,,,
-Calder Valley,32.07,51.15,71.23,81.42,48360
-Camborne and Redruth,25.6,35.26,54.41,73.51,46765
-Cambridge,14.48,31.4,53.75,68.75,51394
-Cannock Chase,4.33,18.04,55.13,74.4,45780
-Canterbury,15.21,32.41,60.11,76.68,47000
-Cardiff East,18.17,36.99,59.64,75.28,46934
-Cardiff North,20.04,38.84,61.15,76.33,49203
-Cardiff South and Penarth,17.59,32.47,58.0,76.14,41378
-Cardiff West,22.76,41.53,63.34,77.84,53742
-Carlisle,,,,,
-Carshalton and Wallington,5.25,53.93,68.22,82.54,42985
-Castle Point,1.38,12.48,60.86,83.93,43836
-Central Ayrshire,,,,,
-Central Devon,26.35,35.18,55.22,73.69,44363
-Central Suffolk and North Ipswich,18.48,31.27,52.96,72.87,45462
-Ceredigion Preseli,34.44,44.8,63.47,80.95,48366
-Chatham and Aylesford,14.59,30.4,61.36,78.58,48709
-Cheadle,13.9,42.26,76.86,90.0,50923
-Chelmsford,5.03,18.0,51.21,75.26,43312
-Chelsea and Fulham,53.21,68.36,77.05,84.87,60078
-Cheltenham,22.45,33.44,63.05,79.85,44695
-Chesham and Amersham,8.89,22.93,55.2,74.53,49631
-Chester North and Neston,12.83,27.67,61.24,76.25,36553
-Chester South and Eddisbury,13.78,28.27,60.01,75.44,47280
-Chesterfield,13.18,35.33,64.85,83.17,42292
-Chichester,14.33,28.46,55.41,72.79,44841
-Chingford and Woodford Green,19.58,63.72,76.65,83.62,43102
-Chippenham,16.77,26.38,52.43,70.4,44590
-Chipping Barnet,6.7,55.02,69.1,79.26,52743
-Chorley,14.52,28.45,51.06,72.61,45154
-Christchurch,14.42,31.95,56.32,77.92,46001
-Cities of London and Westminster,27.5,33.56,66.28,72.32,80908
-City of Durham,13.72,35.98,64.71,78.73,39512
-Clacton,10.4,29.87,59.08,79.82,50944
-Clapham and Brixton Hill,36.88,53.84,71.11,80.06,52027
-Clwyd East,14.93,33.17,64.72,79.67,50323
-Clwyd North,20.55,41.54,67.13,82.86,41955
-Coatbridge and Bellshill,,,,,
-Colchester,9.94,21.6,47.38,68.78,47411
-Colne Valley,22.76,41.82,67.94,79.46,38308
-Congleton,15.92,29.61,57.23,73.64,35954
-Corby and East Northamptonshire,12.56,25.13,51.99,69.02,48932
-Coventry East,4.13,40.13,70.94,78.48,50497
-Coventry North West,4.13,40.13,70.94,78.48,50497
-Coventry South,4.13,40.13,70.94,78.48,50497
-Cowdenbeath and Kirkcaldy,,,,,
-Cramlington and Killingworth,12.39,35.57,63.27,79.75,59085
-Crawley,1.44,4.29,46.5,75.3,47080
-Crewe and Nantwich,15.92,29.61,57.23,73.64,46740
-Croydon East,19.44,52.74,72.83,83.23,51281
-Croydon South,19.44,52.74,72.83,83.23,45583
-Croydon West,19.44,52.74,72.83,83.23,45583
-Cumbernauld and Kirkintilloch,,,,,
-Dagenham and Rainham,1.38,50.56,74.89,80.94,57561
-Darlington,10.02,40.68,62.35,77.08,47790
-Dartford,10.19,31.41,56.77,67.2,46636
-Daventry,12.57,23.88,48.07,70.37,50997
-Derby North,14.86,38.08,62.63,82.13,51819
-Derby South,14.86,38.08,62.63,82.13,42398
-Derbyshire Dales,30.02,43.5,63.32,77.01,47750
-Dewsbury and Batley,22.76,41.82,67.94,79.46,45970
-Didcot and Wantage,11.28,21.67,50.61,69.85,44777
-Doncaster Central,5.75,34.13,63.71,79.81,54297
-Doncaster East and the Isle of Axholme,7.43,31.75,62.3,78.77,37676
-Doncaster North,5.75,34.13,63.71,79.81,47510
-Dorking and Horley,13.63,36.14,64.21,79.97,40274
-Dover and Deal,25.99,43.37,68.15,81.94,48476
-Droitwich and Evesham,14.49,23.23,46.39,66.64,44799
-Dudley,6.15,28.58,69.6,86.2,43357
-Dulwich and West Norwood,33.0,47.97,66.22,76.23,53890
-Dumfries and Galloway,,,,,
-"Dumfriesshire, Clydesdale and Tweeddale",,,,,
-Dundee Central,,,,,
-Dunfermline and Dollar,,,,,
-Dunstable and Leighton Buzzard,8.93,17.96,45.87,66.38,44942
-Dwyfor Meirionnydd,43.74,54.5,74.42,86.67,53552
-Ealing Central and Acton,20.81,60.74,72.15,81.34,52007
-Ealing North,12.79,59.23,71.46,81.03,49243
-Ealing Southall,12.79,59.23,71.46,81.03,55399
-Earley and Woodley,7.63,19.06,47.25,71.62,44542
-Easington,13.72,35.98,64.71,78.73,51366
-East Antrim,,,,,
-East Grinstead and Uckfield,12.54,25.43,55.35,74.35,46958
-East Ham,28.94,43.46,58.43,68.53,47404
-East Hampshire,10.38,21.01,46.91,73.37,47546
-East Kilbride and Strathaven,,,,,
-East Londonderry,,,,,
-East Renfrewshire,,,,,
-East Surrey,12.98,35.53,64.76,76.96,42125
-East Thanet,26.04,47.75,73.13,85.97,50830
-East Wiltshire,15.89,25.49,51.51,70.49,49557
-East Worthing and Shoreham,4.67,37.06,74.9,88.52,44688
-Eastbourne,19.67,36.33,61.44,82.73,49580
-Eastleigh,4.27,17.16,42.57,68.67,41566
-Edinburgh East and Musselburgh,,,,,
-Edinburgh North and Leith,,,,,
-Edinburgh South,,,,,
-Edinburgh South West,,,,,
-Edinburgh West,,,,,
-Edmonton and Winchmore Hill,10.69,58.81,75.62,85.0,45846
-Ellesmere Port and Bromborough,13.32,31.41,63.72,78.48,46030
-Eltham and Chislehurst,15.0,41.38,62.44,74.36,47531
-Ely and East Cambridgeshire,11.67,21.26,42.18,60.95,45670
-Enfield North,10.69,58.81,75.62,85.0,45846
-Epping Forest,7.69,24.78,64.43,80.9,38573
-Epsom and Ewell,7.73,46.35,69.5,80.58,47176
-Erewash,14.09,36.62,64.03,82.46,44640
-Erith and Thamesmead,13.45,43.08,63.47,75.35,54790
-Esher and Walton,8.69,34.18,62.27,76.06,44550
-Exeter,14.22,33.98,56.48,71.51,46362
-Exmouth and Exeter East,17.29,31.48,54.52,72.7,43348
-Falkirk,,,,,
-Fareham and Waterlooville,5.15,18.25,54.89,79.19,45228
-Farnham and Bordon,14.46,30.74,57.67,78.36,38637
-Faversham and Mid Kent,15.59,28.76,56.23,72.32,50571
-Feltham and Heston,10.8,45.77,63.81,76.38,44808
-Fermanagh and South Tyrone,,,,,
-Filton and Bradley Stoke,7.63,18.31,47.74,70.69,44907
-Finchley and Golders Green,6.7,55.02,69.1,79.26,52743
-Folkestone and Hythe,22.46,41.36,65.73,81.27,44762
-Forest of Dean,24.95,32.85,55.88,74.71,42195
-Foyle,,,,,
-Frome and East Somerset,25.26,38.63,66.69,79.07,15607
-Fylde,13.09,30.84,62.34,76.62,47882
-Gainsborough,17.48,26.84,52.78,67.59,45640
-Gateshead Central and Whickham,13.12,38.03,73.17,85.24,47485
-Gedling,6.11,29.17,64.13,83.36,48495
-Gillingham and Rainham,14.33,33.55,65.15,81.99,35889
-Glasgow East,,,,,
-Glasgow North,,,,,
-Glasgow North East,,,,,
-Glasgow South,,,,,
-Glasgow South West,,,,,
-Glasgow West,,,,,
-Glastonbury and Somerton,,,,,
-Glenrothes and Mid Fife,,,,,
-Gloucester,16.16,27.6,49.62,72.35,52649
-Godalming and Ash,15.85,35.75,63.62,80.74,36950
-Goole and Pocklington,14.43,29.68,54.93,74.34,54273
-Gordon and Buchan,,,,,
-Gorton and Denton,16.52,42.67,64.79,76.91,48257
-Gosport,10.26,29.25,63.29,80.66,42999
-Gower,19.0,41.1,66.96,81.67,64231
-Grantham and Bourne,11.47,20.38,44.08,64.59,48079
-Gravesham,13.42,36.13,72.62,85.16,44480
-Great Grimsby and Cleethorpes,15.64,38.19,69.66,84.52,50007
-Great Yarmouth,18.95,33.41,60.0,80.8,49330
-Greenwich and Woolwich,15.64,40.1,59.89,71.43,49272
-Guildford,12.01,33.76,62.64,78.72,49753
-Hackney North and Stoke Newington,29.65,43.1,64.6,72.96,51240
-Hackney South and Shoreditch,29.65,43.1,64.6,72.96,51240
-Halesowen,6.29,30.79,69.44,85.18,48797
-Halifax,32.07,51.15,71.23,81.42,48360
-Hamble Valley,4.47,18.36,48.93,74.93,46305
-Hamilton and Clyde Valley,,,,,
-Hammersmith and Chiswick,40.09,61.35,72.07,81.05,59531
-Hampstead and Highgate,44.59,58.72,74.82,84.14,59155
-"Harborough, Oadby and Wigston",7.84,20.68,59.46,76.24,40104
-Harlow,4.53,9.5,59.11,74.25,50729
-Harpenden and Berkhamsted,8.57,24.33,60.05,79.37,52982
-Harrogate and Knaresborough,,,,,
-Harrow East,4.62,62.49,75.07,83.35,40924
-Harrow West,2.62,62.68,75.85,84.37,47990
-Hartlepool,10.39,26.24,61.65,75.95,45160
-Harwich and North Essex,10.25,27.11,55.18,76.14,46862
-Hastings and Rye,33.51,49.48,70.97,88.14,50743
-Havant,3.54,13.44,64.29,84.78,42532
-Hayes and Harlington,1.87,41.75,67.35,81.5,44648
-Hazel Grove,13.9,42.26,76.86,90.0,40738
-Hemel Hempstead,8.3,18.33,58.56,79.55,37570
-Hendon,6.7,55.02,69.1,79.26,46150
-Henley and Thame,13.85,23.95,53.81,70.86,46764
-Hereford and South Herefordshire,25.79,34.17,55.13,75.26,45340
-Herne Bay and Sandwich,20.98,40.01,66.39,81.1,47904
-Hertford and Stortford,13.67,24.8,52.07,71.47,40181
-Hertsmere,4.31,24.0,64.23,77.15,45959
-Hexham,15.21,34.38,61.46,79.19,48432
-Heywood and Middleton North,16.53,37.48,68.05,82.9,46593
-High Peak,29.78,44.81,67.17,80.31,43380
-Hinckley and Bosworth,9.09,24.92,50.97,72.49,44582
-Hitchin,9.11,25.63,53.79,73.86,44612
-Holborn and St Pancras,45.34,58.0,74.5,83.91,59143
-Honiton and Sidmouth,19.82,31.09,53.68,72.71,53194
-Hornchurch and Upminster,1.66,40.87,76.49,85.23,44059
-Hornsey and Friern Barnet,33.33,64.56,76.87,85.52,44310
-Horsham,10.34,20.83,45.76,68.46,47964
-Houghton and Sunderland South,14.43,32.47,67.91,84.31,47938
-Hove and Portslade,33.24,56.76,80.16,87.93,44500
-Huddersfield,22.76,41.82,67.94,79.46,45970
-Huntingdon,8.55,13.91,40.85,70.12,53393
-Hyndburn,38.61,54.83,72.91,86.04,47722
-Ilford North,8.45,61.72,77.82,85.13,39145
-Ilford South,7.65,61.02,77.4,84.43,42454
-Inverclyde and Renfrewshire West,,,,,
-"Inverness, Skye and West Ross-shire",,,,,
-Ipswich,15.02,42.17,68.95,80.2,50424
-Isle of Wight East,28.04,40.17,61.53,80.01,37128
-Isle of Wight West,28.04,40.17,61.53,80.01,35272
-Islington North,36.12,47.44,64.36,76.16,52447
-Islington South and Finsbury,35.48,47.0,64.38,75.84,64696
-Jarrow and Gateshead East,11.57,36.73,73.26,86.77,45582
-Keighley and Ilkley,23.66,46.45,68.66,79.52,42908
-Kenilworth and Southam,14.82,24.17,51.49,67.63,43480
-Kensington and Bayswater,60.67,71.85,81.63,89.31,84383
-Kettering,12.56,25.13,51.99,69.02,48932
-Kilmarnock and Loudoun,,,,,
-Kingston and Surbiton,13.98,55.67,75.0,84.33,42225
-Kingston upon Hull East,13.05,43.05,65.56,82.34,47326
-Kingston upon Hull North and Cottingham,13.32,40.38,63.43,80.74,59386
-Kingston upon Hull West and Haltemprice,13.57,38.04,61.57,79.34,47670
-Kingswinford and South Staffordshire,6.41,19.38,58.62,81.94,40689
-Knowsley,2.52,22.76,62.06,73.52,39724
-Lagan Valley,,,,,
-Lancaster and Wyre,16.42,38.64,66.95,80.23,44347
-Leeds Central and Headingley,12.53,36.58,65.56,77.7,43486
-Leeds East,12.53,36.58,65.56,77.7,54357
-Leeds North East,12.53,36.58,65.56,77.7,43486
-Leeds North West,12.53,36.58,65.56,77.7,43486
-Leeds South,12.53,36.58,65.56,77.7,54357
-Leeds South West and Morley,12.53,36.58,65.56,77.7,43486
-Leeds West and Pudsey,12.53,36.58,65.56,77.7,43486
-Leicester East,20.41,46.68,67.76,80.18,45716
-Leicester South,20.41,46.68,67.76,80.18,52247
-Leicester West,20.41,46.68,67.76,80.18,45716
-Leigh and Atherton,14.18,34.73,65.17,79.14,45864
-Lewes,13.77,27.97,59.97,80.23,45319
-Lewisham East,28.16,53.15,69.27,78.66,48285
-Lewisham North,28.16,53.15,69.27,78.66,55183
-Lewisham West and East Dulwich,25.8,44.22,62.36,73.25,46797
-Leyton and Wanstead,19.58,63.72,76.65,83.62,43102
-Lichfield,8.72,18.81,54.92,71.81,44837
-Lincoln,14.92,31.12,54.52,73.31,53404
-Liverpool Garston,26.17,52.69,65.01,76.04,43061
-Liverpool Riverside,26.17,52.69,65.01,76.04,60285
-Liverpool Walton,25.85,52.37,65.8,76.93,42977
-Liverpool Wavertree,26.17,52.69,65.01,76.04,57414
-Liverpool West Derby,23.21,48.95,64.65,75.72,49018
-Livingston,,,,,
-Llanelli,24.72,46.33,66.35,79.13,38660
-Lothian East,,,,,
-Loughborough,9.59,25.66,54.17,72.4,42118
-Louth and Horncastle,18.43,30.93,51.99,73.08,50089
-Lowestoft,18.87,31.73,55.26,77.26,37524
-Luton North,5.31,32.94,64.94,84.78,37299
-Luton South and South Bedfordshire,5.76,31.06,62.56,82.48,55642
-Macclesfield,15.92,29.61,57.23,73.64,50335
-Maidenhead,10.16,20.12,53.33,77.09,52489
-Maidstone and Malling,14.45,26.85,54.82,71.83,41365
-Makerfield,14.18,34.73,65.17,79.14,50450
-Maldon,9.86,21.59,49.89,72.61,46148
-Manchester Central,16.19,43.37,61.4,73.42,54067
-Manchester Rusholme,15.02,44.02,58.37,69.35,46200
-Manchester Withington,15.02,44.02,58.37,69.35,46200
-Mansfield,6.29,33.01,61.21,78.13,44798
-Melksham and Devizes,16.77,26.38,52.43,70.4,44590
-Melton and Syston,15.81,26.77,54.43,74.47,39312
-Meriden and Solihull East,1.68,19.37,64.5,80.07,44781
-Merthyr Tydfil and Aberdare,34.98,49.99,72.48,85.11,43404
-Mid Bedfordshire,9.78,19.61,47.26,66.83,41585
-Mid Buckinghamshire,8.89,22.93,55.2,74.53,40607
-Mid Cheshire,13.09,27.83,60.91,76.03,43804
-Mid Derbyshire,17.23,38.99,63.35,80.84,42163
-Mid Dorset and North Poole,15.85,30.25,54.75,76.97,41486
-Mid Dunbartonshire,,,,,
-Mid Leicestershire,7.47,23.1,54.84,73.09,47969
-Mid Norfolk,13.36,18.26,44.03,67.6,43107
-Mid Sussex,10.21,22.1,51.84,71.47,42573
-Mid Ulster,,,,,
-Mid and South Pembrokeshire,28.41,37.03,62.88,78.74,49864
-Middlesbrough South and East Cleveland,10.54,29.37,65.98,82.51,48306
-Middlesbrough and Thornaby East,8.85,30.03,62.66,79.66,47593
-Midlothian,,,,,
-Milton Keynes Central,4.89,8.22,20.27,59.2,51301
-Milton Keynes North,4.89,8.22,20.27,59.2,44888
-Mitcham and Morden,11.61,63.48,74.58,84.96,48081
-Monmouthshire,19.41,27.95,54.34,75.1,43690
-Montgomeryshire and Glyndŵr,28.94,38.53,61.16,79.23,48238
-"Moray West, Nairn and Strathspey",,,,,
-Morecambe and Lunesdale,21.77,45.08,68.42,80.96,40296
-"Motherwell, Wishaw and Carluke",,,,,
-Na h-Eileanan an Iar,,,,,
-Neath and Swansea East,13.46,44.58,72.62,84.07,47527
-New Forest East,8.14,22.38,54.07,83.01,44655
-New Forest West,8.14,22.38,54.07,83.01,38275
-Newark,10.82,27.07,55.87,71.49,56343
-Newbury,11.52,19.92,47.64,74.95,36936
-Newcastle upon Tyne Central and West,12.19,42.38,66.86,80.79,54588
-Newcastle upon Tyne East and Wallsend,10.94,40.06,66.19,80.61,45969
-Newcastle upon Tyne North,11.41,40.93,66.44,80.68,56808
-Newcastle-under-Lyme,13.38,36.43,69.65,83.32,44130
-Newport East,14.71,34.34,62.3,76.74,47040
-Newport West and Islwyn,18.69,38.93,65.36,79.47,48711
-Newry and Armagh,,,,,
-Newton Abbot,21.69,32.64,55.54,75.62,45787
-Newton Aycliffe and Spennymoor,13.72,35.98,64.71,78.73,43464
-Normanton and Hemsworth,8.73,31.17,61.34,76.08,46694
-North Antrim,,,,,
-North Ayrshire and Arran,,,,,
-North Bedfordshire,12.47,24.75,51.59,68.26,56537
-North Cornwall,25.6,35.26,54.41,73.51,46765
-North Cotswolds,19.78,27.77,51.08,71.0,42755
-North Devon,26.27,35.21,55.38,74.37,48340
-North Dorset,18.0,27.71,52.4,75.54,45127
-North Down,,,,,
-North Durham,13.72,35.98,64.71,78.73,51366
-North East Cambridgeshire,10.44,24.32,45.22,65.86,47040
-North East Derbyshire,11.77,24.56,61.32,79.55,48475
-North East Fife,,,,,
-North East Hampshire,5.85,12.62,44.49,71.56,43158
-North East Hertfordshire,10.83,27.54,55.46,75.15,49688
-North East Somerset and Hanham,20.56,33.21,61.64,76.83,46576
-North Herefordshire,25.79,34.17,55.13,75.26,43660
-North Norfolk,20.67,32.55,54.53,75.71,47098
-North Northumberland,15.38,33.94,61.16,79.1,43470
-North Shropshire,20.53,30.7,55.59,72.26,42840
-North Somerset,14.8,25.68,52.44,74.34,54508
-North Warwickshire and Bedworth,9.07,28.05,63.14,78.68,41021
-North West Cambridgeshire,7.83,17.23,39.59,71.22,50054
-North West Essex,15.93,24.3,48.22,66.43,45604
-North West Hampshire,7.57,15.63,43.35,68.7,41570
-North West Leicestershire,14.04,26.39,50.53,66.13,45483
-North West Norfolk,12.96,27.1,52.39,73.52,47137
-Northampton North,12.57,23.72,47.57,70.54,51255
-Northampton South,12.57,23.72,47.57,70.54,45560
-Norwich North,11.49,25.63,54.26,73.69,41423
-Norwich South,18.59,36.22,63.1,78.83,49952
-Nottingham East,11.64,36.9,61.94,78.72,50813
-Nottingham North and Kimberley,10.78,35.48,64.01,81.65,53358
-Nottingham South,11.64,36.9,61.94,78.72,50813
-Nuneaton,5.03,25.21,59.72,76.87,42469
-Old Bexley and Sidcup,6.9,52.0,74.2,87.11,41617
-Oldham East and Saddleworth,19.7,41.41,70.49,85.63,47203
-"Oldham West, Chadderton and Royton",19.7,41.41,70.49,85.63,43270
-Orkney and Shetland,,,,,
-Orpington,12.12,47.1,73.91,87.55,47597
-Ossett and Denby Dale,13.4,34.72,63.54,77.21,46453
-Oxford East,16.11,41.59,62.54,74.41,44944
-Oxford West and Abingdon,12.36,29.07,54.39,71.37,44577
-Paisley and Renfrewshire North,,,,,
-Paisley and Renfrewshire South,,,,,
-Peckham,22.65,32.31,53.15,66.03,44812
-Pendle and Clitheroe,33.03,52.0,69.42,78.83,45516
-Penistone and Stocksbridge,12.87,39.06,65.08,78.0,43161
-Penrith and Solway,,,,,
-Perth and Kinross-shire,,,,,
-Peterborough,7.62,18.22,39.21,71.55,48758
-Plymouth Moor View,17.68,36.4,66.5,83.65,46869
-Plymouth Sutton and Devonport,17.68,36.4,66.5,83.65,46869
-"Pontefract, Castleford and Knottingley",8.73,31.17,61.34,76.08,46694
-Pontypridd,35.01,53.64,73.2,84.66,49922
-Poole,10.84,36.18,60.23,80.3,45830
-Poplar and Limehouse,10.9,16.13,34.95,47.34,65916
-Portsmouth North,27.4,56.84,75.56,86.13,47030
-Portsmouth South,27.4,56.84,75.56,86.13,47030
-Preston,18.3,39.66,61.35,76.99,50662
-Putney,33.11,52.1,69.84,78.35,47120
-Queen's Park and Maida Vale,36.6,60.01,72.32,79.79,61822
-Rawmarsh and Conisbrough,6.42,30.61,63.79,80.97,47362
-Rayleigh and Wickford,3.17,12.5,56.51,77.75,42291
-Reading Central,18.06,38.47,62.22,74.55,45546
-Reading West and Mid Berkshire,13.44,25.38,51.93,74.83,53072
-Redcar,11.39,26.64,67.58,84.02,44020
-Redditch,7.85,15.9,40.79,76.32,43849
-Reigate,10.68,32.16,60.54,75.53,47021
-Rhondda and Ogmore,30.78,49.36,70.76,83.32,45395
-Ribble Valley,21.76,35.89,60.44,74.01,50395
-Richmond Park,17.67,59.36,76.9,86.28,48369
-Richmond and Northallerton,,,,,
-Rochdale,16.53,37.48,68.05,82.9,39425
-Rochester and Strood,14.33,33.55,65.15,81.99,47852
-Romford,1.66,40.87,76.49,85.23,39164
-Romsey and Southampton North,9.49,23.04,49.63,70.89,55115
-Rossendale and Darwen,34.52,49.46,68.41,82.69,41072
-Rother Valley,6.61,29.6,63.82,81.3,43441
-Rotherham,6.61,29.6,63.82,81.3,43441
-Rugby,10.95,27.49,55.96,69.44,49960
-"Ruislip, Northwood and Pinner",2.15,49.6,70.54,82.58,40993
-Runcorn and Helsby,9.37,24.46,54.8,77.34,44016
-Runnymede and Weybridge,9.75,29.79,56.94,72.29,45249
-Rushcliffe,8.69,25.14,54.94,72.08,41246
-Rutherglen,,,,,
-Rutland and Stamford,15.89,23.21,47.46,67.03,44727
-Salford,11.16,32.84,55.11,67.47,58968
-Salisbury,16.77,26.38,52.43,70.4,42243
-Scarborough and Whitby,,,,,
-Scunthorpe,9.68,28.58,60.43,77.4,49127
-Sefton Central,21.72,48.22,75.95,88.45,45259
-Selby,12.53,36.58,65.56,77.7,10871
-Sevenoaks,15.25,31.7,62.32,81.31,40608
-Sheffield Brightside and Hillsborough,12.12,40.65,66.35,79.81,44650
-Sheffield Central,12.12,40.65,66.35,79.81,35720
-Sheffield Hallam,12.12,40.65,66.35,79.81,44650
-Sheffield Heeley,12.12,40.65,66.35,79.81,53580
-Sheffield South East,12.12,40.65,66.35,79.81,53580
-Sherwood Forest,10.37,29.56,58.37,73.71,40248
-Shipley,23.66,46.45,68.66,79.52,42908
-Shrewsbury,20.53,30.7,55.59,72.26,47600
-Sittingbourne and Sheppey,17.39,29.84,57.81,73.32,44053
-Skipton and Ripon,,,,,
-Sleaford and North Hykeham,10.55,18.37,43.97,60.43,41961
-Slough,3.05,26.07,56.32,74.03,46352
-Smethwick,6.8,38.55,68.85,81.63,43437
-Solihull West and Shirley,1.68,19.37,64.5,80.07,39184
-South Antrim,,,,,
-South Basildon and East Thurrock,2.65,14.87,54.09,74.97,42197
-South Cambridgeshire,10.72,19.65,43.45,64.69,49966
-South Cotswolds,20.81,29.69,51.57,71.11,45567
-South Derbyshire,12.74,22.15,40.65,58.01,42640
-South Devon,25.13,36.48,59.08,79.66,51460
-South Dorset,18.0,27.71,52.4,75.54,41656
-South Down,,,,,
-South East Cornwall,25.6,35.26,54.41,73.51,43647
-South Holland and the Deepings,10.69,22.32,42.74,61.09,47990
-South Leicestershire,8.34,20.49,50.74,68.05,47650
-South Norfolk,13.78,21.0,44.19,65.02,42879
-South Northamptonshire,12.57,23.9,48.13,70.35,45302
-South Ribble,8.92,26.16,57.84,76.81,43310
-South Shields,10.69,35.98,73.31,87.65,44495
-South Shropshire,20.53,30.7,55.59,72.26,47600
-South Suffolk,19.22,25.68,53.11,75.17,43140
-South West Devon,23.73,36.04,59.55,79.37,48516
-South West Hertfordshire,5.51,26.62,65.1,77.86,41384
-South West Norfolk,13.12,22.89,48.55,70.95,54021
-South West Wiltshire,16.77,26.38,52.43,70.4,44590
-Southampton Itchen,11.83,37.76,67.51,81.05,40211
-Southampton Test,11.83,37.76,67.51,81.05,50264
-Southend East and Rochford,3.24,40.8,70.4,84.92,42860
-Southend West and Leigh,2.93,51.92,75.34,87.89,48806
-Southgate and Wood Green,20.31,61.4,76.48,85.52,57210
-Southport,18.08,39.82,70.74,84.78,43670
-Spelthorne,5.34,29.03,69.88,83.08,44160
-Spen Valley,22.76,41.82,67.94,79.46,45970
-St Albans,8.83,30.33,61.53,79.19,36604
-St Austell and Newquay,25.6,35.26,54.41,73.51,49883
-St Helens North,11.52,34.07,68.26,79.74,45011
-St Helens South and Whiston,9.88,32.02,67.14,78.61,49337
-St Ives,29.6,38.03,59.11,76.28,41680
-St Neots and Mid Cambridgeshire,9.55,16.42,41.58,66.53,43685
-Stafford,10.66,24.86,57.22,73.83,46766
-Staffordshire Moorlands,20.28,36.69,68.69,82.72,41463
-Stalybridge and Hyde,18.02,41.32,71.21,84.47,43642
-Stevenage,2.92,7.64,58.13,78.23,44901
-Stirling and Strathallan,,,,,
-Stockport,13.9,42.26,76.86,90.0,40738
-Stockton North,5.47,21.79,55.75,74.27,46178
-Stockton West,6.07,24.31,56.63,74.65,40623
-Stoke-on-Trent Central,16.76,40.65,70.43,84.11,53349
-Stoke-on-Trent North,16.04,39.74,70.26,83.94,42794
-Stoke-on-Trent South,15.94,36.65,67.22,81.62,42949
-"Stone, Great Wyrley and Penkridge",7.76,18.85,55.4,77.96,38180
-Stourbridge,6.15,28.58,69.6,86.2,37937
-Strangford,,,,,
-Stratford and Bow,22.93,34.35,50.61,61.47,50414
-Stratford-on-Avon,15.38,23.25,49.36,65.46,48190
-Streatham and Croydon North,30.54,53.44,71.74,81.21,53141
-Stretford and Urmston,12.69,49.82,75.36,84.76,44203
-Stroud,23.34,32.7,57.77,76.09,44039
-Suffolk Coastal,18.87,31.73,55.26,77.26,54201
-Sunderland Central,14.43,32.47,67.91,84.31,47938
-Surrey Heath,5.08,16.92,51.23,77.03,41347
-Sussex Weald,15.71,29.35,58.02,74.99,41091
-Sutton Coldfield,11.67,47.2,70.36,81.58,50943
-Sutton and Cheam,5.25,53.93,68.22,82.54,42985
-Swansea West,19.0,41.1,66.96,81.67,33806
-Swindon North,11.51,21.08,46.92,70.92,38278
-Swindon South,11.51,21.08,46.92,70.92,47848
-Tamworth,5.98,14.36,47.15,74.99,47130
-Tatton,14.48,29.14,57.38,74.26,51577
-Taunton and Wellington,,,,,
-Telford,6.72,12.11,39.4,65.67,38612
-Tewkesbury,13.45,20.73,50.26,69.97,49215
-The Wrekin,9.72,16.15,42.92,67.1,55338
-Thirsk and Malton,,,,,
-Thornbury and Yate,7.63,18.31,47.74,70.69,44907
-Thurrock,3.84,20.67,57.21,73.85,45416
-Tipton and Wednesbury,6.72,37.31,68.95,82.2,43427
-Tiverton and Minehead,25.11,31.77,52.6,71.81,13550
-Tonbridge,15.22,27.32,57.51,75.99,44826
-Tooting,33.11,52.1,69.84,78.35,53010
-Torbay,24.27,43.15,70.12,84.66,46874
-Torfaen,13.57,27.32,70.24,84.85,43040
-Torridge and Tavistock,29.23,37.4,54.2,70.01,46880
-Tottenham,35.78,61.77,75.54,83.97,59880
-Truro and Falmouth,25.6,35.26,54.41,73.51,53000
-Tunbridge Wells,30.63,42.13,67.01,81.1,44902
-Twickenham,20.3,62.0,78.26,87.68,47556
-Tynemouth,9.06,36.57,65.18,80.35,40484
-Upper Bann,,,,,
-Uxbridge and South Ruislip,1.87,41.75,67.35,81.5,44648
-Vale of Glamorgan,17.26,29.88,57.06,76.63,43499
-Vauxhall and Camberwell Green,33.72,49.05,67.12,76.94,43153
-Wakefield and Rothwell,9.36,32.07,62.04,76.35,49783
-Wallasey,15.49,48.24,74.84,88.54,45963
-Walsall and Bloxwich,8.56,29.83,71.05,83.46,44838
-Walthamstow,24.35,64.58,76.15,82.97,52785
-Warrington North,8.93,28.22,54.25,75.39,41561
-Warrington South,8.93,28.22,54.25,75.39,45717
-Warwick and Leamington,14.74,24.71,54.54,72.08,48240
-Washington and Gateshead South,14.14,33.71,69.08,84.52,45918
-Watford,13.54,44.36,65.91,74.95,44814
-Waveney Valley,17.74,25.19,45.52,67.23,43869
-Weald of Kent,15.52,26.27,51.18,67.94,50225
-Wellingborough and Rushden,12.56,25.13,51.99,69.02,48932
-Wells and Mendip Hills,14.8,25.68,52.44,74.34,11475
-Welwyn Hatfield,2.29,16.76,57.75,76.68,47147
-West Aberdeenshire and Kincardine,,,,,
-West Bromwich,6.8,38.55,68.85,81.63,43437
-West Dorset,18.0,27.71,52.4,75.54,55541
-West Dunbartonshire,,,,,
-West Ham and Beckton,28.94,43.46,58.43,68.53,52144
-West Lancashire,10.8,23.02,60.32,77.44,42144
-West Suffolk,12.88,18.12,46.72,70.38,54060
-West Tyrone,,,,,
-West Worcestershire,23.12,31.17,56.51,73.73,47992
-Westmorland and Lonsdale,,,,,
-Weston-super-Mare,14.8,25.68,52.44,74.34,34426
-Wetherby and Easingwold,12.53,36.58,65.56,77.7,21743
-Whitehaven and Workington,,,,,
-Widnes and Halewood,6.5,22.96,54.46,76.74,42636
-Wigan,14.18,34.73,65.17,79.14,41277
-Wimbledon,12.34,61.07,74.71,84.76,51403
-Winchester,14.11,25.12,49.95,69.76,46248
-Windsor,9.95,26.67,58.32,76.63,45965
-Wirral West,15.49,48.24,74.84,88.54,45963
-Witham,11.39,23.07,49.2,70.11,45138
-Witney,15.42,21.28,48.13,68.09,43761
-Woking,5.94,22.68,53.31,77.07,44140
-Wokingham,4.15,12.6,42.26,70.64,40524
-Wolverhampton North East,7.52,35.88,72.49,84.95,48943
-Wolverhampton South East,7.69,34.87,72.25,84.7,45114
-Wolverhampton West,7.26,37.39,72.85,85.32,47167
-Worcester,16.25,31.07,55.91,74.36,47380
-Worsley and Eccles,12.06,33.41,58.13,70.97,59623
-Worthing West,7.87,39.4,71.18,85.98,45424
-Wrexham,16.36,31.13,62.98,80.14,43843
-Wycombe,8.89,22.93,55.2,74.53,40607
-Wyre Forest,13.9,27.67,64.2,79.98,48350
-Wythenshawe and Sale East,14.15,46.19,64.74,75.13,53234
-Yeovil,,,,,
-Ynys Môn,23.63,34.97,63.34,83.5,35460
-York Central,14.49,33.24,59.74,77.42,39609
-York Outer,14.49,33.24,59.74,77.42,52811
+PCON24NM,pct_pre_1900,pct_pre_1945,pct_pre_1972,pct_pre_1992,n_dwellings,data_source
+Aberafan Maesteg,12.44,41.2,69.93,82.53,36600,VOA CTSOP 2023 (LAD)
+Aberdeen North,,34.55,,,,SHCS 2017-2019 (LA: Aberdeen City); pre-1945 only
+Aberdeen South,,34.55,,,,SHCS 2017-2019 (LA: Aberdeen City); pre-1945 only
+Aberdeenshire North and Moray East,,26.13,,,,SHCS 2017-2019 (LA: Aberdeenshire); pre-1945 only
+Airdrie and Shotts,,21.13,,,,SHCS 2017-2019 (LA: North Lanarkshire); pre-1945 only
+Aldershot,7.77,22.11,52.94,72.91,49751,VOA CTSOP 2023 (LAD)
+Aldridge-Brownhills,8.56,29.83,71.05,83.46,44838,VOA CTSOP 2023 (LAD)
+Alloa and Grangemouth,,17.71,,,,SHCS 2017-2019 (LA: Clackmannanshire); pre-1945 only
+Altrincham and Sale West,12.69,49.82,75.36,84.76,44203,VOA CTSOP 2023 (LAD)
+Alyn and Deeside,11.39,28.51,62.87,77.49,42600,VOA CTSOP 2023 (LAD)
+Amber Valley,21.02,41.14,63.51,78.85,38870,VOA CTSOP 2023 (LAD)
+Angus and Perthshire Glens,,29.73,,,,SHCS 2017-2019 (LA: Angus); pre-1945 only
+Arbroath and Broughty Ferry,,29.73,,,,SHCS 2017-2019 (LA: Angus); pre-1945 only
+"Argyll, Bute and South Lochaber",,31.34,,,,SHCS 2017-2019 (LA: Argyll and Bute); pre-1945 only
+Arundel and South Downs,12.12,25.5,52.33,71.86,49628,VOA CTSOP 2023 (LAD)
+Ashfield,9.67,35.66,61.85,76.15,47310,VOA CTSOP 2023 (LAD)
+Ashford,14.86,24.94,48.95,66.0,43142,VOA CTSOP 2023 (LAD)
+Ashton-under-Lyne,18.02,41.32,71.21,84.47,43642,VOA CTSOP 2023 (LAD)
+Aylesbury,8.89,22.93,55.2,74.53,40607,VOA CTSOP 2023 (LAD)
+"Ayr, Carrick and Cumnock",,37.66,,,,SHCS 2017-2019 (LA: South Ayrshire); pre-1945 only
+Banbury,12.87,19.14,45.52,67.59,45264,VOA CTSOP 2023 (LAD)
+Bangor Aberconwy,28.72,46.96,69.34,84.25,49393,VOA CTSOP 2023 (LAD)
+Barking,1.23,55.4,74.09,78.8,43008,VOA CTSOP 2023 (LAD)
+Barnsley North,13.61,37.47,63.81,76.19,49114,VOA CTSOP 2023 (LAD)
+Barnsley South,13.61,37.47,63.81,76.19,49114,VOA CTSOP 2023 (LAD)
+Barrow and Furness,,,,,,
+Basildon and Billericay,0.56,4.73,48.65,76.93,44356,VOA CTSOP 2023 (LAD)
+Basingstoke,5.99,12.13,42.89,70.37,46524,VOA CTSOP 2023 (LAD)
+Bassetlaw,11.44,29.7,57.77,73.18,44768,VOA CTSOP 2023 (LAD)
+Bath,25.26,38.63,66.69,79.07,41619,VOA CTSOP 2023 (LAD)
+Bathgate and Linlithgow,,11.67,,,,SHCS 2017-2019 (LA: West Lothian); pre-1945 only
+Battersea,33.11,52.1,69.84,78.35,53010,VOA CTSOP 2023 (LAD)
+Beaconsfield,8.89,22.93,55.2,74.53,45119,VOA CTSOP 2023 (LAD)
+Beckenham and Penge,12.12,47.1,73.91,87.55,37020,VOA CTSOP 2023 (LAD)
+Bedford,13.65,27.01,53.5,68.88,38516,VOA CTSOP 2023 (LAD)
+Belfast East,8.0,16.5,42.51,70.47,46111,NIHCS 2023 (NI-wide; no district breakdown)
+Belfast North,8.0,16.5,42.51,70.47,46111,NIHCS 2023 (NI-wide; no district breakdown)
+Belfast South and Mid Down,8.0,16.5,42.51,70.47,46111,NIHCS 2023 (NI-wide; no district breakdown)
+Belfast West,8.0,16.5,42.51,70.47,46111,NIHCS 2023 (NI-wide; no district breakdown)
+Bermondsey and Old Southwark,22.65,32.31,53.15,66.03,51214,VOA CTSOP 2023 (LAD)
+"Berwickshire, Roxburgh and Selkirk",,33.14,,,,SHCS 2017-2019 (LA: Scottish Borders); pre-1945 only
+Bethnal Green and Stepney,10.9,16.13,34.95,47.34,58592,VOA CTSOP 2023 (LAD)
+Beverley and Holderness,14.43,29.68,54.93,74.34,36182,VOA CTSOP 2023 (LAD)
+Bexhill and Battle,21.45,38.89,66.43,82.67,43310,VOA CTSOP 2023 (LAD)
+Bexleyheath and Crayford,6.9,52.0,74.2,87.11,41617,VOA CTSOP 2023 (LAD)
+Bicester and Woodstock,12.87,19.14,45.52,67.59,45264,VOA CTSOP 2023 (LAD)
+Birkenhead,15.49,48.24,74.84,88.54,45963,VOA CTSOP 2023 (LAD)
+Birmingham Edgbaston,11.67,47.2,70.36,81.58,31840,VOA CTSOP 2023 (LAD)
+Birmingham Erdington,11.67,47.2,70.36,81.58,50943,VOA CTSOP 2023 (LAD)
+Birmingham Hall Green and Moseley,11.67,47.2,70.36,81.58,38208,VOA CTSOP 2023 (LAD)
+Birmingham Hodge Hill and Solihull North,9.17,40.25,68.89,81.2,49403,VOA CTSOP 2023 (LAD)
+Birmingham Ladywood,11.67,47.2,70.36,81.58,50943,VOA CTSOP 2023 (LAD)
+Birmingham Northfield,11.67,47.2,70.36,81.58,50943,VOA CTSOP 2023 (LAD)
+Birmingham Perry Barr,11.67,47.2,70.36,81.58,50943,VOA CTSOP 2023 (LAD)
+Birmingham Selly Oak,11.67,47.2,70.36,81.58,50943,VOA CTSOP 2023 (LAD)
+Birmingham Yardley,11.67,47.2,70.36,81.58,44575,VOA CTSOP 2023 (LAD)
+Bishop Auckland,13.72,35.98,64.71,78.73,43464,VOA CTSOP 2023 (LAD)
+Blackburn,30.83,46.88,65.42,80.79,44506,VOA CTSOP 2023 (LAD)
+Blackley and Middleton South,15.59,41.57,62.0,74.43,49252,VOA CTSOP 2023 (LAD)
+Blackpool North and Fleetwood,10.94,40.24,70.55,82.77,48547,VOA CTSOP 2023 (LAD)
+Blackpool South,15.0,62.88,82.72,90.47,53417,VOA CTSOP 2023 (LAD)
+Blaenau Gwent and Rhymney,32.08,50.28,75.24,86.93,48234,VOA CTSOP 2023 (LAD)
+Blaydon and Consett,13.45,36.91,68.56,81.69,45292,VOA CTSOP 2023 (LAD)
+Blyth and Ashington,15.38,33.94,61.16,79.1,50715,VOA CTSOP 2023 (LAD)
+Bognor Regis and Littlehampton,6.97,26.0,58.35,78.24,51847,VOA CTSOP 2023 (LAD)
+Bolsover,13.03,33.69,60.43,76.57,52365,VOA CTSOP 2023 (LAD)
+Bolton North East,18.88,41.31,65.24,82.46,42487,VOA CTSOP 2023 (LAD)
+Bolton South and Walkden,16.56,38.77,62.2,77.96,56832,VOA CTSOP 2023 (LAD)
+Bolton West,18.88,41.31,65.24,82.46,47798,VOA CTSOP 2023 (LAD)
+Bootle,21.72,48.22,75.95,88.45,45259,VOA CTSOP 2023 (LAD)
+Boston and Skegness,16.65,30.49,53.91,71.43,52661,VOA CTSOP 2023 (LAD)
+Bournemouth East,10.84,36.18,60.23,80.3,51559,VOA CTSOP 2023 (LAD)
+Bournemouth West,10.84,36.18,60.23,80.3,45830,VOA CTSOP 2023 (LAD)
+Bracknell,3.19,6.31,37.43,70.56,39495,VOA CTSOP 2023 (LAD)
+Bradford East,23.66,46.45,68.66,79.52,42908,VOA CTSOP 2023 (LAD)
+Bradford South,23.66,46.45,68.66,79.52,50059,VOA CTSOP 2023 (LAD)
+Bradford West,23.66,46.45,68.66,79.52,42908,VOA CTSOP 2023 (LAD)
+Braintree,12.13,23.62,49.59,69.49,48715,VOA CTSOP 2023 (LAD)
+"Brecon, Radnor and Cwm Tawe",30.37,42.54,62.93,79.93,47555,VOA CTSOP 2023 (LAD)
+Brent East,20.69,61.01,68.8,75.22,48175,VOA CTSOP 2023 (LAD)
+Brent West,20.69,61.01,68.8,75.22,60218,VOA CTSOP 2023 (LAD)
+Brentford and Isleworth,11.66,47.24,65.12,77.41,54542,VOA CTSOP 2023 (LAD)
+Brentwood and Ongar,7.28,22.53,67.02,81.56,47134,VOA CTSOP 2023 (LAD)
+Bridgend,13.86,32.27,61.01,77.96,43169,VOA CTSOP 2023 (LAD)
+Bridgwater,,,,,,
+Bridlington and the Wolds,14.43,29.68,54.93,74.34,42213,VOA CTSOP 2023 (LAD)
+Brigg and Immingham,12.66,33.39,65.04,80.96,42549,VOA CTSOP 2023 (LAD)
+Brighton Kemptown and Peacehaven,26.38,46.9,73.81,86.36,48420,VOA CTSOP 2023 (LAD)
+Brighton Pavilion,33.24,56.76,80.16,87.93,49444,VOA CTSOP 2023 (LAD)
+Bristol Central,9.71,51.19,72.78,80.59,43128,VOA CTSOP 2023 (LAD)
+Bristol East,9.71,51.19,72.78,80.59,55451,VOA CTSOP 2023 (LAD)
+Bristol North East,8.67,34.75,60.26,75.64,42608,VOA CTSOP 2023 (LAD)
+Bristol North West,9.71,51.19,72.78,80.59,43128,VOA CTSOP 2023 (LAD)
+Bristol South,9.71,51.19,72.78,80.59,43128,VOA CTSOP 2023 (LAD)
+Broadland and Fakenham,10.83,22.86,50.52,71.8,49409,VOA CTSOP 2023 (LAD)
+Bromley and Biggin Hill,12.12,47.1,73.91,87.55,47597,VOA CTSOP 2023 (LAD)
+Bromsgrove,8.88,26.57,58.45,75.88,42790,VOA CTSOP 2023 (LAD)
+Broxbourne,6.58,18.61,54.09,76.07,46567,VOA CTSOP 2023 (LAD)
+Broxtowe,9.5,33.34,67.11,86.05,41666,VOA CTSOP 2023 (LAD)
+Buckingham and Bletchley,6.89,15.58,37.74,66.87,43698,VOA CTSOP 2023 (LAD)
+Burnley,34.01,56.72,73.23,85.01,49592,VOA CTSOP 2023 (LAD)
+Burton and Uttoxeter,15.27,32.75,55.09,70.95,45833,VOA CTSOP 2023 (LAD)
+Bury North,17.95,43.81,71.3,85.01,42455,VOA CTSOP 2023 (LAD)
+Bury South,17.33,42.81,69.83,83.41,49007,VOA CTSOP 2023 (LAD)
+Bury St Edmunds and Stowmarket,15.24,20.96,45.94,69.07,43794,VOA CTSOP 2023 (LAD)
+Caerfyrddin,24.72,46.33,66.35,79.13,50960,VOA CTSOP 2023 (LAD)
+Caerphilly,21.47,42.14,67.5,81.38,40305,VOA CTSOP 2023 (LAD)
+"Caithness, Sutherland and Easter Ross",,22.66,,,,SHCS 2017-2019 (LA: Highland); pre-1945 only
+Calder Valley,32.07,51.15,71.23,81.42,48360,VOA CTSOP 2023 (LAD)
+Camborne and Redruth,25.6,35.26,54.41,73.51,46765,VOA CTSOP 2023 (LAD)
+Cambridge,14.48,31.4,53.75,68.75,51394,VOA CTSOP 2023 (LAD)
+Cannock Chase,4.33,18.04,55.13,74.4,45780,VOA CTSOP 2023 (LAD)
+Canterbury,15.21,32.41,60.11,76.68,47000,VOA CTSOP 2023 (LAD)
+Cardiff East,18.17,36.99,59.64,75.28,46934,VOA CTSOP 2023 (LAD)
+Cardiff North,20.04,38.84,61.15,76.33,49203,VOA CTSOP 2023 (LAD)
+Cardiff South and Penarth,17.59,32.47,58.0,76.14,41378,VOA CTSOP 2023 (LAD)
+Cardiff West,22.76,41.53,63.34,77.84,53742,VOA CTSOP 2023 (LAD)
+Carlisle,,,,,,
+Carshalton and Wallington,5.25,53.93,68.22,82.54,42985,VOA CTSOP 2023 (LAD)
+Castle Point,1.38,12.48,60.86,83.93,43836,VOA CTSOP 2023 (LAD)
+Central Ayrshire,,37.66,,,,SHCS 2017-2019 (LA: South Ayrshire); pre-1945 only
+Central Devon,26.35,35.18,55.22,73.69,44363,VOA CTSOP 2023 (LAD)
+Central Suffolk and North Ipswich,18.48,31.27,52.96,72.87,45462,VOA CTSOP 2023 (LAD)
+Ceredigion Preseli,34.44,44.8,63.47,80.95,48366,VOA CTSOP 2023 (LAD)
+Chatham and Aylesford,14.59,30.4,61.36,78.58,48709,VOA CTSOP 2023 (LAD)
+Cheadle,13.9,42.26,76.86,90.0,50923,VOA CTSOP 2023 (LAD)
+Chelmsford,5.03,18.0,51.21,75.26,43312,VOA CTSOP 2023 (LAD)
+Chelsea and Fulham,53.21,68.36,77.05,84.87,60078,VOA CTSOP 2023 (LAD)
+Cheltenham,22.45,33.44,63.05,79.85,44695,VOA CTSOP 2023 (LAD)
+Chesham and Amersham,8.89,22.93,55.2,74.53,49631,VOA CTSOP 2023 (LAD)
+Chester North and Neston,12.83,27.67,61.24,76.25,36553,VOA CTSOP 2023 (LAD)
+Chester South and Eddisbury,13.78,28.27,60.01,75.44,47280,VOA CTSOP 2023 (LAD)
+Chesterfield,13.18,35.33,64.85,83.17,42292,VOA CTSOP 2023 (LAD)
+Chichester,14.33,28.46,55.41,72.79,44841,VOA CTSOP 2023 (LAD)
+Chingford and Woodford Green,19.58,63.72,76.65,83.62,43102,VOA CTSOP 2023 (LAD)
+Chippenham,16.77,26.38,52.43,70.4,44590,VOA CTSOP 2023 (LAD)
+Chipping Barnet,6.7,55.02,69.1,79.26,52743,VOA CTSOP 2023 (LAD)
+Chorley,14.52,28.45,51.06,72.61,45154,VOA CTSOP 2023 (LAD)
+Christchurch,14.42,31.95,56.32,77.92,46001,VOA CTSOP 2023 (LAD)
+Cities of London and Westminster,27.5,33.56,66.28,72.32,80908,VOA CTSOP 2023 (LAD)
+City of Durham,13.72,35.98,64.71,78.73,39512,VOA CTSOP 2023 (LAD)
+Clacton,10.4,29.87,59.08,79.82,50944,VOA CTSOP 2023 (LAD)
+Clapham and Brixton Hill,36.88,53.84,71.11,80.06,52027,VOA CTSOP 2023 (LAD)
+Clwyd East,14.93,33.17,64.72,79.67,50323,VOA CTSOP 2023 (LAD)
+Clwyd North,20.55,41.54,67.13,82.86,41955,VOA CTSOP 2023 (LAD)
+Coatbridge and Bellshill,,21.13,,,,SHCS 2017-2019 (LA: North Lanarkshire); pre-1945 only
+Colchester,9.94,21.6,47.38,68.78,47411,VOA CTSOP 2023 (LAD)
+Colne Valley,22.76,41.82,67.94,79.46,38308,VOA CTSOP 2023 (LAD)
+Congleton,15.92,29.61,57.23,73.64,35954,VOA CTSOP 2023 (LAD)
+Corby and East Northamptonshire,12.56,25.13,51.99,69.02,48932,VOA CTSOP 2023 (LAD)
+Coventry East,4.13,40.13,70.94,78.48,50497,VOA CTSOP 2023 (LAD)
+Coventry North West,4.13,40.13,70.94,78.48,50497,VOA CTSOP 2023 (LAD)
+Coventry South,4.13,40.13,70.94,78.48,50497,VOA CTSOP 2023 (LAD)
+Cowdenbeath and Kirkcaldy,,29.44,,,,SHCS 2017-2019 (LA: Fife); pre-1945 only
+Cramlington and Killingworth,12.39,35.57,63.27,79.75,59085,VOA CTSOP 2023 (LAD)
+Crawley,1.44,4.29,46.5,75.3,47080,VOA CTSOP 2023 (LAD)
+Crewe and Nantwich,15.92,29.61,57.23,73.64,46740,VOA CTSOP 2023 (LAD)
+Croydon East,19.44,52.74,72.83,83.23,51281,VOA CTSOP 2023 (LAD)
+Croydon South,19.44,52.74,72.83,83.23,45583,VOA CTSOP 2023 (LAD)
+Croydon West,19.44,52.74,72.83,83.23,45583,VOA CTSOP 2023 (LAD)
+Cumbernauld and Kirkintilloch,,21.13,,,,SHCS 2017-2019 (LA: North Lanarkshire); pre-1945 only
+Dagenham and Rainham,1.38,50.56,74.89,80.94,57561,VOA CTSOP 2023 (LAD)
+Darlington,10.02,40.68,62.35,77.08,47790,VOA CTSOP 2023 (LAD)
+Dartford,10.19,31.41,56.77,67.2,46636,VOA CTSOP 2023 (LAD)
+Daventry,12.57,23.88,48.07,70.37,50997,VOA CTSOP 2023 (LAD)
+Derby North,14.86,38.08,62.63,82.13,51819,VOA CTSOP 2023 (LAD)
+Derby South,14.86,38.08,62.63,82.13,42398,VOA CTSOP 2023 (LAD)
+Derbyshire Dales,30.02,43.5,63.32,77.01,47750,VOA CTSOP 2023 (LAD)
+Dewsbury and Batley,22.76,41.82,67.94,79.46,45970,VOA CTSOP 2023 (LAD)
+Didcot and Wantage,11.28,21.67,50.61,69.85,44777,VOA CTSOP 2023 (LAD)
+Doncaster Central,5.75,34.13,63.71,79.81,54297,VOA CTSOP 2023 (LAD)
+Doncaster East and the Isle of Axholme,7.43,31.75,62.3,78.77,37676,VOA CTSOP 2023 (LAD)
+Doncaster North,5.75,34.13,63.71,79.81,47510,VOA CTSOP 2023 (LAD)
+Dorking and Horley,13.63,36.14,64.21,79.97,40274,VOA CTSOP 2023 (LAD)
+Dover and Deal,25.99,43.37,68.15,81.94,48476,VOA CTSOP 2023 (LAD)
+Droitwich and Evesham,14.49,23.23,46.39,66.64,44799,VOA CTSOP 2023 (LAD)
+Dudley,6.15,28.58,69.6,86.2,43357,VOA CTSOP 2023 (LAD)
+Dulwich and West Norwood,33.0,47.97,66.22,76.23,53890,VOA CTSOP 2023 (LAD)
+Dumfries and Galloway,,34.09,,,,SHCS 2017-2019 (LA: Dumfries and Galloway); pre-1945 only
+"Dumfriesshire, Clydesdale and Tweeddale",,34.09,,,,SHCS 2017-2019 (LA: Dumfries and Galloway); pre-1945 only
+Dundee Central,,33.63,,,,SHCS 2017-2019 (LA: Dundee City); pre-1945 only
+Dunfermline and Dollar,,29.44,,,,SHCS 2017-2019 (LA: Fife); pre-1945 only
+Dunstable and Leighton Buzzard,8.93,17.96,45.87,66.38,44942,VOA CTSOP 2023 (LAD)
+Dwyfor Meirionnydd,43.74,54.5,74.42,86.67,53552,VOA CTSOP 2023 (LAD)
+Ealing Central and Acton,20.81,60.74,72.15,81.34,52007,VOA CTSOP 2023 (LAD)
+Ealing North,12.79,59.23,71.46,81.03,49243,VOA CTSOP 2023 (LAD)
+Ealing Southall,12.79,59.23,71.46,81.03,55399,VOA CTSOP 2023 (LAD)
+Earley and Woodley,7.63,19.06,47.25,71.62,44542,VOA CTSOP 2023 (LAD)
+Easington,13.72,35.98,64.71,78.73,51366,VOA CTSOP 2023 (LAD)
+East Antrim,8.0,16.5,42.51,70.47,46111,NIHCS 2023 (NI-wide; no district breakdown)
+East Grinstead and Uckfield,12.54,25.43,55.35,74.35,46958,VOA CTSOP 2023 (LAD)
+East Ham,28.94,43.46,58.43,68.53,47404,VOA CTSOP 2023 (LAD)
+East Hampshire,10.38,21.01,46.91,73.37,47546,VOA CTSOP 2023 (LAD)
+East Kilbride and Strathaven,,19.96,,,,SHCS 2017-2019 (LA: South Lanarkshire); pre-1945 only
+East Londonderry,8.0,16.5,42.51,70.47,46111,NIHCS 2023 (NI-wide; no district breakdown)
+East Renfrewshire,,39.29,,,,SHCS 2017-2019 (LA: East Renfrewshire); pre-1945 only
+East Surrey,12.98,35.53,64.76,76.96,42125,VOA CTSOP 2023 (LAD)
+East Thanet,26.04,47.75,73.13,85.97,50830,VOA CTSOP 2023 (LAD)
+East Wiltshire,15.89,25.49,51.51,70.49,49557,VOA CTSOP 2023 (LAD)
+East Worthing and Shoreham,4.67,37.06,74.9,88.52,44688,VOA CTSOP 2023 (LAD)
+Eastbourne,19.67,36.33,61.44,82.73,49580,VOA CTSOP 2023 (LAD)
+Eastleigh,4.27,17.16,42.57,68.67,41566,VOA CTSOP 2023 (LAD)
+Edinburgh East and Musselburgh,,48.09,,,,SHCS 2017-2019 (LA: City of Edinburgh); pre-1945 only
+Edinburgh North and Leith,,48.09,,,,SHCS 2017-2019 (LA: City of Edinburgh); pre-1945 only
+Edinburgh South,,48.09,,,,SHCS 2017-2019 (LA: City of Edinburgh); pre-1945 only
+Edinburgh South West,,48.09,,,,SHCS 2017-2019 (LA: City of Edinburgh); pre-1945 only
+Edinburgh West,,48.09,,,,SHCS 2017-2019 (LA: City of Edinburgh); pre-1945 only
+Edmonton and Winchmore Hill,10.69,58.81,75.62,85.0,45846,VOA CTSOP 2023 (LAD)
+Ellesmere Port and Bromborough,13.32,31.41,63.72,78.48,46030,VOA CTSOP 2023 (LAD)
+Eltham and Chislehurst,15.0,41.38,62.44,74.36,47531,VOA CTSOP 2023 (LAD)
+Ely and East Cambridgeshire,11.67,21.26,42.18,60.95,45670,VOA CTSOP 2023 (LAD)
+Enfield North,10.69,58.81,75.62,85.0,45846,VOA CTSOP 2023 (LAD)
+Epping Forest,7.69,24.78,64.43,80.9,38573,VOA CTSOP 2023 (LAD)
+Epsom and Ewell,7.73,46.35,69.5,80.58,47176,VOA CTSOP 2023 (LAD)
+Erewash,14.09,36.62,64.03,82.46,44640,VOA CTSOP 2023 (LAD)
+Erith and Thamesmead,13.45,43.08,63.47,75.35,54790,VOA CTSOP 2023 (LAD)
+Esher and Walton,8.69,34.18,62.27,76.06,44550,VOA CTSOP 2023 (LAD)
+Exeter,14.22,33.98,56.48,71.51,46362,VOA CTSOP 2023 (LAD)
+Exmouth and Exeter East,17.29,31.48,54.52,72.7,43348,VOA CTSOP 2023 (LAD)
+Falkirk,,22.35,,,,SHCS 2017-2019 (LA: Falkirk); pre-1945 only
+Fareham and Waterlooville,5.15,18.25,54.89,79.19,45228,VOA CTSOP 2023 (LAD)
+Farnham and Bordon,14.46,30.74,57.67,78.36,38637,VOA CTSOP 2023 (LAD)
+Faversham and Mid Kent,15.59,28.76,56.23,72.32,50571,VOA CTSOP 2023 (LAD)
+Feltham and Heston,10.8,45.77,63.81,76.38,44808,VOA CTSOP 2023 (LAD)
+Fermanagh and South Tyrone,8.0,16.5,42.51,70.47,46111,NIHCS 2023 (NI-wide; no district breakdown)
+Filton and Bradley Stoke,7.63,18.31,47.74,70.69,44907,VOA CTSOP 2023 (LAD)
+Finchley and Golders Green,6.7,55.02,69.1,79.26,52743,VOA CTSOP 2023 (LAD)
+Folkestone and Hythe,22.46,41.36,65.73,81.27,44762,VOA CTSOP 2023 (LAD)
+Forest of Dean,24.95,32.85,55.88,74.71,42195,VOA CTSOP 2023 (LAD)
+Foyle,8.0,16.5,42.51,70.47,46111,NIHCS 2023 (NI-wide; no district breakdown)
+Frome and East Somerset,25.26,38.63,66.69,79.07,15607,VOA CTSOP 2023 (LAD)
+Fylde,13.09,30.84,62.34,76.62,47882,VOA CTSOP 2023 (LAD)
+Gainsborough,17.48,26.84,52.78,67.59,45640,VOA CTSOP 2023 (LAD)
+Gateshead Central and Whickham,13.12,38.03,73.17,85.24,47485,VOA CTSOP 2023 (LAD)
+Gedling,6.11,29.17,64.13,83.36,48495,VOA CTSOP 2023 (LAD)
+Gillingham and Rainham,14.33,33.55,65.15,81.99,35889,VOA CTSOP 2023 (LAD)
+Glasgow East,,40.61,,,,SHCS 2017-2019 (LA: Glasgow City); pre-1945 only
+Glasgow North,,40.61,,,,SHCS 2017-2019 (LA: Glasgow City); pre-1945 only
+Glasgow North East,,40.61,,,,SHCS 2017-2019 (LA: Glasgow City); pre-1945 only
+Glasgow South,,40.61,,,,SHCS 2017-2019 (LA: Glasgow City); pre-1945 only
+Glasgow South West,,40.61,,,,SHCS 2017-2019 (LA: Glasgow City); pre-1945 only
+Glasgow West,,40.61,,,,SHCS 2017-2019 (LA: Glasgow City); pre-1945 only
+Glastonbury and Somerton,,,,,,
+Glenrothes and Mid Fife,,29.44,,,,SHCS 2017-2019 (LA: Fife); pre-1945 only
+Gloucester,16.16,27.6,49.62,72.35,52649,VOA CTSOP 2023 (LAD)
+Godalming and Ash,15.85,35.75,63.62,80.74,36950,VOA CTSOP 2023 (LAD)
+Goole and Pocklington,14.43,29.68,54.93,74.34,54273,VOA CTSOP 2023 (LAD)
+Gordon and Buchan,,26.13,,,,SHCS 2017-2019 (LA: Aberdeenshire); pre-1945 only
+Gorton and Denton,16.52,42.67,64.79,76.91,48257,VOA CTSOP 2023 (LAD)
+Gosport,10.26,29.25,63.29,80.66,42999,VOA CTSOP 2023 (LAD)
+Gower,19.0,41.1,66.96,81.67,64231,VOA CTSOP 2023 (LAD)
+Grantham and Bourne,11.47,20.38,44.08,64.59,48079,VOA CTSOP 2023 (LAD)
+Gravesham,13.42,36.13,72.62,85.16,44480,VOA CTSOP 2023 (LAD)
+Great Grimsby and Cleethorpes,15.64,38.19,69.66,84.52,50007,VOA CTSOP 2023 (LAD)
+Great Yarmouth,18.95,33.41,60.0,80.8,49330,VOA CTSOP 2023 (LAD)
+Greenwich and Woolwich,15.64,40.1,59.89,71.43,49272,VOA CTSOP 2023 (LAD)
+Guildford,12.01,33.76,62.64,78.72,49753,VOA CTSOP 2023 (LAD)
+Hackney North and Stoke Newington,29.65,43.1,64.6,72.96,51240,VOA CTSOP 2023 (LAD)
+Hackney South and Shoreditch,29.65,43.1,64.6,72.96,51240,VOA CTSOP 2023 (LAD)
+Halesowen,6.29,30.79,69.44,85.18,48797,VOA CTSOP 2023 (LAD)
+Halifax,32.07,51.15,71.23,81.42,48360,VOA CTSOP 2023 (LAD)
+Hamble Valley,4.47,18.36,48.93,74.93,46305,VOA CTSOP 2023 (LAD)
+Hamilton and Clyde Valley,,19.96,,,,SHCS 2017-2019 (LA: South Lanarkshire); pre-1945 only
+Hammersmith and Chiswick,40.09,61.35,72.07,81.05,59531,VOA CTSOP 2023 (LAD)
+Hampstead and Highgate,44.59,58.72,74.82,84.14,59155,VOA CTSOP 2023 (LAD)
+"Harborough, Oadby and Wigston",7.84,20.68,59.46,76.24,40104,VOA CTSOP 2023 (LAD)
+Harlow,4.53,9.5,59.11,74.25,50729,VOA CTSOP 2023 (LAD)
+Harpenden and Berkhamsted,8.57,24.33,60.05,79.37,52982,VOA CTSOP 2023 (LAD)
+Harrogate and Knaresborough,,,,,,
+Harrow East,4.62,62.49,75.07,83.35,40924,VOA CTSOP 2023 (LAD)
+Harrow West,2.62,62.68,75.85,84.37,47990,VOA CTSOP 2023 (LAD)
+Hartlepool,10.39,26.24,61.65,75.95,45160,VOA CTSOP 2023 (LAD)
+Harwich and North Essex,10.25,27.11,55.18,76.14,46862,VOA CTSOP 2023 (LAD)
+Hastings and Rye,33.51,49.48,70.97,88.14,50743,VOA CTSOP 2023 (LAD)
+Havant,3.54,13.44,64.29,84.78,42532,VOA CTSOP 2023 (LAD)
+Hayes and Harlington,1.87,41.75,67.35,81.5,44648,VOA CTSOP 2023 (LAD)
+Hazel Grove,13.9,42.26,76.86,90.0,40738,VOA CTSOP 2023 (LAD)
+Hemel Hempstead,8.3,18.33,58.56,79.55,37570,VOA CTSOP 2023 (LAD)
+Hendon,6.7,55.02,69.1,79.26,46150,VOA CTSOP 2023 (LAD)
+Henley and Thame,13.85,23.95,53.81,70.86,46764,VOA CTSOP 2023 (LAD)
+Hereford and South Herefordshire,25.79,34.17,55.13,75.26,45340,VOA CTSOP 2023 (LAD)
+Herne Bay and Sandwich,20.98,40.01,66.39,81.1,47904,VOA CTSOP 2023 (LAD)
+Hertford and Stortford,13.67,24.8,52.07,71.47,40181,VOA CTSOP 2023 (LAD)
+Hertsmere,4.31,24.0,64.23,77.15,45959,VOA CTSOP 2023 (LAD)
+Hexham,15.21,34.38,61.46,79.19,48432,VOA CTSOP 2023 (LAD)
+Heywood and Middleton North,16.53,37.48,68.05,82.9,46593,VOA CTSOP 2023 (LAD)
+High Peak,29.78,44.81,67.17,80.31,43380,VOA CTSOP 2023 (LAD)
+Hinckley and Bosworth,9.09,24.92,50.97,72.49,44582,VOA CTSOP 2023 (LAD)
+Hitchin,9.11,25.63,53.79,73.86,44612,VOA CTSOP 2023 (LAD)
+Holborn and St Pancras,45.34,58.0,74.5,83.91,59143,VOA CTSOP 2023 (LAD)
+Honiton and Sidmouth,19.82,31.09,53.68,72.71,53194,VOA CTSOP 2023 (LAD)
+Hornchurch and Upminster,1.66,40.87,76.49,85.23,44059,VOA CTSOP 2023 (LAD)
+Hornsey and Friern Barnet,33.33,64.56,76.87,85.52,44310,VOA CTSOP 2023 (LAD)
+Horsham,10.34,20.83,45.76,68.46,47964,VOA CTSOP 2023 (LAD)
+Houghton and Sunderland South,14.43,32.47,67.91,84.31,47938,VOA CTSOP 2023 (LAD)
+Hove and Portslade,33.24,56.76,80.16,87.93,44500,VOA CTSOP 2023 (LAD)
+Huddersfield,22.76,41.82,67.94,79.46,45970,VOA CTSOP 2023 (LAD)
+Huntingdon,8.55,13.91,40.85,70.12,53393,VOA CTSOP 2023 (LAD)
+Hyndburn,38.61,54.83,72.91,86.04,47722,VOA CTSOP 2023 (LAD)
+Ilford North,8.45,61.72,77.82,85.13,39145,VOA CTSOP 2023 (LAD)
+Ilford South,7.65,61.02,77.4,84.43,42454,VOA CTSOP 2023 (LAD)
+Inverclyde and Renfrewshire West,,29.6,,,,SHCS 2017-2019 (LA: Inverclyde); pre-1945 only
+"Inverness, Skye and West Ross-shire",,22.66,,,,SHCS 2017-2019 (LA: Highland); pre-1945 only
+Ipswich,15.02,42.17,68.95,80.2,50424,VOA CTSOP 2023 (LAD)
+Isle of Wight East,28.04,40.17,61.53,80.01,37128,VOA CTSOP 2023 (LAD)
+Isle of Wight West,28.04,40.17,61.53,80.01,35272,VOA CTSOP 2023 (LAD)
+Islington North,36.12,47.44,64.36,76.16,52447,VOA CTSOP 2023 (LAD)
+Islington South and Finsbury,35.48,47.0,64.38,75.84,64696,VOA CTSOP 2023 (LAD)
+Jarrow and Gateshead East,11.57,36.73,73.26,86.77,45582,VOA CTSOP 2023 (LAD)
+Keighley and Ilkley,23.66,46.45,68.66,79.52,42908,VOA CTSOP 2023 (LAD)
+Kenilworth and Southam,14.82,24.17,51.49,67.63,43480,VOA CTSOP 2023 (LAD)
+Kensington and Bayswater,60.67,71.85,81.63,89.31,84383,VOA CTSOP 2023 (LAD)
+Kettering,12.56,25.13,51.99,69.02,48932,VOA CTSOP 2023 (LAD)
+Kilmarnock and Loudoun,,22.24,,,,SHCS 2017-2019 (LA: East Ayrshire); pre-1945 only
+Kingston and Surbiton,13.98,55.67,75.0,84.33,42225,VOA CTSOP 2023 (LAD)
+Kingston upon Hull East,13.05,43.05,65.56,82.34,47326,VOA CTSOP 2023 (LAD)
+Kingston upon Hull North and Cottingham,13.32,40.38,63.43,80.74,59386,VOA CTSOP 2023 (LAD)
+Kingston upon Hull West and Haltemprice,13.57,38.04,61.57,79.34,47670,VOA CTSOP 2023 (LAD)
+Kingswinford and South Staffordshire,6.41,19.38,58.62,81.94,40689,VOA CTSOP 2023 (LAD)
+Knowsley,2.52,22.76,62.06,73.52,39724,VOA CTSOP 2023 (LAD)
+Lagan Valley,8.0,16.5,42.51,70.47,46111,NIHCS 2023 (NI-wide; no district breakdown)
+Lancaster and Wyre,16.42,38.64,66.95,80.23,44347,VOA CTSOP 2023 (LAD)
+Leeds Central and Headingley,12.53,36.58,65.56,77.7,43486,VOA CTSOP 2023 (LAD)
+Leeds East,12.53,36.58,65.56,77.7,54357,VOA CTSOP 2023 (LAD)
+Leeds North East,12.53,36.58,65.56,77.7,43486,VOA CTSOP 2023 (LAD)
+Leeds North West,12.53,36.58,65.56,77.7,43486,VOA CTSOP 2023 (LAD)
+Leeds South,12.53,36.58,65.56,77.7,54357,VOA CTSOP 2023 (LAD)
+Leeds South West and Morley,12.53,36.58,65.56,77.7,43486,VOA CTSOP 2023 (LAD)
+Leeds West and Pudsey,12.53,36.58,65.56,77.7,43486,VOA CTSOP 2023 (LAD)
+Leicester East,20.41,46.68,67.76,80.18,45716,VOA CTSOP 2023 (LAD)
+Leicester South,20.41,46.68,67.76,80.18,52247,VOA CTSOP 2023 (LAD)
+Leicester West,20.41,46.68,67.76,80.18,45716,VOA CTSOP 2023 (LAD)
+Leigh and Atherton,14.18,34.73,65.17,79.14,45864,VOA CTSOP 2023 (LAD)
+Lewes,13.77,27.97,59.97,80.23,45319,VOA CTSOP 2023 (LAD)
+Lewisham East,28.16,53.15,69.27,78.66,48285,VOA CTSOP 2023 (LAD)
+Lewisham North,28.16,53.15,69.27,78.66,55183,VOA CTSOP 2023 (LAD)
+Lewisham West and East Dulwich,25.8,44.22,62.36,73.25,46797,VOA CTSOP 2023 (LAD)
+Leyton and Wanstead,19.58,63.72,76.65,83.62,43102,VOA CTSOP 2023 (LAD)
+Lichfield,8.72,18.81,54.92,71.81,44837,VOA CTSOP 2023 (LAD)
+Lincoln,14.92,31.12,54.52,73.31,53404,VOA CTSOP 2023 (LAD)
+Liverpool Garston,26.17,52.69,65.01,76.04,43061,VOA CTSOP 2023 (LAD)
+Liverpool Riverside,26.17,52.69,65.01,76.04,60285,VOA CTSOP 2023 (LAD)
+Liverpool Walton,25.85,52.37,65.8,76.93,42977,VOA CTSOP 2023 (LAD)
+Liverpool Wavertree,26.17,52.69,65.01,76.04,57414,VOA CTSOP 2023 (LAD)
+Liverpool West Derby,23.21,48.95,64.65,75.72,49018,VOA CTSOP 2023 (LAD)
+Livingston,,11.67,,,,SHCS 2017-2019 (LA: West Lothian); pre-1945 only
+Llanelli,24.72,46.33,66.35,79.13,38660,VOA CTSOP 2023 (LAD)
+Lothian East,,29.72,,,,SHCS 2017-2019 (LA: East Lothian); pre-1945 only
+Loughborough,9.59,25.66,54.17,72.4,42118,VOA CTSOP 2023 (LAD)
+Louth and Horncastle,18.43,30.93,51.99,73.08,50089,VOA CTSOP 2023 (LAD)
+Lowestoft,18.87,31.73,55.26,77.26,37524,VOA CTSOP 2023 (LAD)
+Luton North,5.31,32.94,64.94,84.78,37299,VOA CTSOP 2023 (LAD)
+Luton South and South Bedfordshire,5.76,31.06,62.56,82.48,55642,VOA CTSOP 2023 (LAD)
+Macclesfield,15.92,29.61,57.23,73.64,50335,VOA CTSOP 2023 (LAD)
+Maidenhead,10.16,20.12,53.33,77.09,52489,VOA CTSOP 2023 (LAD)
+Maidstone and Malling,14.45,26.85,54.82,71.83,41365,VOA CTSOP 2023 (LAD)
+Makerfield,14.18,34.73,65.17,79.14,50450,VOA CTSOP 2023 (LAD)
+Maldon,9.86,21.59,49.89,72.61,46148,VOA CTSOP 2023 (LAD)
+Manchester Central,16.19,43.37,61.4,73.42,54067,VOA CTSOP 2023 (LAD)
+Manchester Rusholme,15.02,44.02,58.37,69.35,46200,VOA CTSOP 2023 (LAD)
+Manchester Withington,15.02,44.02,58.37,69.35,46200,VOA CTSOP 2023 (LAD)
+Mansfield,6.29,33.01,61.21,78.13,44798,VOA CTSOP 2023 (LAD)
+Melksham and Devizes,16.77,26.38,52.43,70.4,44590,VOA CTSOP 2023 (LAD)
+Melton and Syston,15.81,26.77,54.43,74.47,39312,VOA CTSOP 2023 (LAD)
+Meriden and Solihull East,1.68,19.37,64.5,80.07,44781,VOA CTSOP 2023 (LAD)
+Merthyr Tydfil and Aberdare,34.98,49.99,72.48,85.11,43404,VOA CTSOP 2023 (LAD)
+Mid Bedfordshire,9.78,19.61,47.26,66.83,41585,VOA CTSOP 2023 (LAD)
+Mid Buckinghamshire,8.89,22.93,55.2,74.53,40607,VOA CTSOP 2023 (LAD)
+Mid Cheshire,13.09,27.83,60.91,76.03,43804,VOA CTSOP 2023 (LAD)
+Mid Derbyshire,17.23,38.99,63.35,80.84,42163,VOA CTSOP 2023 (LAD)
+Mid Dorset and North Poole,15.85,30.25,54.75,76.97,41486,VOA CTSOP 2023 (LAD)
+Mid Dunbartonshire,,24.62,,,,SHCS 2017-2019 (LA: East Dunbartonshire); pre-1945 only
+Mid Leicestershire,7.47,23.1,54.84,73.09,47969,VOA CTSOP 2023 (LAD)
+Mid Norfolk,13.36,18.26,44.03,67.6,43107,VOA CTSOP 2023 (LAD)
+Mid Sussex,10.21,22.1,51.84,71.47,42573,VOA CTSOP 2023 (LAD)
+Mid Ulster,8.0,16.5,42.51,70.47,46111,NIHCS 2023 (NI-wide; no district breakdown)
+Mid and South Pembrokeshire,28.41,37.03,62.88,78.74,49864,VOA CTSOP 2023 (LAD)
+Middlesbrough South and East Cleveland,10.54,29.37,65.98,82.51,48306,VOA CTSOP 2023 (LAD)
+Middlesbrough and Thornaby East,8.85,30.03,62.66,79.66,47593,VOA CTSOP 2023 (LAD)
+Midlothian,,23.12,,,,SHCS 2017-2019 (LA: Midlothian); pre-1945 only
+Milton Keynes Central,4.89,8.22,20.27,59.2,51301,VOA CTSOP 2023 (LAD)
+Milton Keynes North,4.89,8.22,20.27,59.2,44888,VOA CTSOP 2023 (LAD)
+Mitcham and Morden,11.61,63.48,74.58,84.96,48081,VOA CTSOP 2023 (LAD)
+Monmouthshire,19.41,27.95,54.34,75.1,43690,VOA CTSOP 2023 (LAD)
+Montgomeryshire and Glyndŵr,28.94,38.53,61.16,79.23,48238,VOA CTSOP 2023 (LAD)
+"Moray West, Nairn and Strathspey",,28.41,,,,SHCS 2017-2019 (LA: Moray); pre-1945 only
+Morecambe and Lunesdale,21.77,45.08,68.42,80.96,40296,VOA CTSOP 2023 (LAD)
+"Motherwell, Wishaw and Carluke",,21.13,,,,SHCS 2017-2019 (LA: North Lanarkshire); pre-1945 only
+Na h-Eileanan an Iar,,23.32,,,,SHCS 2017-2019 (LA: Na h-Eileanan Siar); pre-1945 only
+Neath and Swansea East,13.46,44.58,72.62,84.07,47527,VOA CTSOP 2023 (LAD)
+New Forest East,8.14,22.38,54.07,83.01,44655,VOA CTSOP 2023 (LAD)
+New Forest West,8.14,22.38,54.07,83.01,38275,VOA CTSOP 2023 (LAD)
+Newark,10.82,27.07,55.87,71.49,56343,VOA CTSOP 2023 (LAD)
+Newbury,11.52,19.92,47.64,74.95,36936,VOA CTSOP 2023 (LAD)
+Newcastle upon Tyne Central and West,12.19,42.38,66.86,80.79,54588,VOA CTSOP 2023 (LAD)
+Newcastle upon Tyne East and Wallsend,10.94,40.06,66.19,80.61,45969,VOA CTSOP 2023 (LAD)
+Newcastle upon Tyne North,11.41,40.93,66.44,80.68,56808,VOA CTSOP 2023 (LAD)
+Newcastle-under-Lyme,13.38,36.43,69.65,83.32,44130,VOA CTSOP 2023 (LAD)
+Newport East,14.71,34.34,62.3,76.74,47040,VOA CTSOP 2023 (LAD)
+Newport West and Islwyn,18.69,38.93,65.36,79.47,48711,VOA CTSOP 2023 (LAD)
+Newry and Armagh,8.0,16.5,42.51,70.47,46111,NIHCS 2023 (NI-wide; no district breakdown)
+Newton Abbot,21.69,32.64,55.54,75.62,45787,VOA CTSOP 2023 (LAD)
+Newton Aycliffe and Spennymoor,13.72,35.98,64.71,78.73,43464,VOA CTSOP 2023 (LAD)
+Normanton and Hemsworth,8.73,31.17,61.34,76.08,46694,VOA CTSOP 2023 (LAD)
+North Antrim,8.0,16.5,42.51,70.47,46111,NIHCS 2023 (NI-wide; no district breakdown)
+North Ayrshire and Arran,,25.2,,,,SHCS 2017-2019 (LA: North Ayrshire); pre-1945 only
+North Bedfordshire,12.47,24.75,51.59,68.26,56537,VOA CTSOP 2023 (LAD)
+North Cornwall,25.6,35.26,54.41,73.51,46765,VOA CTSOP 2023 (LAD)
+North Cotswolds,19.78,27.77,51.08,71.0,42755,VOA CTSOP 2023 (LAD)
+North Devon,26.27,35.21,55.38,74.37,48340,VOA CTSOP 2023 (LAD)
+North Dorset,18.0,27.71,52.4,75.54,45127,VOA CTSOP 2023 (LAD)
+North Down,8.0,16.5,42.51,70.47,46111,NIHCS 2023 (NI-wide; no district breakdown)
+North Durham,13.72,35.98,64.71,78.73,51366,VOA CTSOP 2023 (LAD)
+North East Cambridgeshire,10.44,24.32,45.22,65.86,47040,VOA CTSOP 2023 (LAD)
+North East Derbyshire,11.77,24.56,61.32,79.55,48475,VOA CTSOP 2023 (LAD)
+North East Fife,,29.44,,,,SHCS 2017-2019 (LA: Fife); pre-1945 only
+North East Hampshire,5.85,12.62,44.49,71.56,43158,VOA CTSOP 2023 (LAD)
+North East Hertfordshire,10.83,27.54,55.46,75.15,49688,VOA CTSOP 2023 (LAD)
+North East Somerset and Hanham,20.56,33.21,61.64,76.83,46576,VOA CTSOP 2023 (LAD)
+North Herefordshire,25.79,34.17,55.13,75.26,43660,VOA CTSOP 2023 (LAD)
+North Norfolk,20.67,32.55,54.53,75.71,47098,VOA CTSOP 2023 (LAD)
+North Northumberland,15.38,33.94,61.16,79.1,43470,VOA CTSOP 2023 (LAD)
+North Shropshire,20.53,30.7,55.59,72.26,42840,VOA CTSOP 2023 (LAD)
+North Somerset,14.8,25.68,52.44,74.34,54508,VOA CTSOP 2023 (LAD)
+North Warwickshire and Bedworth,9.07,28.05,63.14,78.68,41021,VOA CTSOP 2023 (LAD)
+North West Cambridgeshire,7.83,17.23,39.59,71.22,50054,VOA CTSOP 2023 (LAD)
+North West Essex,15.93,24.3,48.22,66.43,45604,VOA CTSOP 2023 (LAD)
+North West Hampshire,7.57,15.63,43.35,68.7,41570,VOA CTSOP 2023 (LAD)
+North West Leicestershire,14.04,26.39,50.53,66.13,45483,VOA CTSOP 2023 (LAD)
+North West Norfolk,12.96,27.1,52.39,73.52,47137,VOA CTSOP 2023 (LAD)
+Northampton North,12.57,23.72,47.57,70.54,51255,VOA CTSOP 2023 (LAD)
+Northampton South,12.57,23.72,47.57,70.54,45560,VOA CTSOP 2023 (LAD)
+Norwich North,11.49,25.63,54.26,73.69,41423,VOA CTSOP 2023 (LAD)
+Norwich South,18.59,36.22,63.1,78.83,49952,VOA CTSOP 2023 (LAD)
+Nottingham East,11.64,36.9,61.94,78.72,50813,VOA CTSOP 2023 (LAD)
+Nottingham North and Kimberley,10.78,35.48,64.01,81.65,53358,VOA CTSOP 2023 (LAD)
+Nottingham South,11.64,36.9,61.94,78.72,50813,VOA CTSOP 2023 (LAD)
+Nuneaton,5.03,25.21,59.72,76.87,42469,VOA CTSOP 2023 (LAD)
+Old Bexley and Sidcup,6.9,52.0,74.2,87.11,41617,VOA CTSOP 2023 (LAD)
+Oldham East and Saddleworth,19.7,41.41,70.49,85.63,47203,VOA CTSOP 2023 (LAD)
+"Oldham West, Chadderton and Royton",19.7,41.41,70.49,85.63,43270,VOA CTSOP 2023 (LAD)
+Orkney and Shetland,,25.07,,,,SHCS 2017-2019 (LA: Shetland Islands); pre-1945 only
+Orpington,12.12,47.1,73.91,87.55,47597,VOA CTSOP 2023 (LAD)
+Ossett and Denby Dale,13.4,34.72,63.54,77.21,46453,VOA CTSOP 2023 (LAD)
+Oxford East,16.11,41.59,62.54,74.41,44944,VOA CTSOP 2023 (LAD)
+Oxford West and Abingdon,12.36,29.07,54.39,71.37,44577,VOA CTSOP 2023 (LAD)
+Paisley and Renfrewshire North,,23.31,,,,SHCS 2017-2019 (LA: Renfrewshire); pre-1945 only
+Paisley and Renfrewshire South,,23.31,,,,SHCS 2017-2019 (LA: Renfrewshire); pre-1945 only
+Peckham,22.65,32.31,53.15,66.03,44812,VOA CTSOP 2023 (LAD)
+Pendle and Clitheroe,33.03,52.0,69.42,78.83,45516,VOA CTSOP 2023 (LAD)
+Penistone and Stocksbridge,12.87,39.06,65.08,78.0,43161,VOA CTSOP 2023 (LAD)
+Penrith and Solway,,,,,,
+Perth and Kinross-shire,,35.0,,,,SHCS 2017-2019 (LA: Perth and Kinross); pre-1945 only
+Peterborough,7.62,18.22,39.21,71.55,48758,VOA CTSOP 2023 (LAD)
+Plymouth Moor View,17.68,36.4,66.5,83.65,46869,VOA CTSOP 2023 (LAD)
+Plymouth Sutton and Devonport,17.68,36.4,66.5,83.65,46869,VOA CTSOP 2023 (LAD)
+"Pontefract, Castleford and Knottingley",8.73,31.17,61.34,76.08,46694,VOA CTSOP 2023 (LAD)
+Pontypridd,35.01,53.64,73.2,84.66,49922,VOA CTSOP 2023 (LAD)
+Poole,10.84,36.18,60.23,80.3,45830,VOA CTSOP 2023 (LAD)
+Poplar and Limehouse,10.9,16.13,34.95,47.34,65916,VOA CTSOP 2023 (LAD)
+Portsmouth North,27.4,56.84,75.56,86.13,47030,VOA CTSOP 2023 (LAD)
+Portsmouth South,27.4,56.84,75.56,86.13,47030,VOA CTSOP 2023 (LAD)
+Preston,18.3,39.66,61.35,76.99,50662,VOA CTSOP 2023 (LAD)
+Putney,33.11,52.1,69.84,78.35,47120,VOA CTSOP 2023 (LAD)
+Queen's Park and Maida Vale,36.6,60.01,72.32,79.79,61822,VOA CTSOP 2023 (LAD)
+Rawmarsh and Conisbrough,6.42,30.61,63.79,80.97,47362,VOA CTSOP 2023 (LAD)
+Rayleigh and Wickford,3.17,12.5,56.51,77.75,42291,VOA CTSOP 2023 (LAD)
+Reading Central,18.06,38.47,62.22,74.55,45546,VOA CTSOP 2023 (LAD)
+Reading West and Mid Berkshire,13.44,25.38,51.93,74.83,53072,VOA CTSOP 2023 (LAD)
+Redcar,11.39,26.64,67.58,84.02,44020,VOA CTSOP 2023 (LAD)
+Redditch,7.85,15.9,40.79,76.32,43849,VOA CTSOP 2023 (LAD)
+Reigate,10.68,32.16,60.54,75.53,47021,VOA CTSOP 2023 (LAD)
+Rhondda and Ogmore,30.78,49.36,70.76,83.32,45395,VOA CTSOP 2023 (LAD)
+Ribble Valley,21.76,35.89,60.44,74.01,50395,VOA CTSOP 2023 (LAD)
+Richmond Park,17.67,59.36,76.9,86.28,48369,VOA CTSOP 2023 (LAD)
+Richmond and Northallerton,,,,,,
+Rochdale,16.53,37.48,68.05,82.9,39425,VOA CTSOP 2023 (LAD)
+Rochester and Strood,14.33,33.55,65.15,81.99,47852,VOA CTSOP 2023 (LAD)
+Romford,1.66,40.87,76.49,85.23,39164,VOA CTSOP 2023 (LAD)
+Romsey and Southampton North,9.49,23.04,49.63,70.89,55115,VOA CTSOP 2023 (LAD)
+Rossendale and Darwen,34.52,49.46,68.41,82.69,41072,VOA CTSOP 2023 (LAD)
+Rother Valley,6.61,29.6,63.82,81.3,43441,VOA CTSOP 2023 (LAD)
+Rotherham,6.61,29.6,63.82,81.3,43441,VOA CTSOP 2023 (LAD)
+Rugby,10.95,27.49,55.96,69.44,49960,VOA CTSOP 2023 (LAD)
+"Ruislip, Northwood and Pinner",2.15,49.6,70.54,82.58,40993,VOA CTSOP 2023 (LAD)
+Runcorn and Helsby,9.37,24.46,54.8,77.34,44016,VOA CTSOP 2023 (LAD)
+Runnymede and Weybridge,9.75,29.79,56.94,72.29,45249,VOA CTSOP 2023 (LAD)
+Rushcliffe,8.69,25.14,54.94,72.08,41246,VOA CTSOP 2023 (LAD)
+Rutherglen,,19.96,,,,SHCS 2017-2019 (LA: South Lanarkshire); pre-1945 only
+Rutland and Stamford,15.89,23.21,47.46,67.03,44727,VOA CTSOP 2023 (LAD)
+Salford,11.16,32.84,55.11,67.47,58968,VOA CTSOP 2023 (LAD)
+Salisbury,16.77,26.38,52.43,70.4,42243,VOA CTSOP 2023 (LAD)
+Scarborough and Whitby,,,,,,
+Scunthorpe,9.68,28.58,60.43,77.4,49127,VOA CTSOP 2023 (LAD)
+Sefton Central,21.72,48.22,75.95,88.45,45259,VOA CTSOP 2023 (LAD)
+Selby,12.53,36.58,65.56,77.7,10871,VOA CTSOP 2023 (LAD)
+Sevenoaks,15.25,31.7,62.32,81.31,40608,VOA CTSOP 2023 (LAD)
+Sheffield Brightside and Hillsborough,12.12,40.65,66.35,79.81,44650,VOA CTSOP 2023 (LAD)
+Sheffield Central,12.12,40.65,66.35,79.81,35720,VOA CTSOP 2023 (LAD)
+Sheffield Hallam,12.12,40.65,66.35,79.81,44650,VOA CTSOP 2023 (LAD)
+Sheffield Heeley,12.12,40.65,66.35,79.81,53580,VOA CTSOP 2023 (LAD)
+Sheffield South East,12.12,40.65,66.35,79.81,53580,VOA CTSOP 2023 (LAD)
+Sherwood Forest,10.37,29.56,58.37,73.71,40248,VOA CTSOP 2023 (LAD)
+Shipley,23.66,46.45,68.66,79.52,42908,VOA CTSOP 2023 (LAD)
+Shrewsbury,20.53,30.7,55.59,72.26,47600,VOA CTSOP 2023 (LAD)
+Sittingbourne and Sheppey,17.39,29.84,57.81,73.32,44053,VOA CTSOP 2023 (LAD)
+Skipton and Ripon,,,,,,
+Sleaford and North Hykeham,10.55,18.37,43.97,60.43,41961,VOA CTSOP 2023 (LAD)
+Slough,3.05,26.07,56.32,74.03,46352,VOA CTSOP 2023 (LAD)
+Smethwick,6.8,38.55,68.85,81.63,43437,VOA CTSOP 2023 (LAD)
+Solihull West and Shirley,1.68,19.37,64.5,80.07,39184,VOA CTSOP 2023 (LAD)
+South Antrim,8.0,16.5,42.51,70.47,46111,NIHCS 2023 (NI-wide; no district breakdown)
+South Basildon and East Thurrock,2.65,14.87,54.09,74.97,42197,VOA CTSOP 2023 (LAD)
+South Cambridgeshire,10.72,19.65,43.45,64.69,49966,VOA CTSOP 2023 (LAD)
+South Cotswolds,20.81,29.69,51.57,71.11,45567,VOA CTSOP 2023 (LAD)
+South Derbyshire,12.74,22.15,40.65,58.01,42640,VOA CTSOP 2023 (LAD)
+South Devon,25.13,36.48,59.08,79.66,51460,VOA CTSOP 2023 (LAD)
+South Dorset,18.0,27.71,52.4,75.54,41656,VOA CTSOP 2023 (LAD)
+South Down,8.0,16.5,42.51,70.47,46111,NIHCS 2023 (NI-wide; no district breakdown)
+South East Cornwall,25.6,35.26,54.41,73.51,43647,VOA CTSOP 2023 (LAD)
+South Holland and the Deepings,10.69,22.32,42.74,61.09,47990,VOA CTSOP 2023 (LAD)
+South Leicestershire,8.34,20.49,50.74,68.05,47650,VOA CTSOP 2023 (LAD)
+South Norfolk,13.78,21.0,44.19,65.02,42879,VOA CTSOP 2023 (LAD)
+South Northamptonshire,12.57,23.9,48.13,70.35,45302,VOA CTSOP 2023 (LAD)
+South Ribble,8.92,26.16,57.84,76.81,43310,VOA CTSOP 2023 (LAD)
+South Shields,10.69,35.98,73.31,87.65,44495,VOA CTSOP 2023 (LAD)
+South Shropshire,20.53,30.7,55.59,72.26,47600,VOA CTSOP 2023 (LAD)
+South Suffolk,19.22,25.68,53.11,75.17,43140,VOA CTSOP 2023 (LAD)
+South West Devon,23.73,36.04,59.55,79.37,48516,VOA CTSOP 2023 (LAD)
+South West Hertfordshire,5.51,26.62,65.1,77.86,41384,VOA CTSOP 2023 (LAD)
+South West Norfolk,13.12,22.89,48.55,70.95,54021,VOA CTSOP 2023 (LAD)
+South West Wiltshire,16.77,26.38,52.43,70.4,44590,VOA CTSOP 2023 (LAD)
+Southampton Itchen,11.83,37.76,67.51,81.05,40211,VOA CTSOP 2023 (LAD)
+Southampton Test,11.83,37.76,67.51,81.05,50264,VOA CTSOP 2023 (LAD)
+Southend East and Rochford,3.24,40.8,70.4,84.92,42860,VOA CTSOP 2023 (LAD)
+Southend West and Leigh,2.93,51.92,75.34,87.89,48806,VOA CTSOP 2023 (LAD)
+Southgate and Wood Green,20.31,61.4,76.48,85.52,57210,VOA CTSOP 2023 (LAD)
+Southport,18.08,39.82,70.74,84.78,43670,VOA CTSOP 2023 (LAD)
+Spelthorne,5.34,29.03,69.88,83.08,44160,VOA CTSOP 2023 (LAD)
+Spen Valley,22.76,41.82,67.94,79.46,45970,VOA CTSOP 2023 (LAD)
+St Albans,8.83,30.33,61.53,79.19,36604,VOA CTSOP 2023 (LAD)
+St Austell and Newquay,25.6,35.26,54.41,73.51,49883,VOA CTSOP 2023 (LAD)
+St Helens North,11.52,34.07,68.26,79.74,45011,VOA CTSOP 2023 (LAD)
+St Helens South and Whiston,9.88,32.02,67.14,78.61,49337,VOA CTSOP 2023 (LAD)
+St Ives,29.6,38.03,59.11,76.28,41680,VOA CTSOP 2023 (LAD)
+St Neots and Mid Cambridgeshire,9.55,16.42,41.58,66.53,43685,VOA CTSOP 2023 (LAD)
+Stafford,10.66,24.86,57.22,73.83,46766,VOA CTSOP 2023 (LAD)
+Staffordshire Moorlands,20.28,36.69,68.69,82.72,41463,VOA CTSOP 2023 (LAD)
+Stalybridge and Hyde,18.02,41.32,71.21,84.47,43642,VOA CTSOP 2023 (LAD)
+Stevenage,2.92,7.64,58.13,78.23,44901,VOA CTSOP 2023 (LAD)
+Stirling and Strathallan,,30.86,,,,SHCS 2017-2019 (LA: Stirling); pre-1945 only
+Stockport,13.9,42.26,76.86,90.0,40738,VOA CTSOP 2023 (LAD)
+Stockton North,5.47,21.79,55.75,74.27,46178,VOA CTSOP 2023 (LAD)
+Stockton West,6.07,24.31,56.63,74.65,40623,VOA CTSOP 2023 (LAD)
+Stoke-on-Trent Central,16.76,40.65,70.43,84.11,53349,VOA CTSOP 2023 (LAD)
+Stoke-on-Trent North,16.04,39.74,70.26,83.94,42794,VOA CTSOP 2023 (LAD)
+Stoke-on-Trent South,15.94,36.65,67.22,81.62,42949,VOA CTSOP 2023 (LAD)
+"Stone, Great Wyrley and Penkridge",7.76,18.85,55.4,77.96,38180,VOA CTSOP 2023 (LAD)
+Stourbridge,6.15,28.58,69.6,86.2,37937,VOA CTSOP 2023 (LAD)
+Strangford,8.0,16.5,42.51,70.47,46111,NIHCS 2023 (NI-wide; no district breakdown)
+Stratford and Bow,22.93,34.35,50.61,61.47,50414,VOA CTSOP 2023 (LAD)
+Stratford-on-Avon,15.38,23.25,49.36,65.46,48190,VOA CTSOP 2023 (LAD)
+Streatham and Croydon North,30.54,53.44,71.74,81.21,53141,VOA CTSOP 2023 (LAD)
+Stretford and Urmston,12.69,49.82,75.36,84.76,44203,VOA CTSOP 2023 (LAD)
+Stroud,23.34,32.7,57.77,76.09,44039,VOA CTSOP 2023 (LAD)
+Suffolk Coastal,18.87,31.73,55.26,77.26,54201,VOA CTSOP 2023 (LAD)
+Sunderland Central,14.43,32.47,67.91,84.31,47938,VOA CTSOP 2023 (LAD)
+Surrey Heath,5.08,16.92,51.23,77.03,41347,VOA CTSOP 2023 (LAD)
+Sussex Weald,15.71,29.35,58.02,74.99,41091,VOA CTSOP 2023 (LAD)
+Sutton Coldfield,11.67,47.2,70.36,81.58,50943,VOA CTSOP 2023 (LAD)
+Sutton and Cheam,5.25,53.93,68.22,82.54,42985,VOA CTSOP 2023 (LAD)
+Swansea West,19.0,41.1,66.96,81.67,33806,VOA CTSOP 2023 (LAD)
+Swindon North,11.51,21.08,46.92,70.92,38278,VOA CTSOP 2023 (LAD)
+Swindon South,11.51,21.08,46.92,70.92,47848,VOA CTSOP 2023 (LAD)
+Tamworth,5.98,14.36,47.15,74.99,47130,VOA CTSOP 2023 (LAD)
+Tatton,14.48,29.14,57.38,74.26,51577,VOA CTSOP 2023 (LAD)
+Taunton and Wellington,,,,,,
+Telford,6.72,12.11,39.4,65.67,38612,VOA CTSOP 2023 (LAD)
+Tewkesbury,13.45,20.73,50.26,69.97,49215,VOA CTSOP 2023 (LAD)
+The Wrekin,9.72,16.15,42.92,67.1,55338,VOA CTSOP 2023 (LAD)
+Thirsk and Malton,,,,,,
+Thornbury and Yate,7.63,18.31,47.74,70.69,44907,VOA CTSOP 2023 (LAD)
+Thurrock,3.84,20.67,57.21,73.85,45416,VOA CTSOP 2023 (LAD)
+Tipton and Wednesbury,6.72,37.31,68.95,82.2,43427,VOA CTSOP 2023 (LAD)
+Tiverton and Minehead,25.11,31.77,52.6,71.81,13550,VOA CTSOP 2023 (LAD)
+Tonbridge,15.22,27.32,57.51,75.99,44826,VOA CTSOP 2023 (LAD)
+Tooting,33.11,52.1,69.84,78.35,53010,VOA CTSOP 2023 (LAD)
+Torbay,24.27,43.15,70.12,84.66,46874,VOA CTSOP 2023 (LAD)
+Torfaen,13.57,27.32,70.24,84.85,43040,VOA CTSOP 2023 (LAD)
+Torridge and Tavistock,29.23,37.4,54.2,70.01,46880,VOA CTSOP 2023 (LAD)
+Tottenham,35.78,61.77,75.54,83.97,59880,VOA CTSOP 2023 (LAD)
+Truro and Falmouth,25.6,35.26,54.41,73.51,53000,VOA CTSOP 2023 (LAD)
+Tunbridge Wells,30.63,42.13,67.01,81.1,44902,VOA CTSOP 2023 (LAD)
+Twickenham,20.3,62.0,78.26,87.68,47556,VOA CTSOP 2023 (LAD)
+Tynemouth,9.06,36.57,65.18,80.35,40484,VOA CTSOP 2023 (LAD)
+Upper Bann,8.0,16.5,42.51,70.47,46111,NIHCS 2023 (NI-wide; no district breakdown)
+Uxbridge and South Ruislip,1.87,41.75,67.35,81.5,44648,VOA CTSOP 2023 (LAD)
+Vale of Glamorgan,17.26,29.88,57.06,76.63,43499,VOA CTSOP 2023 (LAD)
+Vauxhall and Camberwell Green,33.72,49.05,67.12,76.94,43153,VOA CTSOP 2023 (LAD)
+Wakefield and Rothwell,9.36,32.07,62.04,76.35,49783,VOA CTSOP 2023 (LAD)
+Wallasey,15.49,48.24,74.84,88.54,45963,VOA CTSOP 2023 (LAD)
+Walsall and Bloxwich,8.56,29.83,71.05,83.46,44838,VOA CTSOP 2023 (LAD)
+Walthamstow,24.35,64.58,76.15,82.97,52785,VOA CTSOP 2023 (LAD)
+Warrington North,8.93,28.22,54.25,75.39,41561,VOA CTSOP 2023 (LAD)
+Warrington South,8.93,28.22,54.25,75.39,45717,VOA CTSOP 2023 (LAD)
+Warwick and Leamington,14.74,24.71,54.54,72.08,48240,VOA CTSOP 2023 (LAD)
+Washington and Gateshead South,14.14,33.71,69.08,84.52,45918,VOA CTSOP 2023 (LAD)
+Watford,13.54,44.36,65.91,74.95,44814,VOA CTSOP 2023 (LAD)
+Waveney Valley,17.74,25.19,45.52,67.23,43869,VOA CTSOP 2023 (LAD)
+Weald of Kent,15.52,26.27,51.18,67.94,50225,VOA CTSOP 2023 (LAD)
+Wellingborough and Rushden,12.56,25.13,51.99,69.02,48932,VOA CTSOP 2023 (LAD)
+Wells and Mendip Hills,14.8,25.68,52.44,74.34,11475,VOA CTSOP 2023 (LAD)
+Welwyn Hatfield,2.29,16.76,57.75,76.68,47147,VOA CTSOP 2023 (LAD)
+West Aberdeenshire and Kincardine,,26.13,,,,SHCS 2017-2019 (LA: Aberdeenshire); pre-1945 only
+West Bromwich,6.8,38.55,68.85,81.63,43437,VOA CTSOP 2023 (LAD)
+West Dorset,18.0,27.71,52.4,75.54,55541,VOA CTSOP 2023 (LAD)
+West Dunbartonshire,,22.92,,,,SHCS 2017-2019 (LA: West Dunbartonshire); pre-1945 only
+West Ham and Beckton,28.94,43.46,58.43,68.53,52144,VOA CTSOP 2023 (LAD)
+West Lancashire,10.8,23.02,60.32,77.44,42144,VOA CTSOP 2023 (LAD)
+West Suffolk,12.88,18.12,46.72,70.38,54060,VOA CTSOP 2023 (LAD)
+West Tyrone,8.0,16.5,42.51,70.47,46111,NIHCS 2023 (NI-wide; no district breakdown)
+West Worcestershire,23.12,31.17,56.51,73.73,47992,VOA CTSOP 2023 (LAD)
+Westmorland and Lonsdale,,,,,,
+Weston-super-Mare,14.8,25.68,52.44,74.34,34426,VOA CTSOP 2023 (LAD)
+Wetherby and Easingwold,12.53,36.58,65.56,77.7,21743,VOA CTSOP 2023 (LAD)
+Whitehaven and Workington,,,,,,
+Widnes and Halewood,6.5,22.96,54.46,76.74,42636,VOA CTSOP 2023 (LAD)
+Wigan,14.18,34.73,65.17,79.14,41277,VOA CTSOP 2023 (LAD)
+Wimbledon,12.34,61.07,74.71,84.76,51403,VOA CTSOP 2023 (LAD)
+Winchester,14.11,25.12,49.95,69.76,46248,VOA CTSOP 2023 (LAD)
+Windsor,9.95,26.67,58.32,76.63,45965,VOA CTSOP 2023 (LAD)
+Wirral West,15.49,48.24,74.84,88.54,45963,VOA CTSOP 2023 (LAD)
+Witham,11.39,23.07,49.2,70.11,45138,VOA CTSOP 2023 (LAD)
+Witney,15.42,21.28,48.13,68.09,43761,VOA CTSOP 2023 (LAD)
+Woking,5.94,22.68,53.31,77.07,44140,VOA CTSOP 2023 (LAD)
+Wokingham,4.15,12.6,42.26,70.64,40524,VOA CTSOP 2023 (LAD)
+Wolverhampton North East,7.52,35.88,72.49,84.95,48943,VOA CTSOP 2023 (LAD)
+Wolverhampton South East,7.69,34.87,72.25,84.7,45114,VOA CTSOP 2023 (LAD)
+Wolverhampton West,7.26,37.39,72.85,85.32,47167,VOA CTSOP 2023 (LAD)
+Worcester,16.25,31.07,55.91,74.36,47380,VOA CTSOP 2023 (LAD)
+Worsley and Eccles,12.06,33.41,58.13,70.97,59623,VOA CTSOP 2023 (LAD)
+Worthing West,7.87,39.4,71.18,85.98,45424,VOA CTSOP 2023 (LAD)
+Wrexham,16.36,31.13,62.98,80.14,43843,VOA CTSOP 2023 (LAD)
+Wycombe,8.89,22.93,55.2,74.53,40607,VOA CTSOP 2023 (LAD)
+Wyre Forest,13.9,27.67,64.2,79.98,48350,VOA CTSOP 2023 (LAD)
+Wythenshawe and Sale East,14.15,46.19,64.74,75.13,53234,VOA CTSOP 2023 (LAD)
+Yeovil,,,,,,
+Ynys Môn,23.63,34.97,63.34,83.5,35460,VOA CTSOP 2023 (LAD)
+York Central,14.49,33.24,59.74,77.42,39609,VOA CTSOP 2023 (LAD)
+York Outer,14.49,33.24,59.74,77.42,52811,VOA CTSOP 2023 (LAD)

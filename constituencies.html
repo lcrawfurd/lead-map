@@ -134,6 +134,7 @@
     </div>
     <div class="controls">
         <a href="index.html" class="nav-link">View by County / UA</a>
+        <a href="sources.html" class="nav-link">Sources & methods</a>
         <div>
             <label for="indicator-select">Indicator:</label>
             <select id="indicator-select">
@@ -714,9 +715,11 @@ function openProfile(name) {
     let demoRows = '';
     demoRows += row('Children aged 0–19', fmtNum(p.child_pop_0_19));
     demoRows += row('IMD decile (1=most deprived)', p.imd_decile);
-    demoRows += row('IMD quintile', p.imd_quintile);
-    if (p.imd_score) demoRows += row('Deprivation score', (+p.imd_score).toFixed(1));
-    if (demoRows) html += `<section><h3>Demographics & deprivation</h3>${demoRows}</section>`;
+    if (p.imd_score) demoRows += row('Deprivation score (0–100, ↑=more deprived)', (+p.imd_score).toFixed(1));
+    if (demoRows) html += `<section><h3>Demographics & deprivation</h3>${demoRows}
+        <div style="font-size:0.7rem; color:#6c7a89; margin-top:6px;">
+            Deprivation score is mySociety's UK-comparable composite IMD: percentile rank of LSOAs within UK, population-weighted to constituency. 100 = most deprived, 0 = least.
+        </div></section>`;
 
     // ── Lead exposure (BLL + model estimate) ──
     let leadRows = '';
@@ -751,12 +754,13 @@ function openProfile(name) {
         const pct = v < 1 ? (v * 100) : v;  // some sources are fraction, some pct
         houseRows += row('Non-decent homes', pct.toFixed(1) + '%');
     }
-    if (houseRows) html += `<section><h3>Housing</h3>${houseRows}
-        <div style="font-size:0.7rem; color:#6c7a89; margin-top:6px;">
-            Source: VOA CTSOP 4.0 (2023), England & Wales only.
-        </div></section>`;
-    else if (nation === 'Scotland' || nation === 'Northern Ireland')
-        html += `<section><h3>Housing</h3><p class="empty">No dwelling-age data — VOA covers England & Wales only.</p></section>`;
+    if (houseRows) {
+        const src = p.housing_source || 'VOA CTSOP 4.0 (2023)';
+        html += `<section><h3>Housing</h3>${houseRows}
+            <div style="font-size:0.7rem; color:#6c7a89; margin-top:6px;">Source: ${src}</div></section>`;
+    } else {
+        html += `<section><h3>Housing</h3><p class="empty">No dwelling-age data available.</p></section>`;
+    }
 
     // ── Mines ──
     let mineRows = '';
