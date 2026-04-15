@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UK Lead Exposure Map (Constituencies) — IHME GBD 2021</title>
+    <title>UK Constituency Lead Exposure & Housing Map</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://unpkg.com/papaparse@5.4.1/papaparse.min.js"></script>
@@ -72,12 +72,23 @@
 
 <div id="header">
     <div>
-        <h1>UK Lead Exposure Map — Parliamentary Constituencies</h1>
-        <div class="subtitle">IHME Global Burden of Disease 2021 — Proportion with Blood Lead ≥ 5 µg/dL</div>
+        <h1>UK Constituency Map — Lead Risk Indicators</h1>
+        <div class="subtitle" id="header-subtitle">VOA CTSOP 2023 — pre-1992 dwellings (England & Wales only). UK consumer lead paint banned 1992 (EU Dir. 89/677/EEC).</div>
     </div>
     <div class="controls">
         <a href="index.html" class="nav-link">View by County / UA</a>
         <div>
+            <label for="indicator-select">Indicator:</label>
+            <select id="indicator-select">
+                <option value="bll">Blood lead ≥ 5 µg/dL</option>
+                <option value="pre_1992" selected>Housing pre-1992 (lead paint era)</option>
+                <option value="pre_1972">Housing pre-1972 (lead pipes era)</option>
+                <option value="pre_1945">Housing pre-1945 (lead-pigment peak)</option>
+                <option value="pre_1900">Housing pre-1900 (Victorian)</option>
+                <option value="mines">Historic metal mines (Macklin 2023)</option>
+            </select>
+        </div>
+        <div id="age-wrap" style="display:none;">
             <label for="age-select">Age Group:</label>
             <select id="age-select" disabled>
                 <option value="">Load data first</option>
@@ -99,28 +110,89 @@ let selectedAge = '';
 let geoLayer = null;
 let dataScale = 100;
 
+// Additional indicators keyed by constituency name (PCON24NM)
+// e.g. housingData['Kensington and Bayswater'] = { pct_pre_1945: 71.8, ... }
+let housingData = {};
+let minesData = {};
+let selectedIndicator = 'pre_1992';  // 'bll' | 'pre_1900' | 'pre_1945' | 'pre_1972' | 'pre_1992' | 'mines'
+
 const NATIONS = ['England', 'Scotland', 'Wales', 'Northern Ireland'];
+
+// Indicator definitions
+const INDICATORS = {
+    bll: {
+        label: 'Blood lead ≥ 5 µg/dL',
+        legendTitle: '% with BLL ≥ 5 µg/dL',
+        subtitle: 'IHME Global Burden of Disease 2021 — Proportion with Blood Lead ≥ 5 µg/dL',
+        unit: '%',
+        colors: ['#ffffb2', '#fed976', '#feb24c', '#fd8d3c', '#f03b20', '#bd0026'],
+        breaks: [0, 1, 2, 3, 4, 5],
+        source: 'IHME GBD 2021'
+    },
+    pre_1900: {
+        label: 'Housing built pre-1900 (Victorian)',
+        legendTitle: '% dwellings built pre-1900',
+        subtitle: 'VOA CTSOP 2023 — pre-1900 (Victorian) dwellings, both lead pipes & lead-pigment paint at peak (England & Wales only)',
+        colors: ['#f7fbff', '#deebf7', '#c6dbef', '#9ecae1', '#6baed6', '#4292c6', '#2171b5', '#08306b'],
+        breaks: [0, 5, 10, 15, 20, 25, 30, 40],
+    },
+    pre_1945: {
+        label: 'Housing built pre-1945',
+        legendTitle: '% dwellings built pre-1945',
+        subtitle: 'VOA CTSOP 2023 — pre-1945 dwellings (England & Wales only). Lead-pigment paint peak; ~aligns with US "pre-1950" CDC threshold.',
+        colors: ['#f7fbff', '#deebf7', '#c6dbef', '#9ecae1', '#6baed6', '#4292c6', '#2171b5', '#08306b'],
+        breaks: [0, 10, 20, 30, 40, 50, 60, 70],
+    },
+    pre_1972: {
+        label: 'Housing built pre-1972 (lead pipes era)',
+        legendTitle: '% dwellings built pre-1972',
+        subtitle: 'VOA CTSOP 2023 — pre-1972 dwellings (England & Wales only). Lead service pipes were standard until ~1970; copper-with-lead-solder until 1987.',
+        colors: ['#f7fbff', '#deebf7', '#c6dbef', '#9ecae1', '#6baed6', '#4292c6', '#2171b5', '#08306b'],
+        breaks: [0, 20, 30, 40, 50, 60, 70, 80],
+    },
+    pre_1992: {
+        label: 'Housing built pre-1992 (lead paint era)',
+        legendTitle: '% dwellings built pre-1992',
+        subtitle: 'VOA CTSOP 2023 — pre-1992 dwellings (England & Wales only). UK consumer lead paint banned 1992 (EU Dir. 89/677/EEC).',
+        colors: ['#f7fbff', '#deebf7', '#c6dbef', '#9ecae1', '#6baed6', '#4292c6', '#2171b5', '#08306b'],
+        breaks: [0, 40, 50, 60, 70, 75, 80, 85],
+    },
+    mines: {
+        label: 'Historic metal mines',
+        legendTitle: 'Metal mines (count, Macklin + EA)',
+        subtitle: 'Macklin et al. 2023 (WAPHA, Science) + EA Inventory of Closed Mining Waste Facilities 2014. 211 mine sites, ~deduplicated to constituency.',
+        // 0 = subdued teal (clearly distinct from no-data grey AND from "has mines" pinks)
+        colors: ['#2a3a4a', '#fde0dd', '#fcc5c0', '#fa9fb5', '#f768a1', '#dd3497', '#ae017e', '#7a0177'],
+        breaks: [0, 1, 2, 3, 5, 8, 12, 20],
+    }
+};
 
 // ── Spatial mapping: constituency -> county/UA with IHME data ──
 // Pre-computed using centroid-in-polygon matching against county/UA boundaries
 const CONSTITUENCY_TO_COUNTY = {"Aberavon":"Wales","Aberconwy":"Wales","Aberdeen North":"Scotland","Aberdeen South":"Scotland","Airdrie and Shotts":"Scotland","Aldershot":"Hampshire","Aldridge-Brownhills":"Walsall","Altrincham and Sale West":"Trafford","Alyn and Deeside":"Wales","Amber Valley":"Derbyshire","Angus":"Scotland","Arfon":"Wales","Argyll and Bute":"Scotland","Arundel and South Downs":"West Sussex","Ashfield":"Nottinghamshire","Ashford":"Kent","Ashton-under-Lyne":"Tameside","Aylesbury":"Buckinghamshire","Ayr, Carrick and Cumnock":"Scotland","Banbury":"Northamptonshire","Banff and Buchan":"Scotland","Barking":"Barking and Dagenham","Barnsley Central":"Barnsley","Barnsley East":"Barnsley","Barrow and Furness":"Cumbria","Basildon and Billericay":"Essex","Basingstoke":"Hampshire","Bassetlaw":"Nottinghamshire","Bath":"Bath and North East Somerset","Batley and Spen":"Kirklees","Battersea":"Wandsworth","Beaconsfield":"Buckinghamshire","Beckenham":"Bromley","Bedford":"Bedford","Belfast East":"Northern Ireland","Belfast North":"Northern Ireland","Belfast South":"Northern Ireland","Belfast West":"Northern Ireland","Bermondsey and Old Southwark":"Southwark","Berwick-upon-Tweed":"Northumberland","Berwickshire, Roxburgh and Selkirk":"Scotland","Bethnal Green and Bow":"Tower Hamlets","Beverley and Holderness":"East Riding of Yorkshire","Bexhill and Battle":"East Sussex","Bexleyheath and Crayford":"Bexley","Birkenhead":"Wirral","Birmingham, Edgbaston":"Birmingham","Birmingham, Erdington":"Birmingham","Birmingham, Hall Green":"Birmingham","Birmingham, Hodge Hill":"Birmingham","Birmingham, Ladywood":"Birmingham","Birmingham, Northfield":"Birmingham","Birmingham, Perry Barr":"Birmingham","Birmingham, Selly Oak":"Birmingham","Birmingham, Yardley":"Birmingham","Bishop Auckland":"County Durham","Blackburn":"Blackburn with Darwen","Blackley and Broughton":"Manchester","Blackpool North and Cleveleys":"Blackpool","Blackpool South":"Blackpool","Blaenau Gwent":"Wales","Blaydon":"Gateshead","Blyth Valley":"Northumberland","Bognor Regis and Littlehampton":"West Sussex","Bolsover":"Derbyshire","Bolton North East":"Bolton","Bolton South East":"Bolton","Bolton West":"Bolton","Bootle":"Sefton","Boston and Skegness":"Lincolnshire","Bosworth":"Leicestershire","Bournemouth East":"Bournemouth","Bournemouth West":"Bournemouth","Bracknell":"Wokingham","Bradford East":"Bradford","Bradford South":"Bradford","Bradford West":"Bradford","Braintree":"Essex","Brecon and Radnorshire":"Wales","Brent Central":"Brent","Brent North":"Brent","Brentford and Isleworth":"Hounslow","Brentwood and Ongar":"Essex","Bridgend":"Wales","Bridgwater and West Somerset":"Somerset","Brigg and Goole":"North Lincolnshire","Brighton, Kemptown":"Brighton and Hove","Brighton, Pavilion":"Brighton and Hove","Bristol East":"Bristol, City of","Bristol North West":"Bristol, City of","Bristol South":"Bristol, City of","Bristol West":"Bristol, City of","Broadland":"Norfolk","Bromley and Chislehurst":"Bromley","Bromsgrove":"Worcestershire","Broxbourne":"Hertfordshire","Broxtowe":"Nottinghamshire","Buckingham":"Buckinghamshire","Burnley":"Lancashire","Burton":"Derbyshire","Bury North":"Bury","Bury South":"Bury","Bury St Edmunds":"Suffolk","Caerphilly":"Wales","Caithness, Sutherland and Easter Ross":"Scotland","Calder Valley":"Calderdale","Camberwell and Peckham":"Southwark","Camborne and Redruth":"Cornwall","Cambridge":"Cambridgeshire","Cannock Chase":"Staffordshire","Canterbury":"Kent","Cardiff Central":"Wales","Cardiff North":"Wales","Cardiff South and Penarth":"Wales","Cardiff West":"Wales","Carlisle":"Cumbria","Carmarthen East and Dinefwr":"Wales","Carmarthen West and South Pembrokeshire":"Wales","Carshalton and Wallington":"Sutton","Castle Point":"Essex","Central Ayrshire":"Scotland","Central Devon":"Devon","Central Suffolk and North Ipswich":"Suffolk","Ceredigion":"Wales","Charnwood":"Leicestershire","Chatham and Aylesford":"Kent","Cheadle":"Stockport","Chelmsford":"Essex","Chelsea and Fulham":"Hammersmith and Fulham","Cheltenham":"Gloucestershire","Chesham and Amersham":"Buckinghamshire","Chesterfield":"Derbyshire","Chichester":"West Sussex","Chingford and Woodford Green":"Waltham Forest","Chippenham":"Wiltshire","Chipping Barnet":"Barnet","Chorley":"Lancashire","Christchurch":"Dorset","Cities of London and Westminster":"Westminster","City of Chester":"Cheshire West and Chester","City of Durham":"County Durham","Clacton":"Essex","Cleethorpes":"North East Lincolnshire","Clwyd South":"Wales","Clwyd West":"Wales","Coatbridge, Chryston and Bellshill":"Scotland","Colchester":"Essex","Colne Valley":"Kirklees","Congleton":"Cheshire East","Copeland":"Cumbria","Corby":"Northamptonshire","Coventry North East":"Coventry","Coventry North West":"Coventry","Coventry South":"Coventry","Crawley":"West Sussex","Crewe and Nantwich":"Cheshire East","Croydon Central":"Croydon","Croydon North":"Croydon","Croydon South":"Croydon","Cumbernauld, Kilsyth and Kirkintilloch East":"Scotland","Cynon Valley":"Wales","Dagenham and Rainham":"Havering","Darlington":"Darlington","Dartford":"Kent","Daventry":"Northamptonshire","Delyn":"Wales","Denton and Reddish":"Tameside","Derby North":"Derby","Derby South":"Derby","Derbyshire Dales":"Derbyshire","Devizes":"Wiltshire","Dewsbury":"Kirklees","Don Valley":"Doncaster","Doncaster Central":"Doncaster","Doncaster North":"Doncaster","Dover":"Kent","Dudley North":"Dudley","Dudley South":"Dudley","Dulwich and West Norwood":"Southwark","Dumfries and Galloway":"Scotland","Dumfriesshire, Clydesdale and Tweeddale":"Scotland","Dundee East":"Scotland","Dundee West":"Scotland","Dunfermline and West Fife":"Scotland","Dwyfor Meirionnydd":"Wales","Ealing Central and Acton":"Ealing","Ealing North":"Ealing","Ealing, Southall":"Ealing","Easington":"County Durham","East Antrim":"Northern Ireland","East Devon":"Devon","East Dunbartonshire":"Scotland","East Ham":"Newham","East Hampshire":"Hampshire","East Kilbride, Strathaven and Lesmahagow":"Scotland","East Londonderry":"Northern Ireland","East Lothian":"Scotland","East Renfrewshire":"Scotland","East Surrey":"Surrey","East Worthing and Shoreham":"West Sussex","East Yorkshire":"East Riding of Yorkshire","Eastbourne":"East Sussex","Eastleigh":"Hampshire","Eddisbury":"Cheshire East","Edinburgh East":"Scotland","Edinburgh North and Leith":"Scotland","Edinburgh South":"Scotland","Edinburgh South West":"Scotland","Edinburgh West":"Scotland","Edmonton":"Enfield","Ellesmere Port and Neston":"Cheshire West and Chester","Elmet and Rothwell":"Leeds","Eltham":"Greenwich","Enfield North":"Enfield","Enfield, Southgate":"Enfield","Epping Forest":"Essex","Epsom and Ewell":"Surrey","Erewash":"Derbyshire","Erith and Thamesmead":"Bexley","Esher and Walton":"Surrey","Exeter":"Devon","Falkirk":"Scotland","Fareham":"Hampshire","Faversham and Mid Kent":"Kent","Feltham and Heston":"Hounslow","Fermanagh And South Tyrone":"Northern Ireland","Filton and Bradley Stoke":"South Gloucestershire","Finchley and Golders Green":"Barnet","Folkestone and Hythe":"Kent","Forest of Dean":"Gloucestershire","Foyle":"Northern Ireland","Fylde":"Lancashire","Gainsborough":"Lincolnshire","Garston and Halewood":"Knowsley","Gateshead":"Gateshead","Gedling":"Nottinghamshire","Gillingham and Rainham":"Medway","Glasgow Central":"Scotland","Glasgow East":"Scotland","Glasgow North":"Scotland","Glasgow North East":"Scotland","Glasgow North West":"Scotland","Glasgow South":"Scotland","Glasgow South West":"Scotland","Glenrothes":"Scotland","Gloucester":"Gloucestershire","Gordon":"Scotland","Gosport":"Hampshire","Gower":"Wales","Grantham and Stamford":"Lincolnshire","Gravesham":"Kent","Great Grimsby":"North East Lincolnshire","Great Yarmouth":"Norfolk","Greenwich and Woolwich":"Greenwich","Guildford":"Surrey","Hackney North and Stoke Newington":"Hackney","Hackney South and Shoreditch":"Hackney","Halesowen and Rowley Regis":"Dudley","Halifax":"Calderdale","Haltemprice and Howden":"East Riding of Yorkshire","Halton":"Halton","Hammersmith":"Hammersmith and Fulham","Hampstead and Kilburn":"Camden","Harborough":"Leicestershire","Harlow":"Essex","Harrogate and Knaresborough":"North Yorkshire","Harrow East":"Harrow","Harrow West":"Harrow","Hartlepool":"Hartlepool","Harwich and North Essex":"Essex","Hastings and Rye":"East Sussex","Havant":"Hampshire","Hayes and Harlington":"Hillingdon","Hazel Grove":"Stockport","Hemel Hempstead":"Hertfordshire","Hemsworth":"Wakefield","Hendon":"Barnet","Henley":"Oxfordshire","Hereford and South Herefordshire":"Herefordshire, County of","Hertford and Stortford":"Hertfordshire","Hertsmere":"Hertfordshire","Hexham":"Northumberland","Heywood and Middleton":"Rochdale","High Peak":"Derbyshire","Hitchin and Harpenden":"Hertfordshire","Holborn and St Pancras":"Camden","Hornchurch and Upminster":"Havering","Hornsey and Wood Green":"Haringey","Horsham":"West Sussex","Houghton and Sunderland South":"Sunderland","Hove":"Brighton and Hove","Huddersfield":"Kirklees","Huntingdon":"Cambridgeshire","Hyndburn":"Lancashire","Ilford North":"Redbridge","Ilford South":"Redbridge","Inverclyde":"Scotland","Inverness, Nairn, Badenoch and Strathspey":"Scotland","Ipswich":"Suffolk","Isle of Wight":"Isle of Wight","Islington North":"Islington","Islington South and Finsbury":"Islington","Islwyn":"Wales","Jarrow":"South Tyneside","Keighley":"Bradford","Kenilworth and Southam":"Warwickshire","Kensington":"Kensington and Chelsea","Kettering":"Northamptonshire","Kilmarnock and Loudoun":"Scotland","Kingston and Surbiton":"Kingston upon Thames","Kingston upon Hull East":"Kingston upon Hull, City of","Kingston upon Hull North":"Kingston upon Hull, City of","Kingston upon Hull West and Hessle":"Kingston upon Hull, City of","Kingswood":"South Gloucestershire","Kirkcaldy and Cowdenbeath":"Scotland","Knowsley":"Knowsley","Lagan Valley":"Northern Ireland","Lanark and Hamilton East":"Scotland","Lancaster and Fleetwood":"Lancashire","Leeds Central":"Leeds","Leeds East":"Leeds","Leeds North East":"Leeds","Leeds North West":"Leeds","Leeds West":"Leeds","Leicester East":"Leicester","Leicester South":"Leicester","Leicester West":"Leicester","Leigh":"Wigan","Lewes":"East Sussex","Lewisham East":"Lewisham","Lewisham West and Penge":"Bromley","Lewisham, Deptford":"Lewisham","Leyton and Wanstead":"Waltham Forest","Lichfield":"Staffordshire","Lincoln":"Lincolnshire","Linlithgow and East Falkirk":"Scotland","Liverpool, Riverside":"Liverpool","Liverpool, Walton":"Liverpool","Liverpool, Wavertree":"Liverpool","Liverpool, West Derby":"Liverpool","Livingston":"Scotland","Llanelli":"Wales","Loughborough":"Leicestershire","Louth and Horncastle":"Lincolnshire","Ludlow":"Shropshire","Luton North":"Luton","Luton South":"Luton","Macclesfield":"Cheshire East","Maidenhead":"Windsor and Maidenhead","Maidstone and The Weald":"Kent","Makerfield":"Wigan","Maldon":"Essex","Manchester Central":"Manchester","Manchester, Gorton":"Manchester","Manchester, Withington":"Manchester","Mansfield":"Nottinghamshire","Meon Valley":"Hampshire","Meriden":"Solihull","Merthyr Tydfil and Rhymney":"Wales","Mid Bedfordshire":"Central Bedfordshire","Mid Derbyshire":"Derbyshire","Mid Dorset and North Poole":"Dorset","Mid Norfolk":"Norfolk","Mid Sussex":"West Sussex","Mid Ulster":"Northern Ireland","Mid Worcestershire":"Worcestershire","Middlesbrough":"Middlesbrough","Middlesbrough South and East Cleveland":"Redcar and Cleveland","Midlothian":"Scotland","Milton Keynes North":"Milton Keynes","Milton Keynes South":"Milton Keynes","Mitcham and Morden":"Merton","Mole Valley":"Surrey","Monmouth":"Wales","Montgomeryshire":"Wales","Moray":"Scotland","Morecambe and Lunesdale":"Lancashire","Morley and Outwood":"Leeds","Motherwell and Wishaw":"Scotland","Na h-Eileanan an Iar":"Scotland","Neath":"Wales","New Forest East":"Hampshire","New Forest West":"Hampshire","Newark":"Nottinghamshire","Newbury":"West Berkshire","Newcastle upon Tyne Central":"Newcastle upon Tyne","Newcastle upon Tyne East":"Newcastle upon Tyne","Newcastle upon Tyne North":"Newcastle upon Tyne","Newcastle-under-Lyme":"Staffordshire","Newport East":"Wales","Newport West":"Wales","Newry And Armagh":"Northern Ireland","Newton Abbot":"Devon","Normanton, Pontefract and Castleford":"Wakefield","North Antrim":"Northern Ireland","North Ayrshire and Arran":"Scotland","North Cornwall":"Cornwall","North Devon":"Devon","North Dorset":"Dorset","North Down":"Northern Ireland","North Durham":"County Durham","North East Bedfordshire":"Bedford","North East Cambridgeshire":"Cambridgeshire","North East Derbyshire":"Derbyshire","North East Fife":"Scotland","North East Hampshire":"Hampshire","North East Hertfordshire":"Hertfordshire","North East Somerset":"Bath and North East Somerset","North Herefordshire":"Herefordshire, County of","North Norfolk":"Norfolk","North Shropshire":"Shropshire","North Somerset":"North Somerset","North Swindon":"Swindon","North Thanet":"Kent","North Tyneside":"North Tyneside","North Warwickshire":"Warwickshire","North West Cambridgeshire":"Cambridgeshire","North West Durham":"County Durham","North West Hampshire":"Hampshire","North West Leicestershire":"Leicestershire","North West Norfolk":"Norfolk","North Wiltshire":"Wiltshire","Northampton North":"Northamptonshire","Northampton South":"Northamptonshire","Norwich North":"Norfolk","Norwich South":"Norfolk","Nottingham East":"Nottingham","Nottingham North":"Nottingham","Nottingham South":"Nottingham","Nuneaton":"Warwickshire","Ochil and South Perthshire":"Scotland","Ogmore":"Wales","Old Bexley and Sidcup":"Bexley","Oldham East and Saddleworth":"Oldham","Oldham West and Royton":"Oldham","Orkney and Shetland":"Scotland","Orpington":"Bromley","Oxford East":"Oxfordshire","Oxford West and Abingdon":"Oxfordshire","Paisley and Renfrewshire North":"Scotland","Paisley and Renfrewshire South":"Scotland","Pendle":"Lancashire","Penistone and Stocksbridge":"Barnsley","Penrith and The Border":"Cumbria","Perth and North Perthshire":"Scotland","Peterborough":"Peterborough","Plymouth, Moor View":"Plymouth","Plymouth, Sutton and Devonport":"Plymouth","Pontypridd":"Wales","Poole":"Poole","Poplar and Limehouse":"Tower Hamlets","Portsmouth North":"Portsmouth","Portsmouth South":"Portsmouth","Preseli Pembrokeshire":"Wales","Preston":"Lancashire","Pudsey":"Leeds","Putney":"Wandsworth","Rayleigh and Wickford":"Essex","Reading East":"Reading","Reading West":"Reading","Redcar":"Redcar and Cleveland","Redditch":"Worcestershire","Reigate":"Surrey","Rhondda":"Wales","Ribble Valley":"Lancashire","Richmond (Yorks)":"North Yorkshire","Richmond Park":"Richmond upon Thames","Rochdale":"Rochdale","Rochester and Strood":"Medway","Rochford and Southend East":"Essex","Romford":"Havering","Romsey and Southampton North":"Hampshire","Ross, Skye and Lochaber":"Scotland","Rossendale and Darwen":"Lancashire","Rother Valley":"Rotherham","Rotherham":"Rotherham","Rugby":"Warwickshire","Ruislip, Northwood and Pinner":"Hillingdon","Runnymede and Weybridge":"Surrey","Rushcliffe":"Nottinghamshire","Rutherglen and Hamilton West":"Scotland","Rutland and Melton":"Rutland","Saffron Walden":"Essex","Salford and Eccles":"Salford","Salisbury":"Wiltshire","Scarborough and Whitby":"North Yorkshire","Scunthorpe":"North Lincolnshire","Sedgefield":"County Durham","Sefton Central":"Sefton","Selby and Ainsty":"North Yorkshire","Sevenoaks":"Kent","Sheffield Central":"Sheffield","Sheffield South East":"Sheffield","Sheffield, Brightside and Hillsborough":"Sheffield","Sheffield, Hallam":"Sheffield","Sheffield, Heeley":"Sheffield","Sherwood":"Nottinghamshire","Shipley":"Bradford","Shrewsbury and Atcham":"Shropshire","Sittingbourne and Sheppey":"Kent","Skipton and Ripon":"North Yorkshire","Sleaford and North Hykeham":"Lincolnshire","Slough":"Slough","Solihull":"Solihull","Somerton and Frome":"Somerset","South Antrim":"Northern Ireland","South Basildon and East Thurrock":"Thurrock","South Cambridgeshire":"Cambridgeshire","South Derbyshire":"Derbyshire","South Dorset":"Dorset","South Down":"Northern Ireland","South East Cambridgeshire":"Cambridgeshire","South East Cornwall":"Cornwall","South Holland and The Deepings":"Lincolnshire","South Leicestershire":"Leicestershire","South Norfolk":"Norfolk","South Northamptonshire":"Northamptonshire","South Ribble":"Lancashire","South Shields":"South Tyneside","South Staffordshire":"Wolverhampton","South Suffolk":"Suffolk","South Swindon":"Swindon","South Thanet":"Kent","South West Bedfordshire":"Central Bedfordshire","South West Devon":"Devon","South West Hertfordshire":"Hertfordshire","South West Norfolk":"Norfolk","South West Surrey":"Surrey","South West Wiltshire":"Wiltshire","Southampton, Itchen":"Southampton","Southampton, Test":"Southampton","Southend West":"Southend-on-Sea","Southport":"Sefton","Spelthorne":"Surrey","St Albans":"Hertfordshire","St Austell and Newquay":"Cornwall","St Helens North":"St Helens","St Helens South and Whiston":"St Helens","St Ives":"Cornwall","Stafford":"Staffordshire","Staffordshire Moorlands":"Staffordshire","Stalybridge and Hyde":"Tameside","Stevenage":"Hertfordshire","Stirling":"Scotland","Stockport":"Stockport","Stockton North":"Stockton-on-Tees","Stockton South":"Stockton-on-Tees","Stoke-on-Trent Central":"Stoke-on-Trent","Stoke-on-Trent North":"Stoke-on-Trent","Stoke-on-Trent South":"Stoke-on-Trent","Stone":"Staffordshire","Stourbridge":"Dudley","Strangford":"Northern Ireland","Stratford-on-Avon":"Warwickshire","Streatham":"Lambeth","Stretford and Urmston":"Trafford","Stroud":"Gloucestershire","Suffolk Coastal":"Suffolk","Sunderland Central":"Sunderland","Surrey Heath":"Surrey","Sutton Coldfield":"Birmingham","Sutton and Cheam":"Sutton","Swansea East":"Wales","Swansea West":"Wales","Tamworth":"Staffordshire","Tatton":"Cheshire East","Taunton Deane":"Somerset","Telford":"Telford and Wrekin","Tewkesbury":"Gloucestershire","The Cotswolds":"Gloucestershire","The Wrekin":"Telford and Wrekin","Thirsk and Malton":"North Yorkshire","Thornbury and Yate":"South Gloucestershire","Thurrock":"Thurrock","Tiverton and Honiton":"Devon","Tonbridge and Malling":"Kent","Tooting":"Wandsworth","Torbay":"Torbay","Torfaen":"Wales","Torridge and West Devon":"Devon","Totnes":"Devon","Tottenham":"Haringey","Truro and Falmouth":"Cornwall","Tunbridge Wells":"Kent","Twickenham":"Richmond upon Thames","Tynemouth":"North Tyneside","Upper Bann":"Northern Ireland","Uxbridge and South Ruislip":"Hillingdon","Vale of Clwyd":"Wales","Vale of Glamorgan":"Wales","Vauxhall":"Lambeth","Wakefield":"Wakefield","Wallasey":"Wirral","Walsall North":"Walsall","Walsall South":"Walsall","Walthamstow":"Waltham Forest","Wansbeck":"Northumberland","Wantage":"Oxfordshire","Warley":"Sandwell","Warrington North":"Warrington","Warrington South":"Warrington","Warwick and Leamington":"Warwickshire","Washington and Sunderland West":"Sunderland","Watford":"Hertfordshire","Waveney":"Suffolk","Wealden":"East Sussex","Weaver Vale":"Cheshire West and Chester","Wellingborough":"Northamptonshire","Wells":"Somerset","Welwyn Hatfield":"Hertfordshire","Wentworth and Dearne":"Rotherham","West Aberdeenshire and Kincardine":"Scotland","West Bromwich East":"Sandwell","West Bromwich West":"Sandwell","West Dorset":"Dorset","West Dunbartonshire":"Scotland","West Ham":"Newham","West Lancashire":"Lancashire","West Suffolk":"Suffolk","West Tyrone":"Northern Ireland","West Worcestershire":"Worcestershire","Westminster North":"Westminster","Westmorland and Lonsdale":"Cumbria","Weston-Super-Mare":"North Somerset","Wigan":"Wigan","Wimbledon":"Merton","Winchester":"Hampshire","Windsor":"Bracknell Forest","Wirral South":"Wirral","Wirral West":"Wirral","Witham":"Essex","Witney":"Oxfordshire","Woking":"Surrey","Wokingham":"Wokingham","Wolverhampton North East":"Wolverhampton","Wolverhampton South East":"Wolverhampton","Wolverhampton South West":"Wolverhampton","Worcester":"Worcestershire","Workington":"Cumbria","Worsley and Eccles South":"Salford","Worthing West":"West Sussex","Wrexham":"Wales","Wycombe":"Buckinghamshire","Wyre Forest":"Worcestershire","Wyre and Preston North":"Lancashire","Wythenshawe and Sale East":"Manchester","Yeovil":"Somerset","Ynys Mon":"Wales","York Central":"York","York Outer":"York"};
 
 // ── Color scale ─────────────────────────────────────────────────────
-const COLORS = ['#ffffb2', '#fed976', '#feb24c', '#fd8d3c', '#f03b20', '#bd0026'];
-const COLOR_BREAKS = [0, 1, 2, 3, 4, 5];
-
 function getColor(val) {
     if (val == null || isNaN(val)) return '#444';
-    const pct = val * dataScale;
-    for (let i = COLOR_BREAKS.length - 1; i >= 0; i--) {
-        if (pct >= COLOR_BREAKS[i]) return COLORS[i];
+    const ind = INDICATORS[selectedIndicator];
+    const pct = selectedIndicator === 'bll' ? val * dataScale : val;
+    for (let i = ind.breaks.length - 1; i >= 0; i--) {
+        if (pct >= ind.breaks[i]) return ind.colors[i];
     }
-    return COLORS[0];
+    return ind.colors[0];
 }
 
-function fmtPct(val) {
+function fmtVal(val) {
     if (val == null || isNaN(val)) return '?';
-    return (val * dataScale).toFixed(1) + '%';
+    if (selectedIndicator === 'mines') return val.toString();
+    const pct = selectedIndicator === 'bll' ? val * dataScale : val;
+    return pct.toFixed(1) + '%';
+}
+// Backwards-compat alias
+const fmtPct = fmtVal;
+
+function isHousingIndicator(ind) {
+    return ind && ind.indexOf('pre_') === 0;
 }
 
 // ── Map setup ───────────────────────────────────────────────────────
@@ -140,16 +212,43 @@ info.onAdd = function () {
 };
 info.update = function (props, data, source, ladName) {
     if (!props) {
-        this._div.innerHTML = '<h4>UK Lead Exposure</h4><p class="no-data">Hover over a constituency</p>';
+        this._div.innerHTML = `<h4>${INDICATORS[selectedIndicator].label}</h4><p class="no-data">Hover over a constituency</p>`;
         return;
     }
     const name = props.name;
     const nation = props.nation || '';
     const label = nation && nation !== name ? `${name} <span style="color:#6c7a89; font-size:0.8rem;">(${nation})</span>` : name;
     if (!data) {
-        this._div.innerHTML = `<h4>${label}</h4><p class="no-data">No data loaded</p>`;
+        this._div.innerHTML = `<h4>${label}</h4><p class="no-data">No data</p>`;
         return;
     }
+
+    if (isHousingIndicator(selectedIndicator)) {
+        const yr = selectedIndicator.replace('pre_', '');
+        const nDwel = data.n_dwellings ? `<p class="ci">Dwellings: ${data.n_dwellings.toLocaleString()}</p>` : '';
+        this._div.innerHTML = `
+            <h4>${label}</h4>
+            <p>Dwellings built before ${yr}</p>
+            <p class="value">${fmtVal(data.mean)}</p>
+            ${nDwel}
+            <p class="source-label">Source: VOA CTSOP 4.0 (2023)</p>
+        `;
+        return;
+    }
+
+    if (selectedIndicator === 'mines') {
+        const m = data;
+        this._div.innerHTML = `
+            <h4>${label}</h4>
+            <p>Historic metal mine sites (combined)</p>
+            <p class="value">${m.mean}</p>
+            <p class="ci">EA closed mining waste: ${m.iocmwf_metal || 0} metalliferous (${m.iocmwf_pollution || 0} polluting water)</p>
+            <p class="ci">Macklin / WAPHA: ${m.macklin || 0} (${m.macklin_pb || 0} Pb/Zn/Cu/Ag/Ba)</p>
+            <p class="source-label">Sources: Macklin 2023 + EA IoCMWF 2014</p>
+        `;
+        return;
+    }
+
     const isNationFallback = source === 'nation' || source === 'national (UK)';
     const isCountyMatch = source === 'county/UA';
     const popStr = (!isNationFallback && data.population) ? `<p class="ci">Population: ${Math.round(data.population).toLocaleString()}</p>` : '';
@@ -175,40 +274,86 @@ info.addTo(map);
 // ── Legend ───────────────────────────────────────────────────────────
 const legend = L.control({ position: 'bottomright' });
 legend.onAdd = function () {
-    const div = L.DomUtil.create('div', 'legend');
-    let html = '<h4>% with BLL ≥ 5 µg/dL</h4>';
-    for (let i = 0; i < COLORS.length; i++) {
-        const lo = COLOR_BREAKS[i];
-        const hi = lo + 1;
-        html += `<div class="legend-item"><span class="legend-color" style="background:${COLORS[i]}"></span>${lo}–${hi}%</div>`;
+    this._div = L.DomUtil.create('div', 'legend');
+    this.update();
+    return this._div;
+};
+legend.update = function () {
+    const ind = INDICATORS[selectedIndicator];
+    const isCount = selectedIndicator === 'mines';
+    let html = `<h4>${ind.legendTitle}</h4>`;
+    for (let i = 0; i < ind.colors.length; i++) {
+        const lo = ind.breaks[i];
+        const hi = ind.breaks[i + 1];
+        let range;
+        if (isCount) {
+            if (lo === 0) range = '0';
+            else if (hi != null) range = (hi - lo === 1) ? `${lo}` : `${lo}–${hi - 1}`;
+            else range = `≥ ${lo}`;
+        } else {
+            range = hi != null ? `${lo}–${hi}%` : `≥ ${lo}%`;
+        }
+        html += `<div class="legend-item"><span class="legend-color" style="background:${ind.colors[i]}"></span>${range}</div>`;
     }
-    html += `<div class="legend-item" style="margin-top:6px; border-top:1px solid #0f3460; padding-top:6px;"><span class="legend-color" style="background:#444"></span>No data</div>`;
-    html += `<div class="legend-item"><span class="legend-color" style="background:rgba(254,217,118,0.35); border:1px dashed #0f3460;"></span>Nation-level estimate</div>`;
-    div.innerHTML = html;
-    return div;
+    if (selectedIndicator !== 'mines') {
+        html += `<div class="legend-item" style="margin-top:6px; border-top:1px solid #0f3460; padding-top:6px;"><span class="legend-color" style="background:#444"></span>No data</div>`;
+    }
+    if (selectedIndicator === 'bll') {
+        html += `<div class="legend-item"><span class="legend-color" style="background:rgba(254,217,118,0.35); border:1px dashed #0f3460;"></span>Nation-level estimate</div>`;
+    }
+    this._div.innerHTML = html;
 };
 legend.addTo(map);
 
-// ── Data lookup: exact match -> spatial LAD match -> nation fallback ─
+// ── Data lookup ──────────────────────────────────────────────────────
 function getDataForFeature(props) {
-    if (!selectedAge) return { data: null, source: null };
     const name = props.name;
+
+    // Housing-age indicators
+    if (isHousingIndicator(selectedIndicator)) {
+        const h = housingData[name];
+        const key = 'pct_' + selectedIndicator;  // e.g. pct_pre_1992
+        if (h && h[key] != null) {
+            return {
+                data: { mean: h[key], n_dwellings: h.n_dwellings },
+                source: 'constituency'
+            };
+        }
+        return { data: null, source: null };
+    }
+
+    // Mines indicator (count, 0 is data not no-data)
+    if (selectedIndicator === 'mines') {
+        const m = minesData[name];
+        if (m) {
+            return {
+                data: {
+                    mean: m.n_mines_total,
+                    macklin: m.n_macklin,
+                    macklin_pb: m.n_macklin_pb_relevant,
+                    iocmwf_metal: m.n_iocmwf_metalliferous,
+                    iocmwf_pollution: m.n_iocmwf_water_pollution,
+                },
+                source: 'constituency'
+            };
+        }
+        return { data: { mean: 0 }, source: 'constituency' };
+    }
+
+    // BLL: exact match -> spatial LAD match -> nation fallback
+    if (!selectedAge) return { data: null, source: null };
     const nation = props.nation;
 
-    // Try exact match on constituency name
     if (csvLocationData[name] && csvLocationData[name][selectedAge]) {
         return { data: csvLocationData[name][selectedAge], source: 'constituency' };
     }
-    // Try spatial match: constituency -> county/UA
     const mappedCounty = CONSTITUENCY_TO_COUNTY[name];
     if (mappedCounty && csvLocationData[mappedCounty] && csvLocationData[mappedCounty][selectedAge]) {
         return { data: csvLocationData[mappedCounty][selectedAge], source: 'county/UA', ladName: mappedCounty };
     }
-    // Fall back to nation-level data
     if (nation && csvLocationData[nation] && csvLocationData[nation][selectedAge]) {
         return { data: csvLocationData[nation][selectedAge], source: 'nation' };
     }
-    // Try "United Kingdom" as last resort
     if (csvLocationData['United Kingdom'] && csvLocationData['United Kingdom'][selectedAge]) {
         return { data: csvLocationData['United Kingdom'][selectedAge], source: 'national (UK)' };
     }
@@ -226,11 +371,48 @@ fetch('uk_constituencies.json')
         document.getElementById('loading-msg').remove();
         renderMap();
         autoLoadCSV();
+        loadHousingCSV();
+        loadMinesCSV();
     })
     .catch(err => {
         document.getElementById('loading-msg').textContent = 'Error loading boundaries: ' + err.message;
         console.error(err);
     });
+
+// ── Load pre-1945 housing CSV ───────────────────────────────────────
+function loadHousingCSV() {
+    fetch('constituency_prewar_housing.csv')
+        .then(r => {
+            if (!r.ok) throw new Error('housing CSV not found');
+            return r.text();
+        })
+        .then(text => {
+            const results = Papa.parse(text, { header: true, skipEmptyLines: true, dynamicTyping: true });
+            results.data.forEach(row => {
+                if (row.PCON24NM) {
+                    housingData[row.PCON24NM] = row;
+                }
+            });
+            console.log(`Loaded housing data for ${Object.keys(housingData).length} constituencies`);
+            if (isHousingIndicator(selectedIndicator)) renderMap();
+        })
+        .catch(err => console.error('Could not load housing CSV:', err));
+}
+
+// ── Load combined UK mines CSV (Macklin + EA IoCMWF) ────────────────
+function loadMinesCSV() {
+    fetch('constituency_uk_mines.csv')
+        .then(r => { if (!r.ok) throw new Error('mines CSV not found'); return r.text(); })
+        .then(text => {
+            const results = Papa.parse(text, { header: true, skipEmptyLines: true, dynamicTyping: true });
+            results.data.forEach(row => {
+                if (row.PCON24NM) minesData[row.PCON24NM] = row;
+            });
+            console.log(`Loaded mines data for ${Object.keys(minesData).length} constituencies`);
+            if (selectedIndicator === 'mines') renderMap();
+        })
+        .catch(err => console.error('Could not load mines CSV:', err));
+}
 
 // ── Render map ──────────────────────────────────────────────────────
 function renderMap() {
@@ -245,7 +427,7 @@ function renderMap() {
 
 function featureStyle(feature) {
     const { data, source } = getDataForFeature(feature.properties);
-    const isNationFallback = source === 'nation' || source === 'national (UK)';
+    const isNationFallback = selectedIndicator === 'bll' && (source === 'nation' || source === 'national (UK)');
     return {
         fillColor: data ? getColor(data.mean) : '#444',
         weight: isNationFallback ? 0.5 : 1,
@@ -386,6 +568,20 @@ function processCSV(rows) {
 ageSelect.addEventListener('change', () => {
     selectedAge = ageSelect.value;
     renderMap();
+});
+
+// Indicator change
+const indicatorSelect = document.getElementById('indicator-select');
+const ageWrap = document.getElementById('age-wrap');
+const headerSubtitle = document.getElementById('header-subtitle');
+indicatorSelect.addEventListener('change', () => {
+    selectedIndicator = indicatorSelect.value;
+    ageWrap.style.display = selectedIndicator === 'bll' ? '' : 'none';
+    headerSubtitle.textContent = INDICATORS[selectedIndicator].subtitle;
+    document.title = 'UK Constituency Map — ' + INDICATORS[selectedIndicator].label;
+    legend.update();
+    renderMap();
+    info.update();
 });
 </script>
 </body>
