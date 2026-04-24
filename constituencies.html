@@ -123,6 +123,66 @@
             overflow: hidden;
         }
         #profile-panel .bar-fill { height: 100%; background: linear-gradient(90deg, #6baed6, #e94560); }
+
+        /* ── Rankings modal ─────────────────────────────────────── */
+        #rankings-backdrop {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(10, 15, 30, 0.85); z-index: 1200;
+            display: none; align-items: center; justify-content: center;
+        }
+        #rankings-backdrop.open { display: flex; }
+        #rankings-modal {
+            background: #16213e; border: 1px solid #0f3460; border-radius: 10px;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+            width: min(1100px, 95vw); height: min(85vh, 900px);
+            display: flex; flex-direction: column; overflow: hidden;
+        }
+        #rankings-header {
+            padding: 16px 20px; border-bottom: 1px solid #0f3460;
+            display: flex; justify-content: space-between; align-items: center;
+            flex-wrap: wrap; gap: 10px;
+        }
+        #rankings-header h2 { color: #e94560; font-size: 1.15rem; }
+        #rankings-header .controls { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+        #rankings-header input[type="text"] {
+            background: #1a1a2e; border: 1px solid #0f3460; color: #e0e0e0;
+            padding: 6px 10px; border-radius: 6px; font-size: 0.85rem; min-width: 200px;
+        }
+        #rankings-header button {
+            background: none; border: 1px solid #0f3460; color: #a0a0b0;
+            padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.85rem;
+        }
+        #rankings-header button:hover { color: #e94560; border-color: #e94560; }
+        #rankings-subtitle {
+            padding: 6px 20px 0; color: #6c7a89; font-size: 0.78rem;
+        }
+        #rankings-table-wrap { flex: 1; overflow-y: auto; padding: 8px 20px 20px; }
+        #rankings-table {
+            width: 100%; border-collapse: collapse; font-size: 0.82rem;
+        }
+        #rankings-table th {
+            position: sticky; top: 0; background: #16213e;
+            text-align: left; padding: 10px 8px; color: #a0a0b0; font-weight: 600;
+            border-bottom: 2px solid #0f3460; cursor: pointer; user-select: none;
+            white-space: nowrap;
+        }
+        #rankings-table th:hover { color: #e94560; }
+        #rankings-table th.sorted { color: #e94560; }
+        #rankings-table th.num, #rankings-table td.num { text-align: right; }
+        #rankings-table td {
+            padding: 8px; border-bottom: 1px solid rgba(15, 52, 96, 0.4);
+            color: #e0e0e0;
+        }
+        #rankings-table tr { cursor: pointer; }
+        #rankings-table tr:hover td { background: rgba(233, 69, 96, 0.08); color: #fff; }
+        #rankings-table td.rank { color: #6c7a89; font-variant-numeric: tabular-nums; }
+        #rankings-table td.warn { color: #e94560; font-weight: 600; }
+        #rankings-table td.la { color: #a0a0b0; font-size: 0.78rem; }
+        #rankings-footer {
+            padding: 10px 20px; border-top: 1px solid #0f3460;
+            color: #6c7a89; font-size: 0.76rem; display: flex; justify-content: space-between;
+        }
+        #rankings-footer a { color: #6baed6; }
     </style>
 </head>
 <body>
@@ -135,6 +195,7 @@
     <div class="controls">
         <a href="index.html" class="nav-link">View by County / UA</a>
         <a href="sources.html" class="nav-link">Sources & methods</a>
+        <a href="#" class="nav-link" id="rankings-open">Rankings</a>
         <div>
             <label for="indicator-select">Indicator:</label>
             <select id="indicator-select">
@@ -163,6 +224,47 @@
     <div class="close"><button id="profile-close" type="button">Close ✕</button></div>
     <div id="profile-body"></div>
 </aside>
+
+<!-- Rankings modal -->
+<div id="rankings-backdrop" aria-hidden="true">
+    <div id="rankings-modal" role="dialog" aria-labelledby="rankings-title">
+        <div id="rankings-header">
+            <h2 id="rankings-title">Constituency rankings — estimated childhood lead exposure</h2>
+            <div class="controls">
+                <input type="text" id="rankings-search" placeholder="Search constituency or LA…" autocomplete="off" />
+                <button id="rankings-export" type="button">Download CSV</button>
+                <button id="rankings-close" type="button">Close ✕</button>
+            </div>
+        </div>
+        <div id="rankings-subtitle">
+            Modelled estimates combining IHME GBD 2021 regional BLL prevalence with VOA housing-age data, IMD deprivation, and 2021 Census child population. Click a column header to sort; click a row to open the constituency on the map.
+        </div>
+        <div id="rankings-table-wrap">
+            <table id="rankings-table">
+                <thead>
+                    <tr>
+                        <th data-sort="rank" class="num">#</th>
+                        <th data-sort="name">Constituency</th>
+                        <th data-sort="nation">Nation</th>
+                        <th data-sort="la">Local authority</th>
+                        <th data-sort="mp">MP</th>
+                        <th data-sort="children" class="num">Children 0–19</th>
+                        <th data-sort="affected" class="num sorted">Est. affected (BLL ≥ 5)</th>
+                        <th data-sort="rate" class="num">Rate / 1,000</th>
+                        <th data-sort="imd" class="num">IMD decile</th>
+                        <th data-sort="pre1972" class="num">% pre-1972</th>
+                        <th data-sort="mines" class="num">Mines</th>
+                    </tr>
+                </thead>
+                <tbody id="rankings-tbody"></tbody>
+            </table>
+        </div>
+        <div id="rankings-footer">
+            <div>Showing <span id="rankings-count">0</span> of <span id="rankings-total">0</span> constituencies</div>
+            <div>IMD decile: 1 = most deprived. Rate is modelled children BLL ≥ 5 µg/dL per 1,000 aged 0–19.</div>
+        </div>
+    </div>
+</div>
 
 <script>
 // ── State ───────────────────────────────────────────────────────────
@@ -793,6 +895,191 @@ indicatorSelect.addEventListener('change', () => {
     legend.update();
     renderMap();
     info.update();
+});
+
+// ── Rankings modal ──────────────────────────────────────────────────
+const rankingsBackdrop = document.getElementById('rankings-backdrop');
+const rankingsTbody = document.getElementById('rankings-tbody');
+const rankingsSearch = document.getElementById('rankings-search');
+const rankingsCount = document.getElementById('rankings-count');
+const rankingsTotal = document.getElementById('rankings-total');
+
+let rankingsSortKey = 'affected';
+let rankingsSortDir = 'desc';   // 'asc' | 'desc'
+
+function numOrNull(v) {
+    if (v == null || v === '') return null;
+    const n = +v;
+    return isNaN(n) ? null : n;
+}
+
+function getRankingRows() {
+    // Build a row per constituency with fields we can sort on
+    return Object.values(profileData)
+        .filter(p => p && p.PCON24NM)
+        .map(p => ({
+            name: p.PCON24NM,
+            nation: p.nation || '',
+            la: p.la_name || '',
+            mp: p.mp_name || '',
+            mp_party: p.mp_party || '',
+            children: numOrNull(p.child_pop_0_19),
+            affected: numOrNull(p.estimated_children_bl_5plus),
+            rate: numOrNull(p.rate_per_1000_bl_5plus),
+            imd: numOrNull(p.imd_decile),
+            pre1972: numOrNull(p.pct_pre_1972),
+            mines: numOrNull(p.n_mines_total) || 0,
+        }));
+}
+
+function sortRankings(rows) {
+    const key = rankingsSortKey;
+    const dir = rankingsSortDir === 'asc' ? 1 : -1;
+    const isStr = (key === 'name' || key === 'nation' || key === 'la' || key === 'mp');
+    return rows.slice().sort((a, b) => {
+        const av = a[key], bv = b[key];
+        // Nulls sort to the bottom regardless of direction
+        if (av == null && bv == null) return 0;
+        if (av == null) return 1;
+        if (bv == null) return -1;
+        if (isStr) return dir * String(av).localeCompare(String(bv));
+        return dir * (av - bv);
+    });
+}
+
+function renderRankings() {
+    const all = getRankingRows();
+    const q = (rankingsSearch.value || '').trim().toLowerCase();
+    let filtered = q
+        ? all.filter(r =>
+            r.name.toLowerCase().includes(q) ||
+            r.la.toLowerCase().includes(q) ||
+            (r.mp || '').toLowerCase().includes(q))
+        : all;
+    filtered = sortRankings(filtered);
+
+    const fmt = (v, d) => (v == null) ? '—' : (d != null ? (+v).toFixed(d) : Math.round(+v).toLocaleString());
+    const rowsHTML = filtered.map((r, i) => {
+        const partyCls = r.mp_party ? partyClass(r.mp_party) : '';
+        return `<tr data-name="${r.name.replace(/"/g, '&quot;')}">
+            <td class="rank num">${i + 1}</td>
+            <td>${r.name}</td>
+            <td class="la">${r.nation}</td>
+            <td class="la">${r.la}</td>
+            <td class="la"><span class="${partyCls}">${r.mp || ''}</span></td>
+            <td class="num">${fmt(r.children)}</td>
+            <td class="num warn">${fmt(r.affected)}</td>
+            <td class="num">${fmt(r.rate, 1)}</td>
+            <td class="num">${r.imd != null ? r.imd : '—'}</td>
+            <td class="num">${fmt(r.pre1972, 1)}</td>
+            <td class="num">${r.mines || 0}</td>
+        </tr>`;
+    }).join('');
+    rankingsTbody.innerHTML = rowsHTML || `<tr><td colspan="11" style="padding:30px; text-align:center; color:#6c7a89;">No matches</td></tr>`;
+    rankingsCount.textContent = filtered.length;
+    rankingsTotal.textContent = all.length;
+
+    // Update sorted-header styling
+    document.querySelectorAll('#rankings-table th').forEach(th => {
+        th.classList.toggle('sorted', th.dataset.sort === rankingsSortKey);
+        if (th.dataset.sort === rankingsSortKey) {
+            const arrow = rankingsSortDir === 'asc' ? ' ▲' : ' ▼';
+            if (!th.dataset.baseLabel) th.dataset.baseLabel = th.textContent.replace(/[▲▼]\s*$/, '').trim();
+            th.textContent = th.dataset.baseLabel + arrow;
+        } else {
+            if (th.dataset.baseLabel) th.textContent = th.dataset.baseLabel;
+        }
+    });
+}
+
+function openRankings() {
+    rankingsBackdrop.classList.add('open');
+    rankingsBackdrop.setAttribute('aria-hidden', 'false');
+    renderRankings();
+    setTimeout(() => rankingsSearch.focus(), 50);
+}
+function closeRankings() {
+    rankingsBackdrop.classList.remove('open');
+    rankingsBackdrop.setAttribute('aria-hidden', 'true');
+}
+
+document.getElementById('rankings-open').addEventListener('click', (e) => {
+    e.preventDefault();
+    openRankings();
+});
+document.getElementById('rankings-close').addEventListener('click', closeRankings);
+rankingsBackdrop.addEventListener('click', (e) => {
+    if (e.target === rankingsBackdrop) closeRankings();
+});
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && rankingsBackdrop.classList.contains('open')) closeRankings();
+});
+
+// Header sort handlers
+document.querySelectorAll('#rankings-table th[data-sort]').forEach(th => {
+    th.addEventListener('click', () => {
+        const key = th.dataset.sort;
+        if (key === 'rank') return;  // rank is derived from current sort
+        if (rankingsSortKey === key) {
+            rankingsSortDir = rankingsSortDir === 'asc' ? 'desc' : 'asc';
+        } else {
+            rankingsSortKey = key;
+            // Default direction: desc for numeric risk, asc for text
+            rankingsSortDir = (key === 'name' || key === 'nation' || key === 'la' || key === 'mp' || key === 'imd') ? 'asc' : 'desc';
+        }
+        renderRankings();
+    });
+});
+
+// Search filter
+rankingsSearch.addEventListener('input', renderRankings);
+
+// Row click -> zoom to constituency, open profile
+rankingsTbody.addEventListener('click', (e) => {
+    const tr = e.target.closest('tr[data-name]');
+    if (!tr) return;
+    const name = tr.dataset.name;
+    closeRankings();
+    // Find the Leaflet feature by name and zoom to it
+    if (geoLayer) {
+        geoLayer.eachLayer(layer => {
+            const props = layer.feature && layer.feature.properties;
+            if (props && props.name === name) {
+                const bounds = layer.getBounds();
+                if (bounds.isValid()) map.fitBounds(bounds, { padding: [40, 40], maxZoom: 11 });
+                openProfile(name);
+            }
+        });
+    } else {
+        openProfile(name);
+    }
+});
+
+// CSV export
+document.getElementById('rankings-export').addEventListener('click', () => {
+    const rows = sortRankings(getRankingRows());
+    const header = ['rank', 'constituency', 'nation', 'local_authority', 'mp', 'mp_party',
+                    'children_0_19', 'estimated_bll_5plus', 'rate_per_1000',
+                    'imd_decile', 'pct_pre_1972', 'n_mines'];
+    const esc = v => {
+        if (v == null) return '';
+        const s = String(v);
+        return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+    };
+    const lines = [header.join(',')];
+    rows.forEach((r, i) => {
+        lines.push([
+            i + 1, r.name, r.nation, r.la, r.mp, r.mp_party,
+            r.children, r.affected, r.rate, r.imd, r.pre1972, r.mines
+        ].map(esc).join(','));
+    });
+    const blob = new Blob([lines.join('\n')], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'uk_constituency_lead_risk_ranking.csv';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
 });
 </script>
 </body>
