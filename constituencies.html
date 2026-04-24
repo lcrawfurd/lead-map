@@ -948,21 +948,24 @@ function sortRankings(rows) {
 }
 
 function renderRankings() {
-    const all = getRankingRows();
+    const all = sortRankings(getRankingRows());
+    // Assign a global rank (1-based) based on the full sorted list,
+    // so the rank column is stable under search filtering.
+    all.forEach((r, i) => { r._rank = i + 1; });
+
     const q = (rankingsSearch.value || '').trim().toLowerCase();
-    let filtered = q
+    const filtered = q
         ? all.filter(r =>
             r.name.toLowerCase().includes(q) ||
             r.la.toLowerCase().includes(q) ||
             (r.mp || '').toLowerCase().includes(q))
         : all;
-    filtered = sortRankings(filtered);
 
     const fmt = (v, d) => (v == null) ? '—' : (d != null ? (+v).toFixed(d) : Math.round(+v).toLocaleString());
-    const rowsHTML = filtered.map((r, i) => {
+    const rowsHTML = filtered.map(r => {
         const partyCls = r.mp_party ? partyClass(r.mp_party) : '';
         return `<tr data-name="${r.name.replace(/"/g, '&quot;')}">
-            <td class="rank num">${i + 1}</td>
+            <td class="rank num">${r._rank}</td>
             <td>${r.name}</td>
             <td class="la">${r.nation}</td>
             <td class="la">${r.la}</td>
