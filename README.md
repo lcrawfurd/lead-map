@@ -6,8 +6,9 @@ Interactive map of childhood lead exposure risk indicators across the UK, at bot
 
 ## Views
 
-- **[Constituencies](https://lcrawfurd.github.io/lead-map/constituencies.html)** — per-constituency view with profile panel, indicator selector, and sortable rankings table
-- **[County / UA](https://lcrawfurd.github.io/lead-map/)** — IHME GBD 2021 blood lead level estimates at county / unitary authority level
+- **[Global](https://lcrawfurd.github.io/lead-map/global.html)** — world choropleth of IHME GBD 2021 BLL prevalence by country, with subnational availability highlighted
+- **[UK Constituencies](https://lcrawfurd.github.io/lead-map/constituencies.html)** — per-constituency view with profile panel, indicator selector, and sortable rankings table
+- **[UK County / UA](https://lcrawfurd.github.io/lead-map/)** — IHME GBD 2021 blood lead level estimates at county / unitary authority level
 
 ## Indicators
 

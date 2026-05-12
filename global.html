@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Lead Exposure Map — IHME GBD 2021</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/papaparse@5.4.1/papaparse.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #1a1a2e; color: #e0e0e0; }
+
+        #header {
+            background: #16213e;
+            padding: 16px 24px;
+            border-bottom: 2px solid #0f3460;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        #header h1 { font-size: 1.3rem; color: #e94560; font-weight: 700; }
+        #header .subtitle { font-size: 0.85rem; color: #a0a0b0; }
+
+        .controls { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+
+        .nav-link {
+            color: #a0a0b0; font-size: 0.82rem; text-decoration: none;
+            border: 1px solid #0f3460; padding: 6px 12px; border-radius: 6px;
+            transition: color 0.2s, border-color 0.2s;
+        }
+        .nav-link:hover { color: #e94560; border-color: #e94560; }
+
+        select, label.toggle {
+            background: #1a1a2e; color: #e0e0e0; border: 1px solid #0f3460;
+            padding: 6px 10px; border-radius: 6px; font-size: 0.85rem;
+        }
+        label { font-size: 0.8rem; color: #a0a0b0; }
+        label.toggle { cursor: pointer; user-select: none; display: inline-flex; align-items: center; gap: 6px; }
+        label.toggle input { accent-color: #e94560; }
+
+        #map { width: 100%; height: calc(100vh - 70px); }
+
+        .info-panel {
+            padding: 10px 14px; background: rgba(22, 33, 62, 0.95); border-radius: 8px;
+            border: 1px solid #0f3460; box-shadow: 0 2px 12px rgba(0,0,0,0.4);
+            color: #e0e0e0; font-size: 0.85rem; line-height: 1.5; min-width: 240px;
+            max-width: 320px;
+        }
+        .info-panel h4 { margin: 0 0 6px 0; color: #e94560; font-size: 1rem; }
+        .info-panel .no-data { color: #666; font-style: italic; }
+        .info-panel .value { font-weight: 700; color: #fff; font-size: 1.1rem; }
+        .info-panel .ci { color: #a0a0b0; font-size: 0.8rem; }
+        .info-panel .source-label { color: #6c7a89; font-size: 0.75rem; margin-top: 4px; }
+        .info-panel .subnat-badge {
+            display: inline-block; margin-top: 6px; padding: 2px 8px;
+            background: rgba(233, 69, 96, 0.18); border: 1px solid #e94560;
+            color: #e94560; border-radius: 4px; font-size: 0.75rem;
+        }
+
+        .legend {
+            background: rgba(22, 33, 62, 0.95); border-radius: 8px; border: 1px solid #0f3460;
+            padding: 10px 14px; box-shadow: 0 2px 12px rgba(0,0,0,0.4);
+            color: #e0e0e0; font-size: 0.8rem; line-height: 1.8;
+        }
+        .legend h4 { margin: 0 0 8px 0; font-size: 0.85rem; color: #e94560; }
+        .legend-item { display: flex; align-items: center; gap: 8px; }
+        .legend-color { width: 20px; height: 14px; border-radius: 2px; flex-shrink: 0; }
+
+        .loading-msg {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            z-index: 1000; background: rgba(22, 33, 62, 0.95); padding: 20px 30px;
+            border-radius: 8px; border: 1px solid #0f3460; color: #e0e0e0;
+        }
+
+        #subnat-note {
+            position: fixed; left: 12px; bottom: 12px; max-width: 360px; z-index: 1100;
+            background: rgba(22, 33, 62, 0.95); border: 1px solid #0f3460; border-radius: 8px;
+            padding: 10px 14px; color: #a0a0b0; font-size: 0.78rem; line-height: 1.5;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.4);
+        }
+        #subnat-note strong { color: #e94560; }
+        #subnat-note a { color: #6baed6; text-decoration: none; }
+        #subnat-note a:hover { text-decoration: underline; }
+        #subnat-note .country-tag {
+            display: inline-block; padding: 1px 6px; margin: 2px 3px 0 0;
+            background: rgba(233, 69, 96, 0.12); border: 1px solid rgba(233, 69, 96, 0.4);
+            border-radius: 3px; color: #e0e0e0; font-size: 0.72rem;
+        }
+    </style>
+</head>
+<body>
+
+<div id="header">
+    <div>
+        <h1>Global Childhood Lead Exposure Map</h1>
+        <div class="subtitle">IHME Global Burden of Disease 2021 — Proportion of population with blood lead ≥ 5 µg/dL, by country</div>
+    </div>
+    <div class="controls">
+        <a href="index.html" class="nav-link">UK County / UA</a>
+        <a href="constituencies.html" class="nav-link">UK Constituencies</a>
+        <a href="sources.html" class="nav-link">Sources & methods</a>
+        <div>
+            <label for="age-select">Age group:</label>
+            <select id="age-select" disabled><option value="">Loading…</option></select>
+        </div>
+        <label class="toggle"><input type="checkbox" id="highlight-subnat" checked /> Highlight countries with subnational data</label>
+    </div>
+</div>
+
+<div id="map">
+    <div class="loading-msg" id="loading-msg">Loading world boundaries…</div>
+</div>
+
+<div id="subnat-note">
+    <div><strong>Subnational data available for 14 countries</strong></div>
+    <div style="margin-top:6px;">IHME GBD 2021 provides finer geographic detail (states, provinces, counties, etc.) for these countries:</div>
+    <div style="margin-top:6px;">
+        <span class="country-tag">United Kingdom (163 units)</span>
+        <span class="country-tag">United States (51)</span>
+        <span class="country-tag">Japan (47)</span>
+        <span class="country-tag">Kenya (47)</span>
+        <span class="country-tag">Indonesia (34)</span>
+        <span class="country-tag">Mexico (32)</span>
+        <span class="country-tag">India (31)</span>
+        <span class="country-tag">Iran (31)</span>
+        <span class="country-tag">Brazil (27)</span>
+        <span class="country-tag">Ethiopia (11)</span>
+        <span class="country-tag">Norway (11)</span>
+        <span class="country-tag">South Africa (9)</span>
+        <span class="country-tag">Pakistan (7)</span>
+        <span class="country-tag">Sweden (2)</span>
+    </div>
+    <div style="margin-top:8px;">UK drilldown to constituency level: <a href="constituencies.html">View UK constituencies →</a></div>
+</div>
+
+<script>
+// ── Constants ────────────────────────────────────────────────────────
+// ISO3 codes for countries with IHME subnational estimates in GBD 2021
+const SUBNAT_COUNTRIES = new Set([
+    'GBR', 'USA', 'JPN', 'KEN', 'IDN', 'MEX', 'IND', 'IRN', 'BRA',
+    'ETH', 'NOR', 'ZAF', 'PAK', 'SWE'
+]);
+
+// Some common name/ISO3 mismatches in the geo-countries dataset
+// (mainly for places where ADMIN string doesn't match IHME location_name)
+const ISO3_FIXUPS = {
+    // GeoJSON sometimes has "-99" or empty ISO_A3 for disputed territories
+};
+
+// ── State ────────────────────────────────────────────────────────────
+let worldGeoJSON = null;
+let csvDataByIso = {};   // iso3 -> { ageGroup: {mean, lower, upper, population, location_name} }
+let ageGroups = [];
+let selectedAge = '';
+let geoLayer = null;
+let dataScale = 100;
+let highlightSubnat = true;
+
+// ── Color scale ──────────────────────────────────────────────────────
+const COLORS = ['#ffffb2', '#fed976', '#feb24c', '#fd8d3c', '#f03b20', '#bd0026', '#7a0026'];
+const COLOR_BREAKS = [0, 1, 5, 10, 20, 40, 70]; // wider bins for global range
+
+function getColor(val) {
+    if (val == null || isNaN(val)) return '#444';
+    const pct = val * dataScale;
+    for (let i = COLOR_BREAKS.length - 1; i >= 0; i--) {
+        if (pct >= COLOR_BREAKS[i]) return COLORS[i];
+    }
+    return COLORS[0];
+}
+
+function fmtPct(val) {
+    if (val == null || isNaN(val)) return '?';
+    return (val * dataScale).toFixed(1) + '%';
+}
+
+// ── Map setup ────────────────────────────────────────────────────────
+const map = L.map('map', {
+    center: [20, 10], zoom: 2, minZoom: 2, maxZoom: 8,
+    worldCopyJump: true, zoomControl: true
+});
+
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/attributions">CARTO</a> | Data: <a href="https://ghdx.healthdata.org/record/ihme-data/gbd-2021-lead-exposure-estimates-1990-2021">IHME GBD 2021</a> | Boundaries: <a href="https://github.com/datasets/geo-countries">datasets/geo-countries</a>',
+    subdomains: 'abcd', maxZoom: 8
+}).addTo(map);
+
+// ── Info panel ───────────────────────────────────────────────────────
+const info = L.control({ position: 'topright' });
+info.onAdd = function () {
+    this._div = L.DomUtil.create('div', 'info-panel');
+    this.update();
+    return this._div;
+};
+info.update = function (props, data) {
+    if (!props) {
+        this._div.innerHTML = '<h4>Global Lead Exposure</h4><p class="no-data">Hover over a country</p>';
+        return;
+    }
+    const name = props.ADMIN || props.name || 'Unknown';
+    const iso = props.ISO_A3 || '';
+    const hasSubnat = SUBNAT_COUNTRIES.has(iso);
+    const subnatBadge = hasSubnat
+        ? `<span class="subnat-badge">Subnational data available${iso === 'GBR' ? ' — <a href="constituencies.html" style="color:#e94560; text-decoration:underline;">explore</a>' : ''}</span>`
+        : '';
+    if (!data) {
+        this._div.innerHTML = `<h4>${name}</h4><p class="no-data">No IHME data</p>${subnatBadge}`;
+        return;
+    }
+    const popStr = data.population
+        ? `<p class="ci">Population (this age): ${Math.round(data.population).toLocaleString()}</p>`
+        : '';
+    this._div.innerHTML = `
+        <h4>${name} <span style="color:#6c7a89; font-size:0.78rem;">(${iso})</span></h4>
+        <p>Proportion with BLL ≥ 5 µg/dL</p>
+        <p class="value">${fmtPct(data.mean)}</p>
+        <p class="ci">95% UI: ${fmtPct(data.lower)} – ${fmtPct(data.upper)}</p>
+        ${popStr}
+        <p class="ci" style="margin-top:4px;">Age group: ${selectedAge || 'N/A'}</p>
+        ${subnatBadge}
+        <p class="source-label">IHME GBD 2021</p>
+    `;
+};
+info.addTo(map);
+
+// ── Legend ───────────────────────────────────────────────────────────
+const legend = L.control({ position: 'bottomright' });
+legend.onAdd = function () {
+    const div = L.DomUtil.create('div', 'legend');
+    let html = '<h4>% with BLL ≥ 5 µg/dL</h4>';
+    for (let i = 0; i < COLORS.length; i++) {
+        const lo = COLOR_BREAKS[i];
+        const hi = COLOR_BREAKS[i + 1];
+        const range = hi != null ? `${lo}–${hi}%` : `≥ ${lo}%`;
+        html += `<div class="legend-item"><span class="legend-color" style="background:${COLORS[i]}"></span>${range}</div>`;
+    }
+    html += `<div class="legend-item" style="margin-top:6px; border-top:1px solid #0f3460; padding-top:6px;"><span class="legend-color" style="background:#444"></span>No data</div>`;
+    html += `<div class="legend-item"><span class="legend-color" style="background:rgba(0,0,0,0); border:2px dashed #e94560;"></span>Has subnational data</div>`;
+    div.innerHTML = html;
+    return div;
+};
+legend.addTo(map);
+
+// ── Load world boundaries ────────────────────────────────────────────
+fetch('https://cdn.jsdelivr.net/gh/datasets/geo-countries@master/data/countries.geojson')
+    .then(r => {
+        if (!r.ok) throw new Error('Failed to load world boundaries');
+        return r.json();
+    })
+    .then(data => {
+        worldGeoJSON = data;
+        document.getElementById('loading-msg').remove();
+        loadCSV();
+    })
+    .catch(err => {
+        const el = document.getElementById('loading-msg');
+        if (el) el.textContent = 'Error loading boundaries: ' + err.message;
+        console.error(err);
+    });
+
+// ── Data lookup ──────────────────────────────────────────────────────
+function getDataForFeature(props) {
+    if (!selectedAge) return null;
+    const iso = (props.ISO_A3 || '').trim();
+    if (!iso || iso === '-99') return null;
+    const fixedIso = ISO3_FIXUPS[iso] || iso;
+    const country = csvDataByIso[fixedIso];
+    if (!country) return null;
+    return country[selectedAge] || null;
+}
+
+// ── Render map ───────────────────────────────────────────────────────
+function renderMap() {
+    if (geoLayer) map.removeLayer(geoLayer);
+    if (!worldGeoJSON) return;
+
+    geoLayer = L.geoJSON(worldGeoJSON, {
+        style: featureStyle,
+        onEachFeature: onEachFeature
+    }).addTo(map);
+}
+
+function featureStyle(feature) {
+    const data = getDataForFeature(feature.properties);
+    const iso = (feature.properties.ISO_A3 || '').trim();
+    const hasSubnat = SUBNAT_COUNTRIES.has(iso);
+    const isHighlightedSubnat = hasSubnat && highlightSubnat;
+    return {
+        fillColor: data ? getColor(data.mean) : '#333',
+        weight: isHighlightedSubnat ? 2 : 0.5,
+        opacity: 1,
+        color: isHighlightedSubnat ? '#e94560' : '#0f3460',
+        fillOpacity: data ? 0.85 : 0.4,
+        dashArray: isHighlightedSubnat ? '4 3' : null
+    };
+}
+
+function onEachFeature(feature, layer) {
+    layer.on({
+        mouseover: function (e) {
+            const iso = (feature.properties.ISO_A3 || '').trim();
+            const hasSubnat = SUBNAT_COUNTRIES.has(iso);
+            e.target.setStyle({
+                weight: hasSubnat ? 3 : 2,
+                color: '#e94560',
+                fillOpacity: 0.95
+            });
+            e.target.bringToFront();
+            info.update(feature.properties, getDataForFeature(feature.properties));
+        },
+        mouseout: function (e) {
+            geoLayer.resetStyle(e.target);
+            info.update();
+        },
+        click: function (e) {
+            const iso = (feature.properties.ISO_A3 || '').trim();
+            if (iso === 'GBR') {
+                // For the UK we have a dedicated subnational view
+                window.location.href = 'constituencies.html';
+                return;
+            }
+            map.fitBounds(e.target.getBounds(), { padding: [20, 20], maxZoom: 6 });
+        }
+    });
+}
+
+// ── CSV loading ──────────────────────────────────────────────────────
+const ageSelect = document.getElementById('age-select');
+
+function loadCSV() {
+    const csvFile = 'IHME_GBD_2021_LEAD_RISK_1990_2021_PROP_ABOVE_5_2021_BOTH_Y2024M06D05.CSV';
+    fetch(csvFile)
+        .then(r => {
+            if (!r.ok) throw new Error('CSV not found');
+            return r.text();
+        })
+        .then(text => {
+            const results = Papa.parse(text, { header: true, skipEmptyLines: true });
+            processCSV(results.data);
+        })
+        .catch(err => console.error('Could not load CSV:', err));
+}
+
+function processCSV(rows) {
+    if (rows.length === 0) return;
+
+    const cols = Object.keys(rows[0]);
+    const isoCol = cols.find(c => /ihme_loc_id/i.test(c));
+    const meanCol = cols.find(c => /^mean$/i.test(c));
+    const lowerCol = cols.find(c => /^lower$/i.test(c));
+    const upperCol = cols.find(c => /^upper$/i.test(c));
+    const ageCol = cols.find(c => /age_group_name/i.test(c));
+    const measureCol = cols.find(c => /measure_name/i.test(c));
+    const popCol = cols.find(c => /population/i.test(c));
+    const locNameCol = cols.find(c => /location_name/i.test(c));
+
+    csvDataByIso = {};
+    const ageSet = new Set();
+
+    rows.forEach(row => {
+        // Proportion rows only
+        if (measureCol && row[measureCol] && row[measureCol].trim() !== 'Proportion') return;
+        const iso = (row[isoCol] || '').trim();
+        // Country-level rows only (no underscore = no subnational)
+        if (!iso || iso.includes('_')) return;
+
+        const mean = parseFloat(row[meanCol]);
+        if (isNaN(mean)) return;
+
+        const lower = lowerCol ? parseFloat(row[lowerCol]) : null;
+        const upper = upperCol ? parseFloat(row[upperCol]) : null;
+        const age = ageCol ? (row[ageCol] || '').trim() : 'All';
+        const pop = popCol ? parseFloat(row[popCol]) : null;
+        const locName = locNameCol ? (row[locNameCol] || '').trim() : '';
+
+        if (!csvDataByIso[iso]) csvDataByIso[iso] = {};
+        csvDataByIso[iso][age] = {
+            mean,
+            lower: isNaN(lower) ? null : lower,
+            upper: isNaN(upper) ? null : upper,
+            population: isNaN(pop) ? null : pop,
+            location_name: locName
+        };
+        ageSet.add(age);
+    });
+
+    // Auto-detect scale (IHME proportions are 0-1)
+    let maxMean = 0;
+    for (const loc of Object.values(csvDataByIso)) {
+        for (const ag of Object.values(loc)) {
+            if (ag.mean > maxMean) maxMean = ag.mean;
+        }
+    }
+    dataScale = maxMean > 1 ? 1 : 100;
+
+    // Populate age groups, prefer child age groups first
+    const ordered = orderAgeGroups(Array.from(ageSet));
+    ageGroups = ordered;
+    ageSelect.innerHTML = '';
+    ageGroups.forEach(ag => {
+        const opt = document.createElement('option');
+        opt.value = ag; opt.textContent = ag;
+        ageSelect.appendChild(opt);
+    });
+    ageSelect.disabled = false;
+
+    const preferred = ageGroups.find(a => a === '0 to 14')
+        || ageGroups.find(a => a === '2 to 4')
+        || ageGroups.find(a => a === '<5')
+        || ageGroups.find(a => /all\s*ages/i.test(a))
+        || ageGroups[0];
+    selectedAge = preferred;
+    ageSelect.value = selectedAge;
+
+    renderMap();
+}
+
+// Sort age groups roughly by lower-bound years (children first, then ascending)
+function orderAgeGroups(arr) {
+    const childPriority = ['Early Neonatal', 'Late Neonatal', '0-27 days', '1-5 months', '6-11 months',
+                            '12 to 23 months', '2 to 4', '<5', '5 to 9', '0 to 14', '10 to 14'];
+    const childSet = new Set(childPriority);
+    const children = childPriority.filter(p => arr.includes(p));
+    const others = arr.filter(a => !childSet.has(a)).sort((a, b) => {
+        const na = parseInt(a, 10);
+        const nb = parseInt(b, 10);
+        if (!isNaN(na) && !isNaN(nb)) return na - nb;
+        return String(a).localeCompare(String(b));
+    });
+    return [...children, ...others];
+}
+
+// Event handlers
+ageSelect.addEventListener('change', () => {
+    selectedAge = ageSelect.value;
+    renderMap();
+});
+document.getElementById('highlight-subnat').addEventListener('change', (e) => {
+    highlightSubnat = e.target.checked;
+    renderMap();
+});
+</script>
+</body>
+</html>
