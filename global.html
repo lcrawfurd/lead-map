@@ -88,6 +88,10 @@
             display: inline-block; padding: 1px 6px; margin: 2px 3px 0 0;
             background: rgba(233, 69, 96, 0.12); border: 1px solid rgba(233, 69, 96, 0.4);
             border-radius: 3px; color: #e0e0e0; font-size: 0.72rem;
+            cursor: pointer; user-select: none;
+        }
+        #subnat-note .country-tag:hover {
+            background: rgba(233, 69, 96, 0.3); color: #fff;
         }
     </style>
 </head>
@@ -118,20 +122,20 @@
     <div><strong>Subnational data available for 14 countries</strong></div>
     <div style="margin-top:6px;">IHME GBD 2021 provides finer geographic detail (states, provinces, counties, etc.) for these countries:</div>
     <div style="margin-top:6px;">
-        <span class="country-tag">United Kingdom (163 units)</span>
-        <span class="country-tag">United States (51)</span>
-        <span class="country-tag">Japan (47)</span>
-        <span class="country-tag">Kenya (47)</span>
-        <span class="country-tag">Indonesia (34)</span>
-        <span class="country-tag">Mexico (32)</span>
-        <span class="country-tag">India (31)</span>
-        <span class="country-tag">Iran (31)</span>
-        <span class="country-tag">Brazil (27)</span>
-        <span class="country-tag">Ethiopia (11)</span>
-        <span class="country-tag">Norway (11)</span>
-        <span class="country-tag">South Africa (9)</span>
-        <span class="country-tag">Pakistan (7)</span>
-        <span class="country-tag">Sweden (2)</span>
+        <span class="country-tag" data-iso="GBR">United Kingdom (163 units)</span>
+        <span class="country-tag" data-iso="USA">United States (51)</span>
+        <span class="country-tag" data-iso="JPN">Japan (47)</span>
+        <span class="country-tag" data-iso="KEN">Kenya (47)</span>
+        <span class="country-tag" data-iso="IDN">Indonesia (34)</span>
+        <span class="country-tag" data-iso="MEX">Mexico (32)</span>
+        <span class="country-tag" data-iso="IND">India (31)</span>
+        <span class="country-tag" data-iso="IRN">Iran (31)</span>
+        <span class="country-tag" data-iso="BRA">Brazil (27)</span>
+        <span class="country-tag" data-iso="ETH">Ethiopia (11)</span>
+        <span class="country-tag" data-iso="NOR">Norway (11)</span>
+        <span class="country-tag" data-iso="ZAF">South Africa (9)</span>
+        <span class="country-tag" data-iso="PAK">Pakistan (7)</span>
+        <span class="country-tag" data-iso="SWE">Sweden (2)</span>
     </div>
     <div style="margin-top:8px;">UK drilldown to constituency level: <a href="constituencies.html">View UK constituencies →</a></div>
 </div>
@@ -153,9 +157,13 @@ const ISO3_FIXUPS = {
 // ── State ────────────────────────────────────────────────────────────
 let worldGeoJSON = null;
 let csvDataByIso = {};   // iso3 -> { ageGroup: {mean, lower, upper, population, location_name} }
+let csvDataBySubnat = {};  // iso3 -> { ihme_name -> { ageGroup: {mean,lower,upper,...} } }
 let ageGroups = [];
 let selectedAge = '';
 let geoLayer = null;
+let subnatLayer = null;
+let subnatCacheByIso = {};  // iso3 -> parsed GeoJSON (lazy loaded)
+let subnatActiveIso = null;
 let dataScale = 100;
 let highlightSubnat = true;
 
@@ -312,19 +320,181 @@ function onEachFeature(feature, layer) {
             info.update(feature.properties, getDataForFeature(feature.properties));
         },
         mouseout: function (e) {
-            geoLayer.resetStyle(e.target);
+            if (geoLayer) geoLayer.resetStyle(e.target);
             info.update();
         },
         click: function (e) {
             const iso = (feature.properties.ISO_A3 || '').trim();
             if (iso === 'GBR') {
-                // For the UK we have a dedicated subnational view
+                // UK uses dedicated constituency view
                 window.location.href = 'constituencies.html';
+                return;
+            }
+            if (SUBNAT_COUNTRIES.has(iso)) {
+                loadSubnational(iso, e.target.getBounds());
                 return;
             }
             map.fitBounds(e.target.getBounds(), { padding: [20, 20], maxZoom: 6 });
         }
     });
+}
+
+// ── Subnational drilldown ───────────────────────────────────────────
+function loadSubnational(iso, bounds) {
+    if (subnatActiveIso === iso) {
+        map.fitBounds(bounds, { padding: [20, 20], maxZoom: 7 });
+        return;
+    }
+    clearSubnational();
+    showSubnatStatus(`Loading subnational data for ${iso}…`);
+    const cached = subnatCacheByIso[iso];
+    const promise = cached
+        ? Promise.resolve(cached)
+        : fetch(`subnational/${iso}.geojson`).then(r => {
+            if (!r.ok) throw new Error('HTTP ' + r.status);
+            return r.json();
+        });
+    promise.then(geo => {
+        subnatCacheByIso[iso] = geo;
+        renderSubnational(iso, geo, bounds);
+        hideSubnatStatus();
+    }).catch(err => {
+        console.error(err);
+        showSubnatStatus(`Could not load subnational data for ${iso}: ${err.message}`, true);
+    });
+}
+
+function renderSubnational(iso, geo, bounds) {
+    subnatActiveIso = iso;
+    // Fade the global layer behind the subnational overlay
+    if (geoLayer) geoLayer.setStyle(f => {
+        const data = getDataForFeature(f.properties);
+        return {
+            fillColor: data ? getColor(data.mean) : '#333',
+            weight: 0.4, opacity: 0.4, color: '#0f3460',
+            fillOpacity: 0.15, dashArray: null
+        };
+    });
+    subnatLayer = L.geoJSON(geo, {
+        style: subnatStyle,
+        onEachFeature: onEachSubnatFeature
+    }).addTo(map);
+    map.fitBounds(bounds, { padding: [20, 20], maxZoom: 7 });
+    showSubnatBackButton(iso);
+}
+
+function clearSubnational() {
+    if (subnatLayer) { map.removeLayer(subnatLayer); subnatLayer = null; }
+    subnatActiveIso = null;
+    // Restore full global styling
+    if (geoLayer) geoLayer.setStyle(featureStyle);
+    hideSubnatBackButton();
+}
+
+function getSubnatData(iso, ihme_name) {
+    if (!iso || !ihme_name || !selectedAge) return null;
+    const c = csvDataBySubnat[iso];
+    if (!c || !c[ihme_name]) return null;
+    return c[ihme_name][selectedAge] || null;
+}
+
+function subnatStyle(feature) {
+    const p = feature.properties;
+    const data = getSubnatData(p.adm0_a3, p.ihme_name);
+    return {
+        fillColor: data ? getColor(data.mean) : '#444',
+        weight: 0.8, opacity: 1, color: '#16213e',
+        fillOpacity: data ? 0.9 : 0.5
+    };
+}
+
+function onEachSubnatFeature(feature, layer) {
+    layer.on({
+        mouseover: function (e) {
+            e.target.setStyle({ weight: 2.5, color: '#e94560', fillOpacity: 0.95 });
+            e.target.bringToFront();
+            const p = feature.properties;
+            const data = getSubnatData(p.adm0_a3, p.ihme_name);
+            subnatInfoUpdate(p, data);
+        },
+        mouseout: function (e) {
+            if (subnatLayer) subnatLayer.resetStyle(e.target);
+            info.update();
+        },
+        click: function (e) {
+            map.fitBounds(e.target.getBounds(), { padding: [30, 30], maxZoom: 8 });
+        }
+    });
+}
+
+function subnatInfoUpdate(props, data) {
+    const subnatName = props.ihme_name || props.shape_name;
+    const country = countryNameByIso[props.adm0_a3] || props.adm0_a3;
+    if (!data) {
+        info._div.innerHTML = `<h4>${subnatName} <span style="color:#6c7a89; font-size:0.78rem;">(${country})</span></h4><p class="no-data">No IHME data for this unit</p>`;
+        return;
+    }
+    info._div.innerHTML = `
+        <h4>${subnatName} <span style="color:#6c7a89; font-size:0.78rem;">(${country})</span></h4>
+        <p>Proportion with BLL ≥ 5 µg/dL</p>
+        <p class="value">${fmtPct(data.mean)}</p>
+        <p class="ci">95% UI: ${fmtPct(data.lower)} – ${fmtPct(data.upper)}</p>
+        ${data.population ? `<p class="ci">Population (this age): ${Math.round(data.population).toLocaleString()}</p>` : ''}
+        <p class="ci" style="margin-top:4px;">Age group: ${selectedAge || 'N/A'}</p>
+        <p class="source-label">IHME GBD 2021 (subnational)</p>
+    `;
+}
+
+// Track country names for the info panel during subnational view
+const countryNameByIso = {};
+
+// Status / back-button UI
+const subnatStatusControl = L.control({ position: 'topleft' });
+subnatStatusControl.onAdd = function () {
+    const div = L.DomUtil.create('div', 'info-panel');
+    div.style.display = 'none';
+    div.style.maxWidth = '300px';
+    this._div = div;
+    return div;
+};
+subnatStatusControl.addTo(map);
+
+function showSubnatStatus(msg, isError) {
+    const d = subnatStatusControl._div;
+    d.style.display = '';
+    d.style.borderColor = isError ? '#e94560' : '#0f3460';
+    d.innerHTML = `<div style="color:${isError ? '#e94560' : '#a0a0b0'}; font-size:0.85rem;">${msg}</div>`;
+}
+function hideSubnatStatus() {
+    subnatStatusControl._div.style.display = 'none';
+}
+
+let backButtonControl = null;
+function showSubnatBackButton(iso) {
+    if (backButtonControl) return;
+    backButtonControl = L.control({ position: 'topleft' });
+    backButtonControl.onAdd = function () {
+        const div = L.DomUtil.create('div', 'info-panel');
+        const name = countryNameByIso[iso] || iso;
+        div.innerHTML = `<button id="subnat-back" type="button" style="background:none; border:1px solid #0f3460; color:#a0a0b0; padding:6px 12px; border-radius:6px; cursor:pointer; font-size:0.85rem;">← Back to global view</button>
+            <div style="margin-top:6px; color:#a0a0b0; font-size:0.78rem;">Viewing: <strong style="color:#e94560;">${name}</strong> subnational</div>`;
+        L.DomEvent.disableClickPropagation(div);
+        setTimeout(() => {
+            const btn = document.getElementById('subnat-back');
+            if (btn) btn.addEventListener('click', () => {
+                clearSubnational();
+                map.setView([20, 10], 2);
+            });
+        }, 10);
+        return div;
+    };
+    backButtonControl.addTo(map);
+}
+function hideSubnatBackButton() {
+    if (backButtonControl) {
+        map.removeControl(backButtonControl);
+        backButtonControl = null;
+    }
 }
 
 // ── CSV loading ──────────────────────────────────────────────────────
@@ -358,14 +528,14 @@ function processCSV(rows) {
     const locNameCol = cols.find(c => /location_name/i.test(c));
 
     csvDataByIso = {};
+    csvDataBySubnat = {};
     const ageSet = new Set();
 
     rows.forEach(row => {
         // Proportion rows only
         if (measureCol && row[measureCol] && row[measureCol].trim() !== 'Proportion') return;
         const iso = (row[isoCol] || '').trim();
-        // Country-level rows only (no underscore = no subnational)
-        if (!iso || iso.includes('_')) return;
+        if (!iso) return;
 
         const mean = parseFloat(row[meanCol]);
         if (isNaN(mean)) return;
@@ -376,14 +546,26 @@ function processCSV(rows) {
         const pop = popCol ? parseFloat(row[popCol]) : null;
         const locName = locNameCol ? (row[locNameCol] || '').trim() : '';
 
-        if (!csvDataByIso[iso]) csvDataByIso[iso] = {};
-        csvDataByIso[iso][age] = {
+        const cell = {
             mean,
             lower: isNaN(lower) ? null : lower,
             upper: isNaN(upper) ? null : upper,
             population: isNaN(pop) ? null : pop,
             location_name: locName
         };
+
+        if (iso.includes('_')) {
+            // Subnational row: iso has form "USA_523" etc; first 3 chars = country
+            const countryIso = iso.slice(0, 3);
+            if (!csvDataBySubnat[countryIso]) csvDataBySubnat[countryIso] = {};
+            if (!csvDataBySubnat[countryIso][locName]) csvDataBySubnat[countryIso][locName] = {};
+            csvDataBySubnat[countryIso][locName][age] = cell;
+        } else {
+            // Country-level row
+            if (!csvDataByIso[iso]) csvDataByIso[iso] = {};
+            csvDataByIso[iso][age] = cell;
+            if (locName) countryNameByIso[iso] = locName;
+        }
         ageSet.add(age);
     });
 
@@ -437,10 +619,25 @@ function orderAgeGroups(arr) {
 ageSelect.addEventListener('change', () => {
     selectedAge = ageSelect.value;
     renderMap();
+    if (subnatLayer) subnatLayer.setStyle(subnatStyle);
 });
 document.getElementById('highlight-subnat').addEventListener('change', (e) => {
     highlightSubnat = e.target.checked;
     renderMap();
+});
+
+// Direct-drilldown click on country tags in the bottom-left note
+document.querySelectorAll('#subnat-note .country-tag[data-iso]').forEach(tag => {
+    tag.addEventListener('click', () => {
+        const iso = tag.dataset.iso;
+        if (iso === 'GBR') { window.location.href = 'constituencies.html'; return; }
+        // Find the country feature in worldGeoJSON, get its bounds, then drill in
+        if (!worldGeoJSON) return;
+        const feat = worldGeoJSON.features.find(f => (f.properties.ISO_A3 || '').trim() === iso);
+        if (!feat) return;
+        const layer = L.geoJSON(feat);
+        loadSubnational(iso, layer.getBounds());
+    });
 });
 </script>
 </body>
