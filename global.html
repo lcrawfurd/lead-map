@@ -103,9 +103,6 @@
         <div class="subtitle">IHME Global Burden of Disease 2021 — Proportion of population with blood lead ≥ 5 µg/dL, by country</div>
     </div>
     <div class="controls">
-        <a href="index.html" class="nav-link">UK County / UA</a>
-        <a href="constituencies.html" class="nav-link">UK Constituencies</a>
-        <a href="sources.html" class="nav-link">Sources & methods</a>
         <div>
             <label for="age-select">Age group:</label>
             <select id="age-select" disabled><option value="">Loading…</option></select>
@@ -122,8 +119,8 @@
     <div><strong>Subnational data available for 14 countries</strong></div>
     <div style="margin-top:6px;">IHME GBD 2021 provides finer geographic detail (states, provinces, counties, etc.) for these countries:</div>
     <div style="margin-top:6px;">
-        <span class="country-tag" data-iso="GBR">United Kingdom (163 units)</span>
         <span class="country-tag" data-iso="USA">United States (51)</span>
+        <span class="country-tag" data-iso="GBR">United Kingdom (216)</span>
         <span class="country-tag" data-iso="JPN">Japan (47)</span>
         <span class="country-tag" data-iso="KEN">Kenya (47)</span>
         <span class="country-tag" data-iso="IDN">Indonesia (34)</span>
@@ -137,7 +134,6 @@
         <span class="country-tag" data-iso="PAK">Pakistan (7)</span>
         <span class="country-tag" data-iso="SWE">Sweden (2)</span>
     </div>
-    <div style="margin-top:8px;">UK drilldown to constituency level: <a href="constituencies.html">View UK constituencies →</a></div>
 </div>
 
 <script>
@@ -221,7 +217,7 @@ info.update = function (props, data) {
     const iso = getIso(props);
     const hasSubnat = SUBNAT_COUNTRIES.has(iso);
     const subnatBadge = hasSubnat
-        ? `<span class="subnat-badge">Subnational data available${iso === 'GBR' ? ' — <a href="constituencies.html" style="color:#e94560; text-decoration:underline;">explore</a>' : ''}</span>`
+        ? `<span class="subnat-badge">Subnational data available — click to drill in</span>`
         : '';
     if (!data) {
         this._div.innerHTML = `<h4>${name}</h4><p class="no-data">No IHME data</p>${subnatBadge}`;
@@ -334,11 +330,6 @@ function onEachFeature(feature, layer) {
         },
         click: function (e) {
             const iso = getIso(feature.properties);
-            if (iso === 'GBR') {
-                // UK uses dedicated constituency view
-                window.location.href = 'constituencies.html';
-                return;
-            }
             if (SUBNAT_COUNTRIES.has(iso)) {
                 loadSubnational(iso, e.target.getBounds());
                 return;
@@ -410,10 +401,12 @@ function getSubnatData(iso, ihme_name) {
 function subnatStyle(feature) {
     const p = feature.properties;
     const data = getSubnatData(p.adm0_a3, p.ihme_name);
+    const isParentFallback = p.match_type === 'parent';
     return {
         fillColor: data ? getColor(data.mean) : '#444',
         weight: 0.8, opacity: 1, color: '#16213e',
-        fillOpacity: data ? 0.9 : 0.5
+        fillOpacity: data ? (isParentFallback ? 0.55 : 0.9) : 0.5,
+        dashArray: isParentFallback ? '2 3' : null
     };
 }
 
@@ -437,19 +430,26 @@ function onEachSubnatFeature(feature, layer) {
 }
 
 function subnatInfoUpdate(props, data) {
-    const subnatName = props.ihme_name || props.shape_name;
+    const shapeName = props.shape_name;
+    const ihmeName = props.ihme_name;
     const country = countryNameByIso[props.adm0_a3] || props.adm0_a3;
+    const isParentFallback = props.match_type === 'parent';
+    const displayName = shapeName;
+    const subtitle = isParentFallback
+        ? `<p class="ci" style="color:#e94560; margin-top:4px;">No direct IHME data — showing value for ${ihmeName}</p>`
+        : '';
     if (!data) {
-        info._div.innerHTML = `<h4>${subnatName} <span style="color:#6c7a89; font-size:0.78rem;">(${country})</span></h4><p class="no-data">No IHME data for this unit</p>`;
+        info._div.innerHTML = `<h4>${displayName} <span style="color:#6c7a89; font-size:0.78rem;">(${country})</span></h4><p class="no-data">No IHME data for this unit</p>`;
         return;
     }
     info._div.innerHTML = `
-        <h4>${subnatName} <span style="color:#6c7a89; font-size:0.78rem;">(${country})</span></h4>
+        <h4>${displayName} <span style="color:#6c7a89; font-size:0.78rem;">(${country})</span></h4>
         <p>Proportion with BLL ≥ 5 µg/dL</p>
         <p class="value">${fmtPct(data.mean)}</p>
         <p class="ci">95% UI: ${fmtPct(data.lower)} – ${fmtPct(data.upper)}</p>
         ${data.population ? `<p class="ci">Population (this age): ${Math.round(data.population).toLocaleString()}</p>` : ''}
         <p class="ci" style="margin-top:4px;">Age group: ${selectedAge || 'N/A'}</p>
+        ${subtitle}
         <p class="source-label">IHME GBD 2021 (subnational)</p>
     `;
 }
@@ -639,7 +639,6 @@ document.getElementById('highlight-subnat').addEventListener('change', (e) => {
 document.querySelectorAll('#subnat-note .country-tag[data-iso]').forEach(tag => {
     tag.addEventListener('click', () => {
         const iso = tag.dataset.iso;
-        if (iso === 'GBR') { window.location.href = 'constituencies.html'; return; }
         // Find the country feature in worldGeoJSON, get its bounds, then drill in
         if (!worldGeoJSON) return;
         const feat = worldGeoJSON.features.find(f => getIso(f.properties) === iso);
