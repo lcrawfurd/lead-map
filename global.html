@@ -154,6 +154,15 @@ const ISO3_FIXUPS = {
     // GeoJSON sometimes has "-99" or empty ISO_A3 for disputed territories
 };
 
+// The geo-countries dataset uses "ISO3166-1-Alpha-3" / "name".
+// Older builds used ISO_A3 / ADMIN. Helpers accept both for resilience.
+function getIso(props) {
+    return (props['ISO3166-1-Alpha-3'] || props.ISO_A3 || props.iso_a3 || props.adm0_a3 || '').trim();
+}
+function getCountryName(props) {
+    return props.name || props.ADMIN || props.admin || 'Unknown';
+}
+
 // ── State ────────────────────────────────────────────────────────────
 let worldGeoJSON = null;
 let csvDataByIso = {};   // iso3 -> { ageGroup: {mean, lower, upper, population, location_name} }
@@ -208,8 +217,8 @@ info.update = function (props, data) {
         this._div.innerHTML = '<h4>Global Lead Exposure</h4><p class="no-data">Hover over a country</p>';
         return;
     }
-    const name = props.ADMIN || props.name || 'Unknown';
-    const iso = props.ISO_A3 || '';
+    const name = getCountryName(props);
+    const iso = getIso(props);
     const hasSubnat = SUBNAT_COUNTRIES.has(iso);
     const subnatBadge = hasSubnat
         ? `<span class="subnat-badge">Subnational data available${iso === 'GBR' ? ' — <a href="constituencies.html" style="color:#e94560; text-decoration:underline;">explore</a>' : ''}</span>`
@@ -272,7 +281,7 @@ fetch('https://cdn.jsdelivr.net/gh/datasets/geo-countries@master/data/countries.
 // ── Data lookup ──────────────────────────────────────────────────────
 function getDataForFeature(props) {
     if (!selectedAge) return null;
-    const iso = (props.ISO_A3 || '').trim();
+    const iso = getIso(props);
     if (!iso || iso === '-99') return null;
     const fixedIso = ISO3_FIXUPS[iso] || iso;
     const country = csvDataByIso[fixedIso];
@@ -293,7 +302,7 @@ function renderMap() {
 
 function featureStyle(feature) {
     const data = getDataForFeature(feature.properties);
-    const iso = (feature.properties.ISO_A3 || '').trim();
+    const iso = getIso(feature.properties);
     const hasSubnat = SUBNAT_COUNTRIES.has(iso);
     const isHighlightedSubnat = hasSubnat && highlightSubnat;
     return {
@@ -309,7 +318,7 @@ function featureStyle(feature) {
 function onEachFeature(feature, layer) {
     layer.on({
         mouseover: function (e) {
-            const iso = (feature.properties.ISO_A3 || '').trim();
+            const iso = getIso(feature.properties);
             const hasSubnat = SUBNAT_COUNTRIES.has(iso);
             e.target.setStyle({
                 weight: hasSubnat ? 3 : 2,
@@ -324,7 +333,7 @@ function onEachFeature(feature, layer) {
             info.update();
         },
         click: function (e) {
-            const iso = (feature.properties.ISO_A3 || '').trim();
+            const iso = getIso(feature.properties);
             if (iso === 'GBR') {
                 // UK uses dedicated constituency view
                 window.location.href = 'constituencies.html';
@@ -633,7 +642,7 @@ document.querySelectorAll('#subnat-note .country-tag[data-iso]').forEach(tag => 
         if (iso === 'GBR') { window.location.href = 'constituencies.html'; return; }
         // Find the country feature in worldGeoJSON, get its bounds, then drill in
         if (!worldGeoJSON) return;
-        const feat = worldGeoJSON.features.find(f => (f.properties.ISO_A3 || '').trim() === iso);
+        const feat = worldGeoJSON.features.find(f => getIso(f.properties) === iso);
         if (!feat) return;
         const layer = L.geoJSON(feat);
         loadSubnational(iso, layer.getBounds());
