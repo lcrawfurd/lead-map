@@ -205,6 +205,7 @@
                 <option value="pre_1945">Housing pre-1945 (lead-pigment peak)</option>
                 <option value="pre_1900">Housing pre-1900 (Victorian)</option>
                 <option value="mines">Historic metal mines (Macklin 2023)</option>
+                <option value="topsoil">Topsoil lead — BGS UKTS (mg/kg)</option>
             </select>
         </div>
         <div id="age-wrap">
@@ -254,6 +255,7 @@
                         <th data-sort="imd" class="num">IMD decile</th>
                         <th data-sort="pre1972" class="num">% pre-1972</th>
                         <th data-sort="mines" class="num">Mines</th>
+                        <th data-sort="topsoil_pb" class="num">Topsoil Pb (mg/kg)</th>
                     </tr>
                 </thead>
                 <tbody id="rankings-tbody"></tbody>
@@ -261,7 +263,7 @@
         </div>
         <div id="rankings-footer">
             <div>Showing <span id="rankings-count">0</span> of <span id="rankings-total">0</span> constituencies</div>
-            <div>IMD decile: 1 = most deprived. Rate is modelled children BLL ≥ 5 µg/dL per 1,000 aged 0–19.</div>
+            <div>IMD decile: 1 = most deprived. Rate is modelled children BLL ≥ 5 µg/dL per 1,000 aged 0–19. Topsoil Pb: BGS UKTS mean (mg/kg); — = outside survey coverage (parts of Scotland).</div>
         </div>
     </div>
 </div>
@@ -279,8 +281,9 @@ let dataScale = 100;
 // e.g. housingData['Kensington and Bayswater'] = { pct_pre_1945: 71.8, ... }
 let housingData = {};
 let minesData = {};
+let topsoilData = {};
 let profileData = {};   // PCON24NM -> merged row from constituency_profile.csv
-let selectedIndicator = 'bll';  // 'bll' | 'pre_1900' | 'pre_1945' | 'pre_1972' | 'pre_1992' | 'mines'
+let selectedIndicator = 'bll';  // 'bll' | 'pre_1900' | 'pre_1945' | 'pre_1972' | 'pre_1992' | 'mines' | 'topsoil'
 
 const NATIONS = ['England', 'Scotland', 'Wales', 'Northern Ireland'];
 
@@ -330,6 +333,14 @@ const INDICATORS = {
         // 0 = subdued teal (clearly distinct from no-data grey AND from "has mines" pinks)
         colors: ['#2a3a4a', '#fde0dd', '#fcc5c0', '#fa9fb5', '#f768a1', '#dd3497', '#ae017e', '#7a0177'],
         breaks: [0, 1, 2, 3, 5, 8, 12, 20],
+    },
+    topsoil: {
+        label: 'Topsoil lead — BGS UKTS',
+        legendTitle: 'Topsoil Pb (mg/kg, mean)',
+        subtitle: 'BGS UK Compiled Topsoil Survey (UKTS) 2024 — mean Pb concentration in topsoil, 500m grid, 57,966 samples. England, Wales, Northern Ireland and part of Scotland. C4SL residential threshold 80 mg/kg; SGV residential 450 mg/kg.',
+        unit: 'mg/kg',
+        colors: ['#ffffcc', '#fed976', '#feb24c', '#fd8d3c', '#fc4e2a', '#e31a1c', '#800026'],
+        breaks: [0, 40, 75, 150, 250, 400, 600],
     }
 };
 
@@ -351,6 +362,7 @@ function getColor(val) {
 function fmtVal(val) {
     if (val == null || isNaN(val)) return '?';
     if (selectedIndicator === 'mines') return val.toString();
+    if (selectedIndicator === 'topsoil') return Math.round(val) + ' mg/kg';
     const pct = selectedIndicator === 'bll' ? val * dataScale : val;
     return pct.toFixed(1) + '%';
 }
@@ -365,7 +377,7 @@ function isHousingIndicator(ind) {
 const map = L.map('map', { center: [55.3, -3.5], zoom: 6, zoomControl: true });
 
 L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/attributions">CARTO</a> | Data: <a href="https://ghdx.healthdata.org/record/ihme-data/gbd-2021-lead-exposure-estimates-1990-2021">IHME GBD 2021</a> | Boundaries: <a href="https://geoportal.statistics.gov.uk/">ONS</a>',
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/attributions">CARTO</a> | Data: <a href="https://ghdx.healthdata.org/record/ihme-data/gbd-2021-lead-exposure-estimates-1990-2021">IHME GBD 2021</a> | <a href="https://www.bgs.ac.uk/datasets/uk-topsoil-geochemistry/">BGS UKTS</a> | Boundaries: <a href="https://geoportal.statistics.gov.uk/">ONS</a>',
     subdomains: 'abcd', maxZoom: 14
 }).addTo(map);
 
@@ -415,6 +427,18 @@ info.update = function (props, data, source, ladName) {
         return;
     }
 
+    if (selectedIndicator === 'topsoil') {
+        this._div.innerHTML = `
+            <h4>${label}</h4>
+            <p>Topsoil Pb — mean across constituency</p>
+            <p class="value">${Math.round(data.mean)} mg/kg</p>
+            ${data.p95 != null ? `<p class="ci">95th pct: ${Math.round(data.p95)} mg/kg</p>` : ''}
+            ${data.n_pixels ? `<p class="ci">${data.n_pixels} × 500m grid cells</p>` : ''}
+            <p class="source-label">Source: BGS UKTS (2024)</p>
+        `;
+        return;
+    }
+
     const isNationFallback = source === 'nation' || source === 'national (UK)';
     const isCountyMatch = source === 'county/UA';
     const popStr = (!isNationFallback && data.population) ? `<p class="ci">Population: ${Math.round(data.population).toLocaleString()}</p>` : '';
@@ -456,6 +480,8 @@ legend.update = function () {
             if (lo === 0) range = '0';
             else if (hi != null) range = (hi - lo === 1) ? `${lo}` : `${lo}–${hi - 1}`;
             else range = `≥ ${lo}`;
+        } else if (selectedIndicator === 'topsoil') {
+            range = hi != null ? `${lo}–${hi} mg/kg` : `≥ ${lo} mg/kg`;
         } else {
             range = hi != null ? `${lo}–${hi}%` : `≥ ${lo}%`;
         }
@@ -463,6 +489,9 @@ legend.update = function () {
     }
     if (selectedIndicator !== 'mines') {
         html += `<div class="legend-item" style="margin-top:6px; border-top:1px solid #0f3460; padding-top:6px;"><span class="legend-color" style="background:#444"></span>No data</div>`;
+    }
+    if (selectedIndicator === 'topsoil') {
+        html += `<div style="font-size:0.7rem; color:#6c7a89; margin-top:6px;">Parts of Scotland not covered by BGS UKTS survey.</div>`;
     }
     if (selectedIndicator === 'bll') {
         html += `<div class="legend-item"><span class="legend-color" style="background:rgba(254,217,118,0.35); border:1px dashed #0f3460;"></span>Nation-level estimate</div>`;
@@ -484,6 +513,15 @@ function getDataForFeature(props) {
                 data: { mean: h[key], n_dwellings: h.n_dwellings },
                 source: 'constituency'
             };
+        }
+        return { data: null, source: null };
+    }
+
+    // Topsoil Pb indicator (BGS UKTS, mg/kg mean)
+    if (selectedIndicator === 'topsoil') {
+        const t = topsoilData[name];
+        if (t && t.pb_mean != null) {
+            return { data: { mean: t.pb_mean, p95: t.pb_p95, n_pixels: t.n_pixels }, source: 'constituency' };
         }
         return { data: null, source: null };
     }
@@ -540,6 +578,7 @@ fetch('uk_constituencies.json')
         loadHousingCSV();
         loadMinesCSV();
         loadProfileCSV();
+        loadTopsoilCSV();
     })
     .catch(err => {
         document.getElementById('loading-msg').textContent = 'Error loading boundaries: ' + err.message;
@@ -578,6 +617,21 @@ function loadProfileCSV() {
             console.log(`Loaded profile data for ${Object.keys(profileData).length} constituencies`);
         })
         .catch(err => console.error('Could not load profile CSV:', err));
+}
+
+// ── Load BGS UKTS topsoil Pb CSV ─────────────────────────────────────
+function loadTopsoilCSV() {
+    fetch('constituency_topsoil_pb.csv')
+        .then(r => { if (!r.ok) throw new Error('topsoil CSV not found'); return r.text(); })
+        .then(text => {
+            const results = Papa.parse(text, { header: true, skipEmptyLines: true, dynamicTyping: true });
+            results.data.forEach(row => {
+                if (row.PCON24NM) topsoilData[row.PCON24NM] = row;
+            });
+            console.log(`Loaded topsoil Pb data for ${Object.keys(topsoilData).length} constituencies`);
+            if (selectedIndicator === 'topsoil') renderMap();
+        })
+        .catch(err => console.error('Could not load topsoil CSV:', err));
 }
 
 // ── Load combined UK mines CSV (Macklin + EA IoCMWF) ────────────────
@@ -878,6 +932,22 @@ function openProfile(name) {
         </div></section>`;
     else html += `<section><h3>Historic metal mining</h3><p class="empty">No mines recorded in this constituency.</p></section>`;
 
+    // ── Topsoil lead (BGS UKTS) ──
+    const topsoil = topsoilData[name];
+    if (topsoil && topsoil.pb_mean != null) {
+        let soilRows = '';
+        soilRows += row('Mean Pb', Math.round(topsoil.pb_mean) + ' mg/kg');
+        soilRows += row('95th percentile Pb', Math.round(topsoil.pb_p95) + ' mg/kg');
+        soilRows += row('500m grid cells sampled', topsoil.n_pixels);
+        html += `<section><h3>Topsoil lead (BGS UKTS)</h3>${soilRows}
+            <div style="font-size:0.7rem; color:#6c7a89; margin-top:6px;">
+                BGS UK Compiled Topsoil Survey 2024; 500m raster, zonal mean across constituency.
+                Residential thresholds: C4SL 80 mg/kg · SGV 450 mg/kg.
+            </div></section>`;
+    } else {
+        html += `<section><h3>Topsoil lead (BGS UKTS)</h3><p class="empty">No BGS UKTS coverage (parts of Scotland excluded from survey).</p></section>`;
+    }
+
     profileBody.innerHTML = html;
     profilePanel.classList.add('open');
     profilePanel.setAttribute('aria-hidden', 'false');
@@ -929,6 +999,7 @@ function getRankingRows() {
             imd: numOrNull(p.imd_decile),
             pre1972: numOrNull(p.pct_pre_1972),
             mines: numOrNull(p.n_mines_total) || 0,
+            topsoil_pb: topsoilData[p.PCON24NM] ? numOrNull(topsoilData[p.PCON24NM].pb_mean) : null,
         }));
 }
 
@@ -976,9 +1047,10 @@ function renderRankings() {
             <td class="num">${r.imd != null ? r.imd : '—'}</td>
             <td class="num">${fmt(r.pre1972, 1)}</td>
             <td class="num">${r.mines || 0}</td>
+            <td class="num">${r.topsoil_pb != null ? Math.round(r.topsoil_pb) : '—'}</td>
         </tr>`;
     }).join('');
-    rankingsTbody.innerHTML = rowsHTML || `<tr><td colspan="11" style="padding:30px; text-align:center; color:#6c7a89;">No matches</td></tr>`;
+    rankingsTbody.innerHTML = rowsHTML || `<tr><td colspan="12" style="padding:30px; text-align:center; color:#6c7a89;">No matches</td></tr>`;
     rankingsCount.textContent = filtered.length;
     rankingsTotal.textContent = all.length;
 
@@ -1063,7 +1135,7 @@ document.getElementById('rankings-export').addEventListener('click', () => {
     const rows = sortRankings(getRankingRows());
     const header = ['rank', 'constituency', 'nation', 'local_authority', 'mp', 'mp_party',
                     'children_0_19', 'estimated_bll_5plus', 'rate_per_1000',
-                    'imd_decile', 'pct_pre_1972', 'n_mines'];
+                    'imd_decile', 'pct_pre_1972', 'n_mines', 'topsoil_pb_mgkg'];
     const esc = v => {
         if (v == null) return '';
         const s = String(v);
@@ -1073,7 +1145,8 @@ document.getElementById('rankings-export').addEventListener('click', () => {
     rows.forEach((r, i) => {
         lines.push([
             i + 1, r.name, r.nation, r.la, r.mp, r.mp_party,
-            r.children, r.affected, r.rate, r.imd, r.pre1972, r.mines
+            r.children, r.affected, r.rate, r.imd, r.pre1972, r.mines,
+            r.topsoil_pb != null ? Math.round(r.topsoil_pb) : ''
         ].map(esc).join(','));
     });
     const blob = new Blob([lines.join('\n')], { type: 'text/csv;charset=utf-8;' });
