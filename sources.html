@@ -177,6 +177,43 @@ hazard (which includes lead), disrepair of key components, lacks modern
 facilities, or inadequate thermal comfort.
 </p>
 
+<h3>Topsoil lead — BGS UK Compiled Topsoil Survey (UKTS)</h3>
+<p>
+Source: <a href="https://www.bgs.ac.uk/datasets/uk-topsoil-geochemistry/">BGS UK Compiled Topsoil Survey (UKTS)</a>,
+released August 2024 under the Open Government Licence.
+The UKTS combines multiple BGS geochemical surveys (G-BASE and related programmes)
+into a single gridded product: 57,966 shallow topsoil samples (0–15 cm depth,
+analysed by X-ray fluorescence) interpolated to a 500 m raster in EPSG:27700,
+with values in mg/kg dry weight for 41 elements including lead (Pb).
+</p>
+<p>
+The constituency-level values on this map are the <strong>mean Pb concentration</strong>
+across all 500 m raster cells whose centroid falls within each constituency boundary,
+computed with rasterio zonal masking. The 95th-percentile cell value is also
+stored (visible in the constituency profile panel) to capture local hotspots within
+each constituency that the mean may mask.
+</p>
+<blockquote>
+<strong>Coverage:</strong> The UKTS covers England, Wales, Northern Ireland and
+<em>part</em> of Scotland. Approximately 30 Scottish constituencies — mainly
+northern and north-eastern Scotland (Aberdeen, Highlands, Borders, Fife, Edinburgh
+and surrounding areas) — fall outside the survey footprint and are shown as
+no-data (grey) on this layer.
+</blockquote>
+<p>Contextual thresholds used in the profile panel:</p>
+<table>
+    <tr><th>Threshold</th><th>Value</th><th>Context</th></tr>
+    <tr><td>C4SL residential</td><td>80 mg/kg</td><td>UK Child-specific Assessment Level for sensitive land use; exceedance triggers further investigation under the Contaminated Land regime</td></tr>
+    <tr><td>SGV residential</td><td>450 mg/kg</td><td>UK Soil Guideline Value (residential with plant uptake pathway); statutory remediation trigger</td></tr>
+</table>
+<blockquote>
+Note that the UKTS raster represents <em>shallow topsoil</em> (the A horizon,
+typically 0–15 cm); deeper horizons and in-building dust/paint are separate
+exposure pathways. Urban "hotspot" cells in central London reflect Victorian
+industrial contamination, atmospheric deposition from leaded petrol, and
+historic paint/pipe residues in soils, not necessarily current indoor exposure.
+</blockquote>
+
 <h3>Historic metal mines</h3>
 <p>The map combines two open inventories, deduplicated by ~500 m proximity:</p>
 <ul>
@@ -237,6 +274,7 @@ cross-UK comparisons).
     <li><strong>Modelled children with BLL ≥ 5 is illustrative</strong>. It's a rough scaling of the IHME national total using housing-age and IMD risk weights from US CDC literature. Actual UK exposure rates and risk gradients may differ.</li>
     <li><strong>Housing data is uneven across UK nations</strong>. England & Wales have rich VOA data with all four cutoffs; Scotland has only pre-1945 from SHCS LA tables; NI has all four cutoffs but applied uniformly NI-wide (no sub-NI data exists).</li>
     <li><strong>Mines layer is not exhaustive</strong>. Only Macklin + EA closed waste — actual UK historic-mine inventory (BRITPITS) is much larger but licensed.</li>
+    <li><strong>Topsoil Pb is a constituency mean of a coarse raster</strong>. The 500 m grid cannot resolve garden-to-garden or street-to-street variation. The 95th-percentile cell value (in the profile panel) gives a sense of within-constituency spread, but neither metric replaces a site-specific soil test. ~30 northern Scottish constituencies have no UKTS coverage.</li>
     <li><strong>Ward-weighting is an approximation</strong>. Constituencies that span multiple LADs are aggregated by ward count rather than dwelling count — fine for stable areas, less reliable in complex London/metro splits.</li>
 </ul>
 
@@ -247,7 +285,8 @@ cross-UK comparisons).
     <tr><td><code>IHME_GBD_2021_LEAD_RISK_*.CSV</code></td><td>BLL values by area and age group</td></tr>
     <tr><td><code>constituency_prewar_housing.csv</code></td><td>Housing-age cutoffs per constituency (E&W: VOA, Scot: SHCS, NI: NIHCS)</td></tr>
     <tr><td><code>constituency_uk_mines.csv</code></td><td>Mine counts (Macklin + EA IoCMWF, deduplicated)</td></tr>
-    <tr><td><code>constituency_profile.csv</code></td><td>Single merged file all of the above plus MP, IMD, child population, model estimate</td></tr>
+    <tr><td><code>constituency_topsoil_pb.csv</code></td><td>BGS UKTS zonal statistics: mean + 95th-pct Pb (mg/kg) and pixel count per constituency</td></tr>
+    <tr><td><code>constituency_profile.csv</code></td><td>Single merged file: MP, IMD, child population, model estimate, housing age, mines</td></tr>
 </table>
 
 <p style="margin-top: 32px; font-size: 0.85rem; color: #6c7a89;">
