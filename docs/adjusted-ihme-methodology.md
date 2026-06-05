@@ -1,7 +1,7 @@
 # Adjusted-IHME constituency model — design & methodology
 
 **Date:** 2026-06-05
-**Status:** approved design, pending implementation
+**Status:** implemented and live
 **Author:** Lee Crawfurd (with Claude Code)
 
 ## Problem
