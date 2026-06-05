@@ -28,6 +28,7 @@ This repo hosts two independent maps that share the same IHME data source but ot
 ```
 python3 build_constituency_mapping.py   # constituency -> county/UA mapping (needs shapely)
 python3 regress_ihme_predictors.py      # regression diagnostics (needs statsmodels/pandas)
+python3 backfill_seats.py               # fill 3 newly-drawn 2024 seats the upstream join missed
 python3 build_adjusted_ihme.py          # fits weights + writes adjusted columns (needs numpy)
 ```
 

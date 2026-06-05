@@ -126,6 +126,17 @@ Map and rankings agree.
 Changing the standalone housing/mines/topsoil overlay layers; the global and
 county/UA (`index.html`) maps.
 
+## Known data gaps
+
+Three newly-drawn 2024 seats came through the upstream profile build as near-empty
+stubs (the name-based join to population/IMD/MP tables missed them; only the
+spatially-joined mines attached): **Montgomeryshire and Glyndwr**, **Bridlington and
+The Wolds**, **South Holland and The Deepings**. `backfill_seats.py` restores them —
+child population is **estimated** from Local Intelligence Hub / House of Commons
+Library age bands × total population (within a few %); IMD and housing remain blank
+and are imputed to the area/nation mean. A code-based (GSS) join upstream would
+remove the need for this.
+
 ## Update log
 
 - 2026-06-05: within-area weights switched from imported US odds ratios to a

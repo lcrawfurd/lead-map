@@ -234,6 +234,13 @@
             <h2 id="rankings-title">Constituency rankings — estimated childhood lead exposure</h2>
             <div class="controls">
                 <input type="text" id="rankings-search" placeholder="Search constituency or LA…" autocomplete="off" />
+                <select id="rankings-nation" title="Filter by nation">
+                    <option value="">All nations</option>
+                    <option value="England">England</option>
+                    <option value="Scotland">Scotland</option>
+                    <option value="Wales">Wales</option>
+                    <option value="Northern Ireland">Northern Ireland</option>
+                </select>
                 <button id="rankings-export" type="button">Download CSV</button>
                 <button id="rankings-close" type="button">Close ✕</button>
             </div>
@@ -1019,6 +1026,7 @@ document.title = 'UK Constituency Map — ' + INDICATORS[selectedIndicator].labe
 const rankingsBackdrop = document.getElementById('rankings-backdrop');
 const rankingsTbody = document.getElementById('rankings-tbody');
 const rankingsSearch = document.getElementById('rankings-search');
+const rankingsNation = document.getElementById('rankings-nation');
 const rankingsCount = document.getElementById('rankings-count');
 const rankingsTotal = document.getElementById('rankings-total');
 
@@ -1075,12 +1083,12 @@ function renderRankings() {
     all.forEach((r, i) => { r._rank = i + 1; });
 
     const q = (rankingsSearch.value || '').trim().toLowerCase();
-    const filtered = q
-        ? all.filter(r =>
-            r.name.toLowerCase().includes(q) ||
-            r.la.toLowerCase().includes(q) ||
-            (r.mp || '').toLowerCase().includes(q))
-        : all;
+    const nat = rankingsNation.value || '';
+    const filtered = all.filter(r =>
+        (!nat || r.nation === nat) &&
+        (!q || r.name.toLowerCase().includes(q) ||
+               r.la.toLowerCase().includes(q) ||
+               (r.mp || '').toLowerCase().includes(q)));
 
     const fmt = (v, d) => (v == null) ? '—' : (d != null ? (+v).toFixed(d) : Math.round(+v).toLocaleString());
     const rowsHTML = filtered.map(r => {
@@ -1158,6 +1166,7 @@ document.querySelectorAll('#rankings-table th[data-sort]').forEach(th => {
 
 // Search filter
 rankingsSearch.addEventListener('input', renderRankings);
+rankingsNation.addEventListener('change', renderRankings);
 
 // Row click -> zoom to constituency, open profile
 rankingsTbody.addEventListener('click', (e) => {
