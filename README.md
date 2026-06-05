@@ -18,9 +18,17 @@ This repo hosts two independent maps that share the same IHME data source but ot
 
 ## Indicators
 
-- Blood lead ≥ 5 µg/dL (IHME GBD 2021, county/UA proxy)
+- **Adjusted IHME — modelled BLL ≥ 5** (default): each area's IHME GBD 2021 blood-lead total (England county/UA; Wales/Scotland/NI nation) re-allocated within-area by housing age + IMD. The single figure used by the map, rankings and profile. See [docs/adjusted-ihme-methodology.md](docs/adjusted-ihme-methodology.md).
+- Blood lead ≥ 5 µg/dL — raw IHME GBD 2021 (county/UA proxy; devolved nations flat), available as a toggle
 - Housing built pre-1900 / pre-1945 / pre-1972 / pre-1992 (VOA CTSOP 2023, England & Wales)
 - Historic metal mines (Macklin et al. 2023 + EA Inventory of Closed Mining Waste Facilities 2014)
+
+## Rebuilding the data
+
+```
+python3 build_constituency_mapping.py   # constituency -> county/UA mapping (needs shapely)
+python3 build_adjusted_ihme.py          # adjusted-IHME columns in constituency_profile.csv
+```
 
 ## Features
 

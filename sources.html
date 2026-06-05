@@ -99,20 +99,32 @@ match). Where no local data exists, falls back to nation-level (England,
 Scotland, Wales, NI) shown with reduced opacity.
 </blockquote>
 
-<h3>Modelled children with BLL ≥ 5</h3>
+<h3>Adjusted IHME — modelled children with BLL ≥ 5</h3>
 <p>
-A constituency-level allocation of the IHME national total for children 0–19
-(~352,000 in the UK), produced in <code>lead_exposure_model_FINAL.py</code>
-in this project. Risk weights:
+The default map layer and the rankings table. A <strong>best-data-per-area</strong>
+allocation: each area's IHME GBD 2021 blood-lead total is re-allocated across its
+constituencies by housing-age and deprivation risk. The baseline area is the finest
+IHME geography available:
 </p>
 <ul>
-    <li>Pre-1950 housing share — odds ratio 1.92 (US CDC literature)</li>
-    <li>IMD decile — odds ratio 1.44 for high deprivation</li>
+    <li><strong>England</strong> — the parent county / unitary authority (keeps local variation; e.g. Blackpool ≈ 3.5%, Surrey ≈ 1.1%).</li>
+    <li><strong>Wales, Scotland, Northern Ireland</strong> — the nation (IHME publishes no sub-national estimate). Nation baselines: Wales 4.7%, NI 3.4%, Scotland 3.2% vs England 1.6%.</li>
 </ul>
 <p>
-Each constituency's relative risk × child population gives a risk-weighted
-population; the IHME national total is allocated proportionally. This is
-illustrative; not a clinical estimate.
+Within each area, constituencies are weighted by relative risk — pre-1945 housing
+share (odds ratio 1.92, US CDC literature) and IMD decile (odds ratio 1.44 for high
+deprivation) — and the area's IHME child total is allocated proportionally. Because
+the area total is preserved, this <em>re-levels</em> the housing/IMD model onto IHME
+baselines rather than inflating it. Built by <code>build_adjusted_ihme.py</code>
+(constituency&nbsp;→&nbsp;county mapping by <code>build_constituency_mapping.py</code>).
+This is illustrative; not a clinical estimate.
+</p>
+<p style="font-size:0.85em; color:#555;">
+The earlier version scaled a single UK total by housing/IMD, discarding the
+country baselines — which is why Wales looked worst on the raw map but mid-table in
+the rankings. The adjusted figure reconciles the two. The <em>raw IHME</em> layer
+(England county/UA proxy; devolved nations shown flat at the nation value) remains
+available as a toggle.
 </p>
 
 <h3>Housing built pre-1900 / pre-1945 / pre-1972 / pre-1992</h3>
@@ -270,12 +282,13 @@ cross-UK comparisons).
 
 <h2>Methodology notes & known limitations</h2>
 <ul>
-    <li><strong>BLL is a county-level proxy</strong>. IHME doesn't publish constituency-level BLL; the value shown is the parent county / UA.</li>
-    <li><strong>Modelled children with BLL ≥ 5 is illustrative</strong>. It's a rough scaling of the IHME national total using housing-age and IMD risk weights from US CDC literature. Actual UK exposure rates and risk gradients may differ.</li>
+    <li><strong>BLL is a county-level proxy</strong>. IHME doesn't publish constituency-level BLL; the England baseline is the parent county / UA, and Wales/Scotland/NI use a single nation value.</li>
+    <li><strong>The adjusted figure inherits IHME's cross-nation gradient</strong>. The headline that Wales ≈ 3× England rests on IHME's modelled nation estimates from sparse UK blood-lead data; treat the levels with caution. Within Wales/Scotland/NI there is no sub-national IHME, so within-nation variation comes only from housing age and IMD — those nations look fairly even on the map, but now at the right level. Illustrative, not a clinical estimate.</li>
     <li><strong>Housing data is uneven across UK nations</strong>. England & Wales have rich VOA data with all four cutoffs; Scotland has only pre-1945 from SHCS LA tables; NI has all four cutoffs but applied uniformly NI-wide (no sub-NI data exists).</li>
     <li><strong>Mines layer is not exhaustive</strong>. Only Macklin + EA closed waste — actual UK historic-mine inventory (BRITPITS) is much larger but licensed.</li>
     <li><strong>Topsoil Pb is a constituency mean of a coarse raster</strong>. The 500 m grid cannot resolve garden-to-garden or street-to-street variation. The 95th-percentile cell value (in the profile panel) gives a sense of within-constituency spread, but neither metric replaces a site-specific soil test. ~30 northern Scottish constituencies have no UKTS coverage.</li>
     <li><strong>Ward-weighting is an approximation</strong>. Constituencies that span multiple LADs are aggregated by ward count rather than dwelling count — fine for stable areas, less reliable in complex London/metro splits.</li>
+    <li><strong>Constituency → county mapping</strong>. Each 2024 constituency is matched to its IHME county/UA via its local authority (two-tier shire districts resolved to their county); a handful of cross-boundary seats are assigned to the county holding their populated core.</li>
 </ul>
 
 <h2>Data files in this repository</h2>

@@ -137,6 +137,26 @@ def main():
     bad = [k for k, v in mapping.items() if v not in NATIONS and v not in ihme]
     print("  England seats mapped to a non-IHME county (should be 0):", bad or "none")
     _validate(mapping)
+    _patch_html(mapping)
+
+
+def _patch_html(mapping):
+    """Rewrite the inline CONSTITUENCY_TO_COUNTY const used by the raw-IHME layer."""
+    import re
+    path = "constituencies.html"
+    html = open(path).read()
+    literal = json.dumps(mapping, sort_keys=True, ensure_ascii=False, separators=(",", ":"))
+    new_html, n = re.subn(r"const CONSTITUENCY_TO_COUNTY = \{.*?\};",
+                          "const CONSTITUENCY_TO_COUNTY = " + literal + ";",
+                          html, count=1, flags=re.S)
+    if n != 1:
+        print("  WARNING: CONSTITUENCY_TO_COUNTY const not found in constituencies.html")
+        return
+    if new_html != html:
+        open(path, "w").write(new_html)
+        print("  Patched CONSTITUENCY_TO_COUNTY in constituencies.html")
+    else:
+        print("  constituencies.html already up to date")
 
 
 def _validate(mapping):
