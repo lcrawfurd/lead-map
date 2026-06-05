@@ -190,7 +190,7 @@
 <div id="header">
     <div>
         <h1>UK Constituency Map — Lead Risk Indicators</h1>
-        <div class="subtitle" id="header-subtitle">IHME Global Burden of Disease 2021 — Proportion with Blood Lead ≥ 5 µg/dL</div>
+        <div class="subtitle" id="header-subtitle">Adjusted IHME — IHME GBD 2021 blood-lead prevalence (England county/UA, devolved nations) re-allocated within each area by UK-fitted weights on housing age & deprivation</div>
     </div>
     <div class="controls">
         <a href="index.html" class="nav-link">View by County / UA</a>
@@ -199,7 +199,8 @@
         <div>
             <label for="indicator-select">Indicator:</label>
             <select id="indicator-select">
-                <option value="bll" selected>Blood lead ≥ 5 µg/dL</option>
+                <option value="bll_adj" selected>Adjusted IHME — modelled BLL ≥ 5</option>
+                <option value="bll">Blood lead ≥ 5 (raw IHME)</option>
                 <option value="pre_1992">Housing pre-1992 (lead paint era)</option>
                 <option value="pre_1972">Housing pre-1972 (lead pipes era)</option>
                 <option value="pre_1945">Housing pre-1945 (lead-pigment peak)</option>
@@ -233,12 +234,19 @@
             <h2 id="rankings-title">Constituency rankings — estimated childhood lead exposure</h2>
             <div class="controls">
                 <input type="text" id="rankings-search" placeholder="Search constituency or LA…" autocomplete="off" />
+                <select id="rankings-nation" title="Filter by nation">
+                    <option value="">All nations</option>
+                    <option value="England">England</option>
+                    <option value="Scotland">Scotland</option>
+                    <option value="Wales">Wales</option>
+                    <option value="Northern Ireland">Northern Ireland</option>
+                </select>
                 <button id="rankings-export" type="button">Download CSV</button>
                 <button id="rankings-close" type="button">Close ✕</button>
             </div>
         </div>
         <div id="rankings-subtitle">
-            Modelled estimates combining IHME GBD 2021 regional BLL prevalence with VOA housing-age data, IMD deprivation, and 2021 Census child population. Click a column header to sort; click a row to open the constituency on the map.
+            Adjusted-IHME estimates: each area's IHME GBD 2021 blood-lead total (England county/UA; Wales/Scotland/NI nation) re-allocated across its constituencies by housing age + IMD deprivation, on 2021 Census child population. Same figure as the default map layer. Click a column header to sort; click a row to open the constituency on the map.
         </div>
         <div id="rankings-table-wrap">
             <table id="rankings-table">
@@ -250,8 +258,8 @@
                         <th data-sort="la">Local authority</th>
                         <th data-sort="mp">MP</th>
                         <th data-sort="children" class="num">Children 0–19</th>
-                        <th data-sort="affected" class="num sorted">Est. affected (BLL ≥ 5)</th>
-                        <th data-sort="rate" class="num">Rate / 1,000</th>
+                        <th data-sort="affected" class="num">Est. affected (adj.)</th>
+                        <th data-sort="rate" class="num sorted">Rate / 1,000 (adj.)</th>
                         <th data-sort="imd" class="num">IMD decile</th>
                         <th data-sort="pre1972" class="num">% pre-1972</th>
                         <th data-sort="mines" class="num">Mines</th>
@@ -263,7 +271,7 @@
         </div>
         <div id="rankings-footer">
             <div>Showing <span id="rankings-count">0</span> of <span id="rankings-total">0</span> constituencies</div>
-            <div>IMD decile: 1 = most deprived. Rate is modelled children BLL ≥ 5 µg/dL per 1,000 aged 0–19. Topsoil Pb: BGS UKTS mean (mg/kg); — = outside survey coverage (parts of Scotland).</div>
+            <div>IMD decile: 1 = most deprived. Rate is adjusted-IHME modelled children BLL ≥ 5 µg/dL per 1,000 aged 0–19. Topsoil Pb: BGS UKTS mean (mg/kg); — = outside survey coverage (parts of Scotland).</div>
         </div>
     </div>
 </div>
@@ -283,16 +291,25 @@ let housingData = {};
 let minesData = {};
 let topsoilData = {};
 let profileData = {};   // PCON24NM -> merged row from constituency_profile.csv
-let selectedIndicator = 'bll';  // 'bll' | 'pre_1900' | 'pre_1945' | 'pre_1972' | 'pre_1992' | 'mines' | 'topsoil'
+let selectedIndicator = 'bll_adj';  // 'bll_adj' | 'bll' | 'pre_1900' | 'pre_1945' | 'pre_1972' | 'pre_1992' | 'mines' | 'topsoil'
 
 const NATIONS = ['England', 'Scotland', 'Wales', 'Northern Ireland'];
 
 // Indicator definitions
 const INDICATORS = {
+    bll_adj: {
+        label: 'Adjusted IHME — modelled BLL ≥ 5',
+        legendTitle: '% children BLL ≥ 5 (adjusted)',
+        subtitle: 'Adjusted IHME — IHME GBD 2021 blood-lead prevalence (England county/UA, devolved nations) re-allocated within each area by UK-fitted weights on housing age & deprivation',
+        unit: '%',
+        colors: ['#ffffb2', '#fed976', '#feb24c', '#fd8d3c', '#f03b20', '#bd0026'],
+        breaks: [0, 1, 2, 3, 4, 5],
+        source: 'IHME GBD 2021 + VOA/IMD model'
+    },
     bll: {
-        label: 'Blood lead ≥ 5 µg/dL',
+        label: 'Blood lead ≥ 5 (raw IHME)',
         legendTitle: '% with BLL ≥ 5 µg/dL',
-        subtitle: 'IHME Global Burden of Disease 2021 — Proportion with Blood Lead ≥ 5 µg/dL',
+        subtitle: 'IHME Global Burden of Disease 2021 — Proportion with Blood Lead ≥ 5 µg/dL (raw; England county/UA proxy, devolved nations flat nation value)',
         unit: '%',
         colors: ['#ffffb2', '#fed976', '#feb24c', '#fd8d3c', '#f03b20', '#bd0026'],
         breaks: [0, 1, 2, 3, 4, 5],
@@ -344,9 +361,10 @@ const INDICATORS = {
     }
 };
 
-// ── Spatial mapping: constituency -> county/UA with IHME data ──
+// ── constituency -> IHME county/UA (England) or nation (W/S/NI) ──
+// Generated by build_constituency_mapping.py from 2024 boundaries + la_name. Do not hand-edit.
 // Pre-computed using centroid-in-polygon matching against county/UA boundaries
-const CONSTITUENCY_TO_COUNTY = {"Aberavon":"Wales","Aberconwy":"Wales","Aberdeen North":"Scotland","Aberdeen South":"Scotland","Airdrie and Shotts":"Scotland","Aldershot":"Hampshire","Aldridge-Brownhills":"Walsall","Altrincham and Sale West":"Trafford","Alyn and Deeside":"Wales","Amber Valley":"Derbyshire","Angus":"Scotland","Arfon":"Wales","Argyll and Bute":"Scotland","Arundel and South Downs":"West Sussex","Ashfield":"Nottinghamshire","Ashford":"Kent","Ashton-under-Lyne":"Tameside","Aylesbury":"Buckinghamshire","Ayr, Carrick and Cumnock":"Scotland","Banbury":"Northamptonshire","Banff and Buchan":"Scotland","Barking":"Barking and Dagenham","Barnsley Central":"Barnsley","Barnsley East":"Barnsley","Barrow and Furness":"Cumbria","Basildon and Billericay":"Essex","Basingstoke":"Hampshire","Bassetlaw":"Nottinghamshire","Bath":"Bath and North East Somerset","Batley and Spen":"Kirklees","Battersea":"Wandsworth","Beaconsfield":"Buckinghamshire","Beckenham":"Bromley","Bedford":"Bedford","Belfast East":"Northern Ireland","Belfast North":"Northern Ireland","Belfast South":"Northern Ireland","Belfast West":"Northern Ireland","Bermondsey and Old Southwark":"Southwark","Berwick-upon-Tweed":"Northumberland","Berwickshire, Roxburgh and Selkirk":"Scotland","Bethnal Green and Bow":"Tower Hamlets","Beverley and Holderness":"East Riding of Yorkshire","Bexhill and Battle":"East Sussex","Bexleyheath and Crayford":"Bexley","Birkenhead":"Wirral","Birmingham, Edgbaston":"Birmingham","Birmingham, Erdington":"Birmingham","Birmingham, Hall Green":"Birmingham","Birmingham, Hodge Hill":"Birmingham","Birmingham, Ladywood":"Birmingham","Birmingham, Northfield":"Birmingham","Birmingham, Perry Barr":"Birmingham","Birmingham, Selly Oak":"Birmingham","Birmingham, Yardley":"Birmingham","Bishop Auckland":"County Durham","Blackburn":"Blackburn with Darwen","Blackley and Broughton":"Manchester","Blackpool North and Cleveleys":"Blackpool","Blackpool South":"Blackpool","Blaenau Gwent":"Wales","Blaydon":"Gateshead","Blyth Valley":"Northumberland","Bognor Regis and Littlehampton":"West Sussex","Bolsover":"Derbyshire","Bolton North East":"Bolton","Bolton South East":"Bolton","Bolton West":"Bolton","Bootle":"Sefton","Boston and Skegness":"Lincolnshire","Bosworth":"Leicestershire","Bournemouth East":"Bournemouth","Bournemouth West":"Bournemouth","Bracknell":"Wokingham","Bradford East":"Bradford","Bradford South":"Bradford","Bradford West":"Bradford","Braintree":"Essex","Brecon and Radnorshire":"Wales","Brent Central":"Brent","Brent North":"Brent","Brentford and Isleworth":"Hounslow","Brentwood and Ongar":"Essex","Bridgend":"Wales","Bridgwater and West Somerset":"Somerset","Brigg and Goole":"North Lincolnshire","Brighton, Kemptown":"Brighton and Hove","Brighton, Pavilion":"Brighton and Hove","Bristol East":"Bristol, City of","Bristol North West":"Bristol, City of","Bristol South":"Bristol, City of","Bristol West":"Bristol, City of","Broadland":"Norfolk","Bromley and Chislehurst":"Bromley","Bromsgrove":"Worcestershire","Broxbourne":"Hertfordshire","Broxtowe":"Nottinghamshire","Buckingham":"Buckinghamshire","Burnley":"Lancashire","Burton":"Derbyshire","Bury North":"Bury","Bury South":"Bury","Bury St Edmunds":"Suffolk","Caerphilly":"Wales","Caithness, Sutherland and Easter Ross":"Scotland","Calder Valley":"Calderdale","Camberwell and Peckham":"Southwark","Camborne and Redruth":"Cornwall","Cambridge":"Cambridgeshire","Cannock Chase":"Staffordshire","Canterbury":"Kent","Cardiff Central":"Wales","Cardiff North":"Wales","Cardiff South and Penarth":"Wales","Cardiff West":"Wales","Carlisle":"Cumbria","Carmarthen East and Dinefwr":"Wales","Carmarthen West and South Pembrokeshire":"Wales","Carshalton and Wallington":"Sutton","Castle Point":"Essex","Central Ayrshire":"Scotland","Central Devon":"Devon","Central Suffolk and North Ipswich":"Suffolk","Ceredigion":"Wales","Charnwood":"Leicestershire","Chatham and Aylesford":"Kent","Cheadle":"Stockport","Chelmsford":"Essex","Chelsea and Fulham":"Hammersmith and Fulham","Cheltenham":"Gloucestershire","Chesham and Amersham":"Buckinghamshire","Chesterfield":"Derbyshire","Chichester":"West Sussex","Chingford and Woodford Green":"Waltham Forest","Chippenham":"Wiltshire","Chipping Barnet":"Barnet","Chorley":"Lancashire","Christchurch":"Dorset","Cities of London and Westminster":"Westminster","City of Chester":"Cheshire West and Chester","City of Durham":"County Durham","Clacton":"Essex","Cleethorpes":"North East Lincolnshire","Clwyd South":"Wales","Clwyd West":"Wales","Coatbridge, Chryston and Bellshill":"Scotland","Colchester":"Essex","Colne Valley":"Kirklees","Congleton":"Cheshire East","Copeland":"Cumbria","Corby":"Northamptonshire","Coventry North East":"Coventry","Coventry North West":"Coventry","Coventry South":"Coventry","Crawley":"West Sussex","Crewe and Nantwich":"Cheshire East","Croydon Central":"Croydon","Croydon North":"Croydon","Croydon South":"Croydon","Cumbernauld, Kilsyth and Kirkintilloch East":"Scotland","Cynon Valley":"Wales","Dagenham and Rainham":"Havering","Darlington":"Darlington","Dartford":"Kent","Daventry":"Northamptonshire","Delyn":"Wales","Denton and Reddish":"Tameside","Derby North":"Derby","Derby South":"Derby","Derbyshire Dales":"Derbyshire","Devizes":"Wiltshire","Dewsbury":"Kirklees","Don Valley":"Doncaster","Doncaster Central":"Doncaster","Doncaster North":"Doncaster","Dover":"Kent","Dudley North":"Dudley","Dudley South":"Dudley","Dulwich and West Norwood":"Southwark","Dumfries and Galloway":"Scotland","Dumfriesshire, Clydesdale and Tweeddale":"Scotland","Dundee East":"Scotland","Dundee West":"Scotland","Dunfermline and West Fife":"Scotland","Dwyfor Meirionnydd":"Wales","Ealing Central and Acton":"Ealing","Ealing North":"Ealing","Ealing, Southall":"Ealing","Easington":"County Durham","East Antrim":"Northern Ireland","East Devon":"Devon","East Dunbartonshire":"Scotland","East Ham":"Newham","East Hampshire":"Hampshire","East Kilbride, Strathaven and Lesmahagow":"Scotland","East Londonderry":"Northern Ireland","East Lothian":"Scotland","East Renfrewshire":"Scotland","East Surrey":"Surrey","East Worthing and Shoreham":"West Sussex","East Yorkshire":"East Riding of Yorkshire","Eastbourne":"East Sussex","Eastleigh":"Hampshire","Eddisbury":"Cheshire East","Edinburgh East":"Scotland","Edinburgh North and Leith":"Scotland","Edinburgh South":"Scotland","Edinburgh South West":"Scotland","Edinburgh West":"Scotland","Edmonton":"Enfield","Ellesmere Port and Neston":"Cheshire West and Chester","Elmet and Rothwell":"Leeds","Eltham":"Greenwich","Enfield North":"Enfield","Enfield, Southgate":"Enfield","Epping Forest":"Essex","Epsom and Ewell":"Surrey","Erewash":"Derbyshire","Erith and Thamesmead":"Bexley","Esher and Walton":"Surrey","Exeter":"Devon","Falkirk":"Scotland","Fareham":"Hampshire","Faversham and Mid Kent":"Kent","Feltham and Heston":"Hounslow","Fermanagh And South Tyrone":"Northern Ireland","Filton and Bradley Stoke":"South Gloucestershire","Finchley and Golders Green":"Barnet","Folkestone and Hythe":"Kent","Forest of Dean":"Gloucestershire","Foyle":"Northern Ireland","Fylde":"Lancashire","Gainsborough":"Lincolnshire","Garston and Halewood":"Knowsley","Gateshead":"Gateshead","Gedling":"Nottinghamshire","Gillingham and Rainham":"Medway","Glasgow Central":"Scotland","Glasgow East":"Scotland","Glasgow North":"Scotland","Glasgow North East":"Scotland","Glasgow North West":"Scotland","Glasgow South":"Scotland","Glasgow South West":"Scotland","Glenrothes":"Scotland","Gloucester":"Gloucestershire","Gordon":"Scotland","Gosport":"Hampshire","Gower":"Wales","Grantham and Stamford":"Lincolnshire","Gravesham":"Kent","Great Grimsby":"North East Lincolnshire","Great Yarmouth":"Norfolk","Greenwich and Woolwich":"Greenwich","Guildford":"Surrey","Hackney North and Stoke Newington":"Hackney","Hackney South and Shoreditch":"Hackney","Halesowen and Rowley Regis":"Dudley","Halifax":"Calderdale","Haltemprice and Howden":"East Riding of Yorkshire","Halton":"Halton","Hammersmith":"Hammersmith and Fulham","Hampstead and Kilburn":"Camden","Harborough":"Leicestershire","Harlow":"Essex","Harrogate and Knaresborough":"North Yorkshire","Harrow East":"Harrow","Harrow West":"Harrow","Hartlepool":"Hartlepool","Harwich and North Essex":"Essex","Hastings and Rye":"East Sussex","Havant":"Hampshire","Hayes and Harlington":"Hillingdon","Hazel Grove":"Stockport","Hemel Hempstead":"Hertfordshire","Hemsworth":"Wakefield","Hendon":"Barnet","Henley":"Oxfordshire","Hereford and South Herefordshire":"Herefordshire, County of","Hertford and Stortford":"Hertfordshire","Hertsmere":"Hertfordshire","Hexham":"Northumberland","Heywood and Middleton":"Rochdale","High Peak":"Derbyshire","Hitchin and Harpenden":"Hertfordshire","Holborn and St Pancras":"Camden","Hornchurch and Upminster":"Havering","Hornsey and Wood Green":"Haringey","Horsham":"West Sussex","Houghton and Sunderland South":"Sunderland","Hove":"Brighton and Hove","Huddersfield":"Kirklees","Huntingdon":"Cambridgeshire","Hyndburn":"Lancashire","Ilford North":"Redbridge","Ilford South":"Redbridge","Inverclyde":"Scotland","Inverness, Nairn, Badenoch and Strathspey":"Scotland","Ipswich":"Suffolk","Isle of Wight":"Isle of Wight","Islington North":"Islington","Islington South and Finsbury":"Islington","Islwyn":"Wales","Jarrow":"South Tyneside","Keighley":"Bradford","Kenilworth and Southam":"Warwickshire","Kensington":"Kensington and Chelsea","Kettering":"Northamptonshire","Kilmarnock and Loudoun":"Scotland","Kingston and Surbiton":"Kingston upon Thames","Kingston upon Hull East":"Kingston upon Hull, City of","Kingston upon Hull North":"Kingston upon Hull, City of","Kingston upon Hull West and Hessle":"Kingston upon Hull, City of","Kingswood":"South Gloucestershire","Kirkcaldy and Cowdenbeath":"Scotland","Knowsley":"Knowsley","Lagan Valley":"Northern Ireland","Lanark and Hamilton East":"Scotland","Lancaster and Fleetwood":"Lancashire","Leeds Central":"Leeds","Leeds East":"Leeds","Leeds North East":"Leeds","Leeds North West":"Leeds","Leeds West":"Leeds","Leicester East":"Leicester","Leicester South":"Leicester","Leicester West":"Leicester","Leigh":"Wigan","Lewes":"East Sussex","Lewisham East":"Lewisham","Lewisham West and Penge":"Bromley","Lewisham, Deptford":"Lewisham","Leyton and Wanstead":"Waltham Forest","Lichfield":"Staffordshire","Lincoln":"Lincolnshire","Linlithgow and East Falkirk":"Scotland","Liverpool, Riverside":"Liverpool","Liverpool, Walton":"Liverpool","Liverpool, Wavertree":"Liverpool","Liverpool, West Derby":"Liverpool","Livingston":"Scotland","Llanelli":"Wales","Loughborough":"Leicestershire","Louth and Horncastle":"Lincolnshire","Ludlow":"Shropshire","Luton North":"Luton","Luton South":"Luton","Macclesfield":"Cheshire East","Maidenhead":"Windsor and Maidenhead","Maidstone and The Weald":"Kent","Makerfield":"Wigan","Maldon":"Essex","Manchester Central":"Manchester","Manchester, Gorton":"Manchester","Manchester, Withington":"Manchester","Mansfield":"Nottinghamshire","Meon Valley":"Hampshire","Meriden":"Solihull","Merthyr Tydfil and Rhymney":"Wales","Mid Bedfordshire":"Central Bedfordshire","Mid Derbyshire":"Derbyshire","Mid Dorset and North Poole":"Dorset","Mid Norfolk":"Norfolk","Mid Sussex":"West Sussex","Mid Ulster":"Northern Ireland","Mid Worcestershire":"Worcestershire","Middlesbrough":"Middlesbrough","Middlesbrough South and East Cleveland":"Redcar and Cleveland","Midlothian":"Scotland","Milton Keynes North":"Milton Keynes","Milton Keynes South":"Milton Keynes","Mitcham and Morden":"Merton","Mole Valley":"Surrey","Monmouth":"Wales","Montgomeryshire":"Wales","Moray":"Scotland","Morecambe and Lunesdale":"Lancashire","Morley and Outwood":"Leeds","Motherwell and Wishaw":"Scotland","Na h-Eileanan an Iar":"Scotland","Neath":"Wales","New Forest East":"Hampshire","New Forest West":"Hampshire","Newark":"Nottinghamshire","Newbury":"West Berkshire","Newcastle upon Tyne Central":"Newcastle upon Tyne","Newcastle upon Tyne East":"Newcastle upon Tyne","Newcastle upon Tyne North":"Newcastle upon Tyne","Newcastle-under-Lyme":"Staffordshire","Newport East":"Wales","Newport West":"Wales","Newry And Armagh":"Northern Ireland","Newton Abbot":"Devon","Normanton, Pontefract and Castleford":"Wakefield","North Antrim":"Northern Ireland","North Ayrshire and Arran":"Scotland","North Cornwall":"Cornwall","North Devon":"Devon","North Dorset":"Dorset","North Down":"Northern Ireland","North Durham":"County Durham","North East Bedfordshire":"Bedford","North East Cambridgeshire":"Cambridgeshire","North East Derbyshire":"Derbyshire","North East Fife":"Scotland","North East Hampshire":"Hampshire","North East Hertfordshire":"Hertfordshire","North East Somerset":"Bath and North East Somerset","North Herefordshire":"Herefordshire, County of","North Norfolk":"Norfolk","North Shropshire":"Shropshire","North Somerset":"North Somerset","North Swindon":"Swindon","North Thanet":"Kent","North Tyneside":"North Tyneside","North Warwickshire":"Warwickshire","North West Cambridgeshire":"Cambridgeshire","North West Durham":"County Durham","North West Hampshire":"Hampshire","North West Leicestershire":"Leicestershire","North West Norfolk":"Norfolk","North Wiltshire":"Wiltshire","Northampton North":"Northamptonshire","Northampton South":"Northamptonshire","Norwich North":"Norfolk","Norwich South":"Norfolk","Nottingham East":"Nottingham","Nottingham North":"Nottingham","Nottingham South":"Nottingham","Nuneaton":"Warwickshire","Ochil and South Perthshire":"Scotland","Ogmore":"Wales","Old Bexley and Sidcup":"Bexley","Oldham East and Saddleworth":"Oldham","Oldham West and Royton":"Oldham","Orkney and Shetland":"Scotland","Orpington":"Bromley","Oxford East":"Oxfordshire","Oxford West and Abingdon":"Oxfordshire","Paisley and Renfrewshire North":"Scotland","Paisley and Renfrewshire South":"Scotland","Pendle":"Lancashire","Penistone and Stocksbridge":"Barnsley","Penrith and The Border":"Cumbria","Perth and North Perthshire":"Scotland","Peterborough":"Peterborough","Plymouth, Moor View":"Plymouth","Plymouth, Sutton and Devonport":"Plymouth","Pontypridd":"Wales","Poole":"Poole","Poplar and Limehouse":"Tower Hamlets","Portsmouth North":"Portsmouth","Portsmouth South":"Portsmouth","Preseli Pembrokeshire":"Wales","Preston":"Lancashire","Pudsey":"Leeds","Putney":"Wandsworth","Rayleigh and Wickford":"Essex","Reading East":"Reading","Reading West":"Reading","Redcar":"Redcar and Cleveland","Redditch":"Worcestershire","Reigate":"Surrey","Rhondda":"Wales","Ribble Valley":"Lancashire","Richmond (Yorks)":"North Yorkshire","Richmond Park":"Richmond upon Thames","Rochdale":"Rochdale","Rochester and Strood":"Medway","Rochford and Southend East":"Essex","Romford":"Havering","Romsey and Southampton North":"Hampshire","Ross, Skye and Lochaber":"Scotland","Rossendale and Darwen":"Lancashire","Rother Valley":"Rotherham","Rotherham":"Rotherham","Rugby":"Warwickshire","Ruislip, Northwood and Pinner":"Hillingdon","Runnymede and Weybridge":"Surrey","Rushcliffe":"Nottinghamshire","Rutherglen and Hamilton West":"Scotland","Rutland and Melton":"Rutland","Saffron Walden":"Essex","Salford and Eccles":"Salford","Salisbury":"Wiltshire","Scarborough and Whitby":"North Yorkshire","Scunthorpe":"North Lincolnshire","Sedgefield":"County Durham","Sefton Central":"Sefton","Selby and Ainsty":"North Yorkshire","Sevenoaks":"Kent","Sheffield Central":"Sheffield","Sheffield South East":"Sheffield","Sheffield, Brightside and Hillsborough":"Sheffield","Sheffield, Hallam":"Sheffield","Sheffield, Heeley":"Sheffield","Sherwood":"Nottinghamshire","Shipley":"Bradford","Shrewsbury and Atcham":"Shropshire","Sittingbourne and Sheppey":"Kent","Skipton and Ripon":"North Yorkshire","Sleaford and North Hykeham":"Lincolnshire","Slough":"Slough","Solihull":"Solihull","Somerton and Frome":"Somerset","South Antrim":"Northern Ireland","South Basildon and East Thurrock":"Thurrock","South Cambridgeshire":"Cambridgeshire","South Derbyshire":"Derbyshire","South Dorset":"Dorset","South Down":"Northern Ireland","South East Cambridgeshire":"Cambridgeshire","South East Cornwall":"Cornwall","South Holland and The Deepings":"Lincolnshire","South Leicestershire":"Leicestershire","South Norfolk":"Norfolk","South Northamptonshire":"Northamptonshire","South Ribble":"Lancashire","South Shields":"South Tyneside","South Staffordshire":"Wolverhampton","South Suffolk":"Suffolk","South Swindon":"Swindon","South Thanet":"Kent","South West Bedfordshire":"Central Bedfordshire","South West Devon":"Devon","South West Hertfordshire":"Hertfordshire","South West Norfolk":"Norfolk","South West Surrey":"Surrey","South West Wiltshire":"Wiltshire","Southampton, Itchen":"Southampton","Southampton, Test":"Southampton","Southend West":"Southend-on-Sea","Southport":"Sefton","Spelthorne":"Surrey","St Albans":"Hertfordshire","St Austell and Newquay":"Cornwall","St Helens North":"St Helens","St Helens South and Whiston":"St Helens","St Ives":"Cornwall","Stafford":"Staffordshire","Staffordshire Moorlands":"Staffordshire","Stalybridge and Hyde":"Tameside","Stevenage":"Hertfordshire","Stirling":"Scotland","Stockport":"Stockport","Stockton North":"Stockton-on-Tees","Stockton South":"Stockton-on-Tees","Stoke-on-Trent Central":"Stoke-on-Trent","Stoke-on-Trent North":"Stoke-on-Trent","Stoke-on-Trent South":"Stoke-on-Trent","Stone":"Staffordshire","Stourbridge":"Dudley","Strangford":"Northern Ireland","Stratford-on-Avon":"Warwickshire","Streatham":"Lambeth","Stretford and Urmston":"Trafford","Stroud":"Gloucestershire","Suffolk Coastal":"Suffolk","Sunderland Central":"Sunderland","Surrey Heath":"Surrey","Sutton Coldfield":"Birmingham","Sutton and Cheam":"Sutton","Swansea East":"Wales","Swansea West":"Wales","Tamworth":"Staffordshire","Tatton":"Cheshire East","Taunton Deane":"Somerset","Telford":"Telford and Wrekin","Tewkesbury":"Gloucestershire","The Cotswolds":"Gloucestershire","The Wrekin":"Telford and Wrekin","Thirsk and Malton":"North Yorkshire","Thornbury and Yate":"South Gloucestershire","Thurrock":"Thurrock","Tiverton and Honiton":"Devon","Tonbridge and Malling":"Kent","Tooting":"Wandsworth","Torbay":"Torbay","Torfaen":"Wales","Torridge and West Devon":"Devon","Totnes":"Devon","Tottenham":"Haringey","Truro and Falmouth":"Cornwall","Tunbridge Wells":"Kent","Twickenham":"Richmond upon Thames","Tynemouth":"North Tyneside","Upper Bann":"Northern Ireland","Uxbridge and South Ruislip":"Hillingdon","Vale of Clwyd":"Wales","Vale of Glamorgan":"Wales","Vauxhall":"Lambeth","Wakefield":"Wakefield","Wallasey":"Wirral","Walsall North":"Walsall","Walsall South":"Walsall","Walthamstow":"Waltham Forest","Wansbeck":"Northumberland","Wantage":"Oxfordshire","Warley":"Sandwell","Warrington North":"Warrington","Warrington South":"Warrington","Warwick and Leamington":"Warwickshire","Washington and Sunderland West":"Sunderland","Watford":"Hertfordshire","Waveney":"Suffolk","Wealden":"East Sussex","Weaver Vale":"Cheshire West and Chester","Wellingborough":"Northamptonshire","Wells":"Somerset","Welwyn Hatfield":"Hertfordshire","Wentworth and Dearne":"Rotherham","West Aberdeenshire and Kincardine":"Scotland","West Bromwich East":"Sandwell","West Bromwich West":"Sandwell","West Dorset":"Dorset","West Dunbartonshire":"Scotland","West Ham":"Newham","West Lancashire":"Lancashire","West Suffolk":"Suffolk","West Tyrone":"Northern Ireland","West Worcestershire":"Worcestershire","Westminster North":"Westminster","Westmorland and Lonsdale":"Cumbria","Weston-Super-Mare":"North Somerset","Wigan":"Wigan","Wimbledon":"Merton","Winchester":"Hampshire","Windsor":"Bracknell Forest","Wirral South":"Wirral","Wirral West":"Wirral","Witham":"Essex","Witney":"Oxfordshire","Woking":"Surrey","Wokingham":"Wokingham","Wolverhampton North East":"Wolverhampton","Wolverhampton South East":"Wolverhampton","Wolverhampton South West":"Wolverhampton","Worcester":"Worcestershire","Workington":"Cumbria","Worsley and Eccles South":"Salford","Worthing West":"West Sussex","Wrexham":"Wales","Wycombe":"Buckinghamshire","Wyre Forest":"Worcestershire","Wyre and Preston North":"Lancashire","Wythenshawe and Sale East":"Manchester","Yeovil":"Somerset","Ynys Mon":"Wales","York Central":"York","York Outer":"York"};
+const CONSTITUENCY_TO_COUNTY = {"Aberafan Maesteg":"Wales","Aberdeen North":"Scotland","Aberdeen South":"Scotland","Aberdeenshire North and Moray East":"Scotland","Airdrie and Shotts":"Scotland","Aldershot":"Hampshire","Aldridge-Brownhills":"Walsall","Alloa and Grangemouth":"Scotland","Altrincham and Sale West":"Trafford","Alyn and Deeside":"Wales","Amber Valley":"Derbyshire","Angus and Perthshire Glens":"Scotland","Arbroath and Broughty Ferry":"Scotland","Argyll, Bute and South Lochaber":"Scotland","Arundel and South Downs":"West Sussex","Ashfield":"Nottinghamshire","Ashford":"Kent","Ashton-under-Lyne":"Tameside","Aylesbury":"Buckinghamshire","Ayr, Carrick and Cumnock":"Scotland","Banbury":"Oxfordshire","Bangor Aberconwy":"Wales","Barking":"Barking and Dagenham","Barnsley North":"Barnsley","Barnsley South":"Barnsley","Barrow and Furness":"Cumbria","Basildon and Billericay":"Essex","Basingstoke":"Hampshire","Bassetlaw":"Nottinghamshire","Bath":"Bath and North East Somerset","Bathgate and Linlithgow":"Scotland","Battersea":"Wandsworth","Beaconsfield":"Buckinghamshire","Beckenham and Penge":"Bromley","Bedford":"Bedford","Belfast East":"Northern Ireland","Belfast North":"Northern Ireland","Belfast South and Mid Down":"Northern Ireland","Belfast West":"Northern Ireland","Bermondsey and Old Southwark":"Southwark","Berwickshire, Roxburgh and Selkirk":"Scotland","Bethnal Green and Stepney":"Tower Hamlets","Beverley and Holderness":"East Riding of Yorkshire","Bexhill and Battle":"East Sussex","Bexleyheath and Crayford":"Bexley","Bicester and Woodstock":"Oxfordshire","Birkenhead":"Wirral","Birmingham Edgbaston":"Birmingham","Birmingham Erdington":"Birmingham","Birmingham Hall Green and Moseley":"Birmingham","Birmingham Hodge Hill and Solihull North":"Birmingham","Birmingham Ladywood":"Birmingham","Birmingham Northfield":"Birmingham","Birmingham Perry Barr":"Birmingham","Birmingham Selly Oak":"Birmingham","Birmingham Yardley":"Birmingham","Bishop Auckland":"County Durham","Blackburn":"Blackburn with Darwen","Blackley and Middleton South":"Manchester","Blackpool North and Fleetwood":"Lancashire","Blackpool South":"Blackpool","Blaenau Gwent and Rhymney":"Wales","Blaydon and Consett":"County Durham","Blyth and Ashington":"Northumberland","Bognor Regis and Littlehampton":"West Sussex","Bolsover":"Derbyshire","Bolton North East":"Bolton","Bolton South and Walkden":"Bolton","Bolton West":"Bolton","Bootle":"Sefton","Boston and Skegness":"Lincolnshire","Bournemouth East":"Bournemouth","Bournemouth West":"Poole","Bracknell":"Bracknell Forest","Bradford East":"Bradford","Bradford South":"Bradford","Bradford West":"Bradford","Braintree":"Essex","Brecon, Radnor and Cwm Tawe":"Wales","Brent East":"Brent","Brent West":"Brent","Brentford and Isleworth":"Hounslow","Brentwood and Ongar":"Essex","Bridgend":"Wales","Bridgwater":"Somerset","Bridlington and The Wolds":"East Riding of Yorkshire","Brigg and Immingham":"North East Lincolnshire","Brighton Kemptown and Peacehaven":"Brighton and Hove","Brighton Pavilion":"Brighton and Hove","Bristol Central":"Bristol, City of","Bristol East":"Bristol, City of","Bristol North East":"Bristol, City of","Bristol North West":"Bristol, City of","Bristol South":"Bristol, City of","Broadland and Fakenham":"Norfolk","Bromley and Biggin Hill":"Bromley","Bromsgrove":"Worcestershire","Broxbourne":"Hertfordshire","Broxtowe":"Nottinghamshire","Buckingham and Bletchley":"Buckinghamshire","Burnley":"Lancashire","Burton and Uttoxeter":"Staffordshire","Bury North":"Bury","Bury South":"Bury","Bury St Edmunds and Stowmarket":"Suffolk","Caerfyrddin":"Wales","Caerphilly":"Wales","Caithness, Sutherland and Easter Ross":"Scotland","Calder Valley":"Calderdale","Camborne and Redruth":"Cornwall","Cambridge":"Cambridgeshire","Cannock Chase":"Staffordshire","Canterbury":"Kent","Cardiff East":"Wales","Cardiff North":"Wales","Cardiff South and Penarth":"Wales","Cardiff West":"Wales","Carlisle":"Cumbria","Carshalton and Wallington":"Sutton","Castle Point":"Essex","Central Ayrshire":"Scotland","Central Devon":"Devon","Central Suffolk and North Ipswich":"Suffolk","Ceredigion Preseli":"Wales","Chatham and Aylesford":"Medway","Cheadle":"Stockport","Chelmsford":"Essex","Chelsea and Fulham":"Hammersmith and Fulham","Cheltenham":"Gloucestershire","Chesham and Amersham":"Buckinghamshire","Chester North and Neston":"Cheshire West and Chester","Chester South and Eddisbury":"Cheshire West and Chester","Chesterfield":"Derbyshire","Chichester":"West Sussex","Chingford and Woodford Green":"Waltham Forest","Chippenham":"Wiltshire","Chipping Barnet":"Barnet","Chorley":"Lancashire","Christchurch":"Dorset","Cities of London and Westminster":"Westminster","City of Durham":"County Durham","Clacton":"Essex","Clapham and Brixton Hill":"Lambeth","Clwyd East":"Wales","Clwyd North":"Wales","Coatbridge and Bellshill":"Scotland","Colchester":"Essex","Colne Valley":"Kirklees","Congleton":"Cheshire East","Corby and East Northamptonshire":"Northamptonshire","Coventry East":"Coventry","Coventry North West":"Coventry","Coventry South":"Coventry","Cowdenbeath and Kirkcaldy":"Scotland","Cramlington and Killingworth":"Northumberland","Crawley":"West Sussex","Crewe and Nantwich":"Cheshire East","Croydon East":"Croydon","Croydon South":"Croydon","Croydon West":"Croydon","Cumbernauld and Kirkintilloch":"Scotland","Dagenham and Rainham":"Barking and Dagenham","Darlington":"Darlington","Dartford":"Kent","Daventry":"Northamptonshire","Derby North":"Derby","Derby South":"Derby","Derbyshire Dales":"Derbyshire","Dewsbury and Batley":"Kirklees","Didcot and Wantage":"Oxfordshire","Doncaster Central":"Doncaster","Doncaster East and the Isle of Axholme":"Doncaster","Doncaster North":"Doncaster","Dorking and Horley":"Surrey","Dover and Deal":"Kent","Droitwich and Evesham":"Worcestershire","Dudley":"Dudley","Dulwich and West Norwood":"Lambeth","Dumfries and Galloway":"Scotland","Dumfriesshire, Clydesdale and Tweeddale":"Scotland","Dundee Central":"Scotland","Dunfermline and Dollar":"Scotland","Dunstable and Leighton Buzzard":"Central Bedfordshire","Dwyfor Meirionnydd":"Wales","Ealing Central and Acton":"Ealing","Ealing North":"Ealing","Ealing Southall":"Ealing","Earley and Woodley":"Wokingham","Easington":"County Durham","East Antrim":"Northern Ireland","East Grinstead and Uckfield":"West Sussex","East Ham":"Newham","East Hampshire":"Hampshire","East Kilbride and Strathaven":"Scotland","East Londonderry":"Northern Ireland","East Renfrewshire":"Scotland","East Surrey":"Surrey","East Thanet":"Kent","East Wiltshire":"Wiltshire","East Worthing and Shoreham":"West Sussex","Eastbourne":"East Sussex","Eastleigh":"Hampshire","Edinburgh East and Musselburgh":"Scotland","Edinburgh North and Leith":"Scotland","Edinburgh South":"Scotland","Edinburgh South West":"Scotland","Edinburgh West":"Scotland","Edmonton and Winchmore Hill":"Enfield","Ellesmere Port and Bromborough":"Cheshire West and Chester","Eltham and Chislehurst":"Greenwich","Ely and East Cambridgeshire":"Cambridgeshire","Enfield North":"Enfield","Epping Forest":"Essex","Epsom and Ewell":"Surrey","Erewash":"Derbyshire","Erith and Thamesmead":"Greenwich","Esher and Walton":"Surrey","Exeter":"Devon","Exmouth and Exeter East":"Devon","Falkirk":"Scotland","Fareham and Waterlooville":"Hampshire","Farnham and Bordon":"Surrey","Faversham and Mid Kent":"Kent","Feltham and Heston":"Hounslow","Fermanagh and South Tyrone":"Northern Ireland","Filton and Bradley Stoke":"South Gloucestershire","Finchley and Golders Green":"Barnet","Folkestone and Hythe":"Kent","Forest of Dean":"Gloucestershire","Foyle":"Northern Ireland","Frome and East Somerset":"Bath and North East Somerset","Fylde":"Lancashire","Gainsborough":"Lincolnshire","Gateshead Central and Whickham":"Gateshead","Gedling":"Nottinghamshire","Gillingham and Rainham":"Medway","Glasgow East":"Scotland","Glasgow North":"Scotland","Glasgow North East":"Scotland","Glasgow South":"Scotland","Glasgow South West":"Scotland","Glasgow West":"Scotland","Glastonbury and Somerton":"Somerset","Glenrothes and Mid Fife":"Scotland","Gloucester":"Gloucestershire","Godalming and Ash":"Surrey","Goole and Pocklington":"East Riding of Yorkshire","Gordon and Buchan":"Scotland","Gorton and Denton":"Manchester","Gosport":"Hampshire","Gower":"Wales","Grantham and Bourne":"Lincolnshire","Gravesham":"Kent","Great Grimsby and Cleethorpes":"North East Lincolnshire","Great Yarmouth":"Norfolk","Greenwich and Woolwich":"Greenwich","Guildford":"Surrey","Hackney North and Stoke Newington":"Hackney","Hackney South and Shoreditch":"Hackney","Halesowen":"Dudley","Halifax":"Calderdale","Hamble Valley":"Hampshire","Hamilton and Clyde Valley":"Scotland","Hammersmith and Chiswick":"Hammersmith and Fulham","Hampstead and Highgate":"Camden","Harborough, Oadby and Wigston":"Leicestershire","Harlow":"Essex","Harpenden and Berkhamsted":"Hertfordshire","Harrogate and Knaresborough":"North Yorkshire","Harrow East":"Harrow","Harrow West":"Harrow","Hartlepool":"Hartlepool","Harwich and North Essex":"Essex","Hastings and Rye":"East Sussex","Havant":"Hampshire","Hayes and Harlington":"Hillingdon","Hazel Grove":"Stockport","Hemel Hempstead":"Hertfordshire","Hendon":"Barnet","Henley and Thame":"Oxfordshire","Hereford and South Herefordshire":"Herefordshire, County of","Herne Bay and Sandwich":"Kent","Hertford and Stortford":"Hertfordshire","Hertsmere":"Hertfordshire","Hexham":"Northumberland","Heywood and Middleton North":"Rochdale","High Peak":"Derbyshire","Hinckley and Bosworth":"Leicestershire","Hitchin":"Hertfordshire","Holborn and St Pancras":"Camden","Honiton and Sidmouth":"Devon","Hornchurch and Upminster":"Havering","Hornsey and Friern Barnet":"Haringey","Horsham":"West Sussex","Houghton and Sunderland South":"Sunderland","Hove and Portslade":"Brighton and Hove","Huddersfield":"Kirklees","Huntingdon":"Cambridgeshire","Hyndburn":"Lancashire","Ilford North":"Redbridge","Ilford South":"Redbridge","Inverclyde and Renfrewshire West":"Scotland","Inverness, Skye and West Ross-shire":"Scotland","Ipswich":"Suffolk","Isle of Wight East":"Isle of Wight","Isle of Wight West":"Isle of Wight","Islington North":"Islington","Islington South and Finsbury":"Islington","Jarrow and Gateshead East":"South Tyneside","Keighley and Ilkley":"Bradford","Kenilworth and Southam":"Warwickshire","Kensington and Bayswater":"Kensington and Chelsea","Kettering":"Northamptonshire","Kilmarnock and Loudoun":"Scotland","Kingston and Surbiton":"Kingston upon Thames","Kingston upon Hull East":"Kingston upon Hull, City of","Kingston upon Hull North and Cottingham":"Kingston upon Hull, City of","Kingston upon Hull West and Haltemprice":"Kingston upon Hull, City of","Kingswinford and South Staffordshire":"Staffordshire","Knowsley":"Knowsley","Lagan Valley":"Northern Ireland","Lancaster and Wyre":"Lancashire","Leeds Central and Headingley":"Leeds","Leeds East":"Leeds","Leeds North East":"Leeds","Leeds North West":"Leeds","Leeds South":"Leeds","Leeds South West and Morley":"Leeds","Leeds West and Pudsey":"Leeds","Leicester East":"Leicester","Leicester South":"Leicester","Leicester West":"Leicester","Leigh and Atherton":"Wigan","Lewes":"East Sussex","Lewisham East":"Lewisham","Lewisham North":"Lewisham","Lewisham West and East Dulwich":"Lewisham","Leyton and Wanstead":"Waltham Forest","Lichfield":"Staffordshire","Lincoln":"Lincolnshire","Liverpool Garston":"Liverpool","Liverpool Riverside":"Liverpool","Liverpool Walton":"Liverpool","Liverpool Wavertree":"Liverpool","Liverpool West Derby":"Liverpool","Livingston":"Scotland","Llanelli":"Wales","Lothian East":"Scotland","Loughborough":"Leicestershire","Louth and Horncastle":"Lincolnshire","Lowestoft":"Suffolk","Luton North":"Luton","Luton South and South Bedfordshire":"Luton","Macclesfield":"Cheshire East","Maidenhead":"Windsor and Maidenhead","Maidstone and Malling":"Kent","Makerfield":"Wigan","Maldon":"Essex","Manchester Central":"Manchester","Manchester Rusholme":"Manchester","Manchester Withington":"Manchester","Mansfield":"Nottinghamshire","Melksham and Devizes":"Wiltshire","Melton and Syston":"Leicestershire","Meriden and Solihull East":"Solihull","Merthyr Tydfil and Aberdare":"Wales","Mid Bedfordshire":"Central Bedfordshire","Mid Buckinghamshire":"Buckinghamshire","Mid Cheshire":"Cheshire West and Chester","Mid Derbyshire":"Derbyshire","Mid Dorset and North Poole":"Dorset","Mid Dunbartonshire":"Scotland","Mid Leicestershire":"Leicestershire","Mid Norfolk":"Norfolk","Mid Sussex":"West Sussex","Mid Ulster":"Northern Ireland","Mid and South Pembrokeshire":"Wales","Middlesbrough South and East Cleveland":"Middlesbrough","Middlesbrough and Thornaby East":"Middlesbrough","Midlothian":"Scotland","Milton Keynes Central":"Milton Keynes","Milton Keynes North":"Milton Keynes","Mitcham and Morden":"Merton","Monmouthshire":"Wales","Montgomeryshire and Glyndwr":"Wales","Moray West, Nairn and Strathspey":"Scotland","Morecambe and Lunesdale":"Lancashire","Motherwell, Wishaw and Carluke":"Scotland","Na h-Eileanan an Iar":"Scotland","Neath and Swansea East":"Wales","New Forest East":"Hampshire","New Forest West":"Hampshire","Newark":"Nottinghamshire","Newbury":"West Berkshire","Newcastle upon Tyne Central and West":"Newcastle upon Tyne","Newcastle upon Tyne East and Wallsend":"Newcastle upon Tyne","Newcastle upon Tyne North":"Newcastle upon Tyne","Newcastle-under-Lyme":"Staffordshire","Newport East":"Wales","Newport West and Islwyn":"Wales","Newry and Armagh":"Northern Ireland","Newton Abbot":"Devon","Newton Aycliffe and Spennymoor":"County Durham","Normanton and Hemsworth":"Wakefield","North Antrim":"Northern Ireland","North Ayrshire and Arran":"Scotland","North Bedfordshire":"Bedford","North Cornwall":"Cornwall","North Cotswolds":"Gloucestershire","North Devon":"Devon","North Dorset":"Dorset","North Down":"Northern Ireland","North Durham":"County Durham","North East Cambridgeshire":"Cambridgeshire","North East Derbyshire":"Derbyshire","North East Fife":"Scotland","North East Hampshire":"Hampshire","North East Hertfordshire":"Hertfordshire","North East Somerset and Hanham":"Bath and North East Somerset","North Herefordshire":"Herefordshire, County of","North Norfolk":"Norfolk","North Northumberland":"Northumberland","North Shropshire":"Shropshire","North Somerset":"North Somerset","North Warwickshire and Bedworth":"Warwickshire","North West Cambridgeshire":"Peterborough","North West Essex":"Essex","North West Hampshire":"Hampshire","North West Leicestershire":"Leicestershire","North West Norfolk":"Norfolk","Northampton North":"Northamptonshire","Northampton South":"Northamptonshire","Norwich North":"Norfolk","Norwich South":"Norfolk","Nottingham East":"Nottingham","Nottingham North and Kimberley":"Nottingham","Nottingham South":"Nottingham","Nuneaton":"Warwickshire","Old Bexley and Sidcup":"Bexley","Oldham East and Saddleworth":"Oldham","Oldham West, Chadderton and Royton":"Oldham","Orkney and Shetland":"Scotland","Orpington":"Bromley","Ossett and Denby Dale":"Wakefield","Oxford East":"Oxfordshire","Oxford West and Abingdon":"Oxfordshire","Paisley and Renfrewshire North":"Scotland","Paisley and Renfrewshire South":"Scotland","Peckham":"Southwark","Pendle and Clitheroe":"Lancashire","Penistone and Stocksbridge":"Barnsley","Penrith and Solway":"Cumbria","Perth and Kinross-shire":"Scotland","Peterborough":"Peterborough","Plymouth Moor View":"Plymouth","Plymouth Sutton and Devonport":"Plymouth","Pontefract, Castleford and Knottingley":"Wakefield","Pontypridd":"Wales","Poole":"Poole","Poplar and Limehouse":"Tower Hamlets","Portsmouth North":"Portsmouth","Portsmouth South":"Portsmouth","Preston":"Lancashire","Putney":"Wandsworth","Queen's Park and Maida Vale":"Westminster","Rawmarsh and Conisbrough":"Rotherham","Rayleigh and Wickford":"Essex","Reading Central":"Reading","Reading West and Mid Berkshire":"West Berkshire","Redcar":"Redcar and Cleveland","Redditch":"Worcestershire","Reigate":"Surrey","Rhondda and Ogmore":"Wales","Ribble Valley":"Lancashire","Richmond Park":"Richmond upon Thames","Richmond and Northallerton":"North Yorkshire","Rochdale":"Rochdale","Rochester and Strood":"Medway","Romford":"Havering","Romsey and Southampton North":"Hampshire","Rossendale and Darwen":"Lancashire","Rother Valley":"Rotherham","Rotherham":"Rotherham","Rugby":"Warwickshire","Ruislip, Northwood and Pinner":"Hillingdon","Runcorn and Helsby":"Halton","Runnymede and Weybridge":"Surrey","Rushcliffe":"Nottinghamshire","Rutherglen":"Scotland","Rutland and Stamford":"Rutland","Salford":"Salford","Salisbury":"Wiltshire","Scarborough and Whitby":"North Yorkshire","Scunthorpe":"North Lincolnshire","Sefton Central":"Sefton","Selby":"North Yorkshire","Sevenoaks":"Kent","Sheffield Brightside and Hillsborough":"Sheffield","Sheffield Central":"Sheffield","Sheffield Hallam":"Sheffield","Sheffield Heeley":"Sheffield","Sheffield South East":"Sheffield","Sherwood Forest":"Nottinghamshire","Shipley":"Bradford","Shrewsbury":"Shropshire","Sittingbourne and Sheppey":"Kent","Skipton and Ripon":"North Yorkshire","Sleaford and North Hykeham":"Lincolnshire","Slough":"Slough","Smethwick":"Sandwell","Solihull West and Shirley":"Solihull","South Antrim":"Northern Ireland","South Basildon and East Thurrock":"Thurrock","South Cambridgeshire":"Cambridgeshire","South Cotswolds":"Gloucestershire","South Derbyshire":"Derbyshire","South Devon":"Devon","South Dorset":"Dorset","South Down":"Northern Ireland","South East Cornwall":"Cornwall","South Holland and The Deepings":"Lincolnshire","South Leicestershire":"Leicestershire","South Norfolk":"Norfolk","South Northamptonshire":"Northamptonshire","South Ribble":"Lancashire","South Shields":"South Tyneside","South Shropshire":"Shropshire","South Suffolk":"Suffolk","South West Devon":"Devon","South West Hertfordshire":"Hertfordshire","South West Norfolk":"Norfolk","South West Wiltshire":"Wiltshire","Southampton Itchen":"Southampton","Southampton Test":"Southampton","Southend East and Rochford":"Southend-on-Sea","Southend West and Leigh":"Southend-on-Sea","Southgate and Wood Green":"Enfield","Southport":"Sefton","Spelthorne":"Surrey","Spen Valley":"Kirklees","St Albans":"Hertfordshire","St Austell and Newquay":"Cornwall","St Helens North":"St Helens","St Helens South and Whiston":"St Helens","St Ives":"Cornwall","St Neots and Mid Cambridgeshire":"Cambridgeshire","Stafford":"Staffordshire","Staffordshire Moorlands":"Staffordshire","Stalybridge and Hyde":"Tameside","Stevenage":"Hertfordshire","Stirling and Strathallan":"Scotland","Stockport":"Stockport","Stockton North":"Stockton-on-Tees","Stockton West":"Stockton-on-Tees","Stoke-on-Trent Central":"Stoke-on-Trent","Stoke-on-Trent North":"Stoke-on-Trent","Stoke-on-Trent South":"Stoke-on-Trent","Stone, Great Wyrley and Penkridge":"Staffordshire","Stourbridge":"Dudley","Strangford":"Northern Ireland","Stratford and Bow":"Newham","Stratford-on-Avon":"Warwickshire","Streatham and Croydon North":"Lambeth","Stretford and Urmston":"Trafford","Stroud":"Gloucestershire","Suffolk Coastal":"Suffolk","Sunderland Central":"Sunderland","Surrey Heath":"Surrey","Sussex Weald":"East Sussex","Sutton Coldfield":"Birmingham","Sutton and Cheam":"Sutton","Swansea West":"Wales","Swindon North":"Swindon","Swindon South":"Swindon","Tamworth":"Staffordshire","Tatton":"Cheshire East","Taunton and Wellington":"Somerset","Telford":"Telford and Wrekin","Tewkesbury":"Gloucestershire","The Wrekin":"Telford and Wrekin","Thirsk and Malton":"North Yorkshire","Thornbury and Yate":"South Gloucestershire","Thurrock":"Thurrock","Tipton and Wednesbury":"Sandwell","Tiverton and Minehead":"Devon","Tonbridge":"Kent","Tooting":"Wandsworth","Torbay":"Torbay","Torfaen":"Wales","Torridge and Tavistock":"Devon","Tottenham":"Haringey","Truro and Falmouth":"Cornwall","Tunbridge Wells":"Kent","Twickenham":"Richmond upon Thames","Tynemouth":"North Tyneside","Upper Bann":"Northern Ireland","Uxbridge and South Ruislip":"Hillingdon","Vale of Glamorgan":"Wales","Vauxhall and Camberwell Green":"Lambeth","Wakefield and Rothwell":"Wakefield","Wallasey":"Wirral","Walsall and Bloxwich":"Walsall","Walthamstow":"Waltham Forest","Warrington North":"Warrington","Warrington South":"Warrington","Warwick and Leamington":"Warwickshire","Washington and Gateshead South":"Sunderland","Watford":"Hertfordshire","Waveney Valley":"Suffolk","Weald of Kent":"Kent","Wellingborough and Rushden":"Northamptonshire","Wells and Mendip Hills":"Somerset","Welwyn Hatfield":"Hertfordshire","West Aberdeenshire and Kincardine":"Scotland","West Bromwich":"Sandwell","West Dorset":"Dorset","West Dunbartonshire":"Scotland","West Ham and Beckton":"Newham","West Lancashire":"Lancashire","West Suffolk":"Suffolk","West Tyrone":"Northern Ireland","West Worcestershire":"Worcestershire","Westmorland and Lonsdale":"Cumbria","Weston-super-Mare":"North Somerset","Wetherby and Easingwold":"North Yorkshire","Whitehaven and Workington":"Cumbria","Widnes and Halewood":"Halton","Wigan":"Wigan","Wimbledon":"Merton","Winchester":"Hampshire","Windsor":"Windsor and Maidenhead","Wirral West":"Wirral","Witham":"Essex","Witney":"Oxfordshire","Woking":"Surrey","Wokingham":"Wokingham","Wolverhampton North East":"Wolverhampton","Wolverhampton South East":"Wolverhampton","Wolverhampton West":"Wolverhampton","Worcester":"Worcestershire","Worsley and Eccles":"Salford","Worthing West":"West Sussex","Wrexham":"Wales","Wycombe":"Buckinghamshire","Wyre Forest":"Worcestershire","Wythenshawe and Sale East":"Manchester","Yeovil":"Somerset","Ynys Môn":"Wales","York Central":"York","York Outer":"York"};
 
 // ── Color scale ─────────────────────────────────────────────────────
 function getColor(val) {
@@ -439,6 +457,19 @@ info.update = function (props, data, source, ladName) {
         return;
     }
 
+    if (selectedIndicator === 'bll_adj') {
+        const childStr = data.children != null ? `<p class="ci">≈ ${data.children.toLocaleString()} children 0–19 (${data.rate} / 1,000)</p>` : '';
+        this._div.innerHTML = `
+            <h4>${label}</h4>
+            <p>Adjusted IHME — modelled BLL ≥ 5 µg/dL</p>
+            <p class="value">${fmtVal(data.mean)}</p>
+            ${childStr}
+            <p class="ci" style="margin-top:4px;">Baseline: ${data.baselineArea || '?'}${data.baselinePct != null ? ` (${data.baselinePct}% IHME)` : ''}</p>
+            <p class="source-label">IHME GBD 2021 × housing/IMD (UK-fitted)</p>
+        `;
+        return;
+    }
+
     const isNationFallback = source === 'nation' || source === 'national (UK)';
     const isCountyMatch = source === 'county/UA';
     const popStr = (!isNationFallback && data.population) ? `<p class="ci">Population: ${Math.round(data.population).toLocaleString()}</p>` : '';
@@ -496,6 +527,9 @@ legend.update = function () {
     if (selectedIndicator === 'bll') {
         html += `<div class="legend-item"><span class="legend-color" style="background:rgba(254,217,118,0.35); border:1px dashed #0f3460;"></span>Nation-level estimate</div>`;
     }
+    if (selectedIndicator === 'bll_adj') {
+        html += `<div style="font-size:0.68rem; color:#6c7a89; margin-top:6px; max-width:200px;">Wales/Scotland/NI use the nation IHME baseline (no sub-national data), varied within-nation by housing &amp; IMD.</div>`;
+    }
     this._div.innerHTML = html;
 };
 legend.addTo(map);
@@ -544,7 +578,24 @@ function getDataForFeature(props) {
         return { data: { mean: 0 }, source: 'constituency' };
     }
 
-    // BLL: exact match -> spatial LAD match -> nation fallback
+    // Adjusted-IHME (modelled): precomputed per constituency in constituency_profile.csv
+    if (selectedIndicator === 'bll_adj') {
+        const p = profileData[name];
+        const v = p ? numOrNull(p.adj_prop_pct) : null;
+        if (v == null) return { data: null, source: null };
+        return {
+            data: {
+                mean: v,                                   // already a percentage
+                baselineArea: p.baseline_area,
+                baselinePct: numOrNull(p.baseline_ihme_pct),
+                children: numOrNull(p.adj_children),
+                rate: numOrNull(p.adj_rate_per_1000)
+            },
+            source: 'constituency'
+        };
+    }
+
+    // Raw BLL: exact match -> mapped county/UA -> nation fallback
     if (!selectedAge) return { data: null, source: null };
     const nation = props.nation;
 
@@ -553,7 +604,9 @@ function getDataForFeature(props) {
     }
     const mappedCounty = CONSTITUENCY_TO_COUNTY[name];
     if (mappedCounty && csvLocationData[mappedCounty] && csvLocationData[mappedCounty][selectedAge]) {
-        return { data: csvLocationData[mappedCounty][selectedAge], source: 'county/UA', ladName: mappedCounty };
+        // Devolved nations have no sub-national IHME estimate: flag them as nation-level.
+        const isNation = NATIONS.includes(mappedCounty);
+        return { data: csvLocationData[mappedCounty][selectedAge], source: isNation ? 'nation' : 'county/UA', ladName: mappedCounty };
     }
     if (nation && csvLocationData[nation] && csvLocationData[nation][selectedAge]) {
         return { data: csvLocationData[nation][selectedAge], source: 'nation' };
@@ -615,6 +668,7 @@ function loadProfileCSV() {
                 if (row.PCON24NM) profileData[row.PCON24NM] = row;
             });
             console.log(`Loaded profile data for ${Object.keys(profileData).length} constituencies`);
+            if (selectedIndicator === 'bll_adj') renderMap();  // default layer reads adj_* here
         })
         .catch(err => console.error('Could not load profile CSV:', err));
 }
@@ -877,25 +931,23 @@ function openProfile(name) {
             Deprivation score is mySociety's UK-comparable composite IMD: percentile rank of LSOAs within UK, population-weighted to constituency. 100 = most deprived, 0 = least.
         </div></section>`;
 
-    // ── Lead exposure (BLL + model estimate) ──
+    // ── Lead exposure (adjusted-IHME headline + raw IHME baseline) ──
     let leadRows = '';
+    if (p.adj_prop_pct != null && p.adj_prop_pct !== '') {
+        leadRows += row('Adjusted IHME — children BLL ≥ 5',
+            `<span class="warn">${fmtPctVal(p.adj_prop_pct, 2)}</span>`);
+        if (p.adj_children) leadRows += row('Modelled children affected (0–19)',
+            `<span class="warn">${fmtNum(p.adj_children)}</span>`);
+        if (p.adj_rate_per_1000) leadRows += row('Rate per 1,000 children', (+p.adj_rate_per_1000).toFixed(1));
+        if (p.baseline_area) leadRows += row('IHME baseline area',
+            `${p.baseline_area}${p.baseline_ihme_pct != null ? ' — ' + fmtPctVal(p.baseline_ihme_pct, 2) : ''}`);
+    }
     if (bllRow) {
-        leadRows += row(`BLL ≥ 5 µg/dL (${selectedAge})`,
-            `<span class="warn">${(bllRow.mean * dataScale).toFixed(2)}%</span>`);
-        if (bllRow.lower != null && bllRow.upper != null) {
-            leadRows += row('95% UI', `${(bllRow.lower * dataScale).toFixed(2)}–${(bllRow.upper * dataScale).toFixed(2)}%`);
-        }
-    }
-    if (p.estimated_children_bl_5plus) {
-        leadRows += row('Modelled children with BLL ≥ 5',
-            `<span class="warn">${fmtNum(p.estimated_children_bl_5plus)}</span>`);
-    }
-    if (p.rate_per_1000_bl_5plus) {
-        leadRows += row('Rate per 1,000 children', (+p.rate_per_1000_bl_5plus).toFixed(1));
+        leadRows += row(`Raw IHME BLL ≥ 5 (${selectedAge})`, `${(bllRow.mean * dataScale).toFixed(2)}%`);
     }
     if (leadRows) html += `<section><h3>Estimated lead exposure</h3>${leadRows}
         <div style="font-size:0.7rem; color:#6c7a89; margin-top:6px;">
-            BLL: IHME GBD 2021 (county/UA proxy). Model estimate: housing-age × IMD scaling of national IHME total.
+            Adjusted IHME: the area's IHME GBD 2021 blood-lead total (England county/UA; Wales/Scotland/NI nation) re-allocated within-area by UK-fitted weights on housing age &amp; deprivation. Illustrative, not a clinical estimate.
         </div></section>`;
 
     // ── Housing age ──
@@ -966,15 +1018,19 @@ indicatorSelect.addEventListener('change', () => {
     renderMap();
     info.update();
 });
+// Initial control state for the default indicator (age selector only applies to raw IHME).
+ageWrap.style.display = selectedIndicator === 'bll' ? '' : 'none';
+document.title = 'UK Constituency Map — ' + INDICATORS[selectedIndicator].label;
 
 // ── Rankings modal ──────────────────────────────────────────────────
 const rankingsBackdrop = document.getElementById('rankings-backdrop');
 const rankingsTbody = document.getElementById('rankings-tbody');
 const rankingsSearch = document.getElementById('rankings-search');
+const rankingsNation = document.getElementById('rankings-nation');
 const rankingsCount = document.getElementById('rankings-count');
 const rankingsTotal = document.getElementById('rankings-total');
 
-let rankingsSortKey = 'affected';
+let rankingsSortKey = 'rate';
 let rankingsSortDir = 'desc';   // 'asc' | 'desc'
 
 function numOrNull(v) {
@@ -994,8 +1050,10 @@ function getRankingRows() {
             mp: p.mp_name || '',
             mp_party: p.mp_party || '',
             children: numOrNull(p.child_pop_0_19),
-            affected: numOrNull(p.estimated_children_bl_5plus),
-            rate: numOrNull(p.rate_per_1000_bl_5plus),
+            affected: numOrNull(p.adj_children),
+            rate: numOrNull(p.adj_rate_per_1000),
+            baseline_area: p.baseline_area || '',
+            baseline_pct: numOrNull(p.baseline_ihme_pct),
             imd: numOrNull(p.imd_decile),
             pre1972: numOrNull(p.pct_pre_1972),
             mines: numOrNull(p.n_mines_total) || 0,
@@ -1025,12 +1083,12 @@ function renderRankings() {
     all.forEach((r, i) => { r._rank = i + 1; });
 
     const q = (rankingsSearch.value || '').trim().toLowerCase();
-    const filtered = q
-        ? all.filter(r =>
-            r.name.toLowerCase().includes(q) ||
-            r.la.toLowerCase().includes(q) ||
-            (r.mp || '').toLowerCase().includes(q))
-        : all;
+    const nat = rankingsNation.value || '';
+    const filtered = all.filter(r =>
+        (!nat || r.nation === nat) &&
+        (!q || r.name.toLowerCase().includes(q) ||
+               r.la.toLowerCase().includes(q) ||
+               (r.mp || '').toLowerCase().includes(q)));
 
     const fmt = (v, d) => (v == null) ? '—' : (d != null ? (+v).toFixed(d) : Math.round(+v).toLocaleString());
     const rowsHTML = filtered.map(r => {
@@ -1108,6 +1166,7 @@ document.querySelectorAll('#rankings-table th[data-sort]').forEach(th => {
 
 // Search filter
 rankingsSearch.addEventListener('input', renderRankings);
+rankingsNation.addEventListener('change', renderRankings);
 
 // Row click -> zoom to constituency, open profile
 rankingsTbody.addEventListener('click', (e) => {
@@ -1134,7 +1193,8 @@ rankingsTbody.addEventListener('click', (e) => {
 document.getElementById('rankings-export').addEventListener('click', () => {
     const rows = sortRankings(getRankingRows());
     const header = ['rank', 'constituency', 'nation', 'local_authority', 'mp', 'mp_party',
-                    'children_0_19', 'estimated_bll_5plus', 'rate_per_1000',
+                    'children_0_19', 'adj_children_bll_5plus', 'adj_rate_per_1000',
+                    'baseline_area', 'baseline_ihme_pct',
                     'imd_decile', 'pct_pre_1972', 'n_mines', 'topsoil_pb_mgkg'];
     const esc = v => {
         if (v == null) return '';
@@ -1145,7 +1205,8 @@ document.getElementById('rankings-export').addEventListener('click', () => {
     rows.forEach((r, i) => {
         lines.push([
             i + 1, r.name, r.nation, r.la, r.mp, r.mp_party,
-            r.children, r.affected, r.rate, r.imd, r.pre1972, r.mines,
+            r.children, r.affected, r.rate, r.baseline_area, r.baseline_pct,
+            r.imd, r.pre1972, r.mines,
             r.topsoil_pb != null ? Math.round(r.topsoil_pb) : ''
         ].map(esc).join(','));
     });
