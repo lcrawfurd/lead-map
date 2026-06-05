@@ -135,3 +135,43 @@ for term in mL.params.index:
         continue
     print(f"   {term:14} b={mL.params[term]:+.5f}  p={mL.pvalues[term]:.3f}")
 print("   -> soil is positive & significant once London is controlled; mines dropped.")
+
+# ── Robustness: is the negative mines coefficient just a rurality confound, and
+# could mines still help rank seats within Wales? Tested two ways. ──
+from shapely.geometry import shape  # noqa: E402
+print("\n=== MINES ROBUSTNESS ===")
+# A. England LAD: does mines flip sign once population density is controlled?
+carea = {f["properties"]["name"]: shape(f["geometry"]).area
+         for f in json.load(open("uk_counties.json"))["features"]}
+amg = {}
+for r in prof:
+    if r["nation"] != "England":
+        continue
+    c = c2c.get(r["PCON24NM"])
+    if c not in ihme or c not in carea or carea[c] == 0:
+        continue
+    cp = fnum(r["child_pop_0_19"]) or 0
+    d = amg.setdefault(c, {"cp": 0, "h": 0, "i": 0, "m": 0})
+    d["cp"] += cp; d["m"] += fnum(r["n_mines_total"]) or 0
+    if fnum(r["pct_pre_1945"]) is not None: d["h"] += fnum(r["pct_pre_1945"]) * cp
+    if fnum(r["imd_score"]) is not None: d["i"] += fnum(r["imd_score"]) * cp
+ed = pd.DataFrame([{"ihme": ihme[c] * 100, "pre1945": d["h"] / d["cp"], "imd": d["i"] / d["cp"],
+                    "mines_per_1k": d["m"] / (d["cp"] / 1000),
+                    "log_density": np.log(d["cp"] / carea[c])}
+                   for c, d in amg.items() if d["cp"]])
+for f in ["ihme ~ pre1945 + imd + mines_per_1k",
+          "ihme ~ pre1945 + imd + mines_per_1k + log_density"]:
+    m = smf.ols(f, data=ed).fit(cov_type="HC3")
+    tag = "with density control" if "density" in f else "no control     "
+    print(f"  A. mines_per_1k ({tag}): b={m.params['mines_per_1k']:+.3f} p={m.pvalues['mines_per_1k']:.3f}")
+print("     -> negative sign is pure rurality confound; mines ≈ 0 once density is controlled.")
+# B. Do mining seats have higher topsoil Pb (a contamination signal that exists within Wales)?
+mb = pd.DataFrame([(fnum(r["n_mines_total"]) or 0, soil.get(r["PCON24NM"]), r["nation"])
+                   for r in prof if soil.get(r["PCON24NM"]) is not None],
+                  columns=["mines", "soil", "nation"])
+for nat in ["Wales", "England", "Scotland"]:
+    d = mb[mb.nation == nat]
+    print(f"  B. {nat}: mean topsoil Pb has-mines={d[d.mines>0].soil.mean():.0f} vs "
+          f"no-mines={d[d.mines==0].soil.mean():.0f} mg/kg")
+print("     -> mining seats do NOT have higher soil Pb (lower in Wales); mine contamination")
+print("        is hyper-local and washes out at constituency scale. Mines stay an overlay.")

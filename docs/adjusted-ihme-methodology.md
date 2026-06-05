@@ -54,7 +54,10 @@ Fitted: pre-1945 housing **+0.0079**, IMD score **+0.0179** — both positive. M
 predictors are imputed to the area/nation mean; predicted risk is floored at 0.1.
 
 **Predictors tested and excluded** (see `regress_ihme_predictors.py`): *historic
-mines* — no positive signal (they cluster in rural seats IHME models as low-BLL);
+mines* — the raw negative coefficient is a pure rurality confound (it vanishes to
+≈0, p≈0.95, once population density is controlled), and mining seats do not even
+have higher topsoil Pb (lower in Wales) — mine contamination is too hyper-local to
+register at constituency scale;
 *topsoil Pb* — predicts blood lead across England only **once London is dropped**
 from the fit (r = +0.42 ex-London vs ≈0 pooled: London has the highest soil Pb but
 average modelled BLL), and applying that slope extrapolates poorly to Wales/Scotland
