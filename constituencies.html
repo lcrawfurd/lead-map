@@ -190,7 +190,7 @@
 <div id="header">
     <div>
         <h1>UK Constituency Map — Lead Risk Indicators</h1>
-        <div class="subtitle" id="header-subtitle">Adjusted IHME — IHME GBD 2021 blood-lead prevalence (England county/UA, devolved nations) re-allocated within each area by housing age & deprivation</div>
+        <div class="subtitle" id="header-subtitle">Adjusted IHME — IHME GBD 2021 blood-lead prevalence (England county/UA, devolved nations) re-allocated within each area by UK-fitted weights on housing age & deprivation</div>
     </div>
     <div class="controls">
         <a href="index.html" class="nav-link">View by County / UA</a>
@@ -293,7 +293,7 @@ const INDICATORS = {
     bll_adj: {
         label: 'Adjusted IHME — modelled BLL ≥ 5',
         legendTitle: '% children BLL ≥ 5 (adjusted)',
-        subtitle: 'Adjusted IHME — IHME GBD 2021 blood-lead prevalence (England county/UA, devolved nations) re-allocated within each area by housing age & deprivation',
+        subtitle: 'Adjusted IHME — IHME GBD 2021 blood-lead prevalence (England county/UA, devolved nations) re-allocated within each area by UK-fitted weights on housing age & deprivation',
         unit: '%',
         colors: ['#ffffb2', '#fed976', '#feb24c', '#fd8d3c', '#f03b20', '#bd0026'],
         breaks: [0, 1, 2, 3, 4, 5],
@@ -458,7 +458,7 @@ info.update = function (props, data, source, ladName) {
             <p class="value">${fmtVal(data.mean)}</p>
             ${childStr}
             <p class="ci" style="margin-top:4px;">Baseline: ${data.baselineArea || '?'}${data.baselinePct != null ? ` (${data.baselinePct}% IHME)` : ''}</p>
-            <p class="source-label">IHME GBD 2021 × housing-age/IMD</p>
+            <p class="source-label">IHME GBD 2021 × housing/IMD (UK-fitted)</p>
         `;
         return;
     }
@@ -940,7 +940,7 @@ function openProfile(name) {
     }
     if (leadRows) html += `<section><h3>Estimated lead exposure</h3>${leadRows}
         <div style="font-size:0.7rem; color:#6c7a89; margin-top:6px;">
-            Adjusted IHME: the area's IHME GBD 2021 blood-lead total (England county/UA; Wales/Scotland/NI nation) re-allocated within-area by housing age &amp; IMD deprivation. Illustrative, not a clinical estimate.
+            Adjusted IHME: the area's IHME GBD 2021 blood-lead total (England county/UA; Wales/Scotland/NI nation) re-allocated within-area by UK-fitted weights on housing age &amp; deprivation. Illustrative, not a clinical estimate.
         </div></section>`;
 
     // ── Housing age ──

@@ -103,21 +103,31 @@ Scotland, Wales, NI) shown with reduced opacity.
 <p>
 The default map layer and the rankings table. A <strong>best-data-per-area</strong>
 allocation: each area's IHME GBD 2021 blood-lead total is re-allocated across its
-constituencies by housing-age and deprivation risk. The baseline area is the finest
-IHME geography available:
+constituencies by modelled risk. The baseline area is the finest IHME geography
+available:
 </p>
 <ul>
     <li><strong>England</strong> — the parent county / unitary authority (keeps local variation; e.g. Blackpool ≈ 3.5%, Surrey ≈ 1.1%).</li>
     <li><strong>Wales, Scotland, Northern Ireland</strong> — the nation (IHME publishes no sub-national estimate). Nation baselines: Wales 4.7%, NI 3.4%, Scotland 3.2% vs England 1.6%.</li>
 </ul>
 <p>
-Within each area, constituencies are weighted by relative risk — pre-1945 housing
-share (odds ratio 1.92, US CDC literature) and IMD decile (odds ratio 1.44 for high
-deprivation) — and the area's IHME child total is allocated proportionally. Because
-the area total is preserved, this <em>re-levels</em> the housing/IMD model onto IHME
-baselines rather than inflating it. Built by <code>build_adjusted_ihme.py</code>
-(constituency&nbsp;→&nbsp;county mapping by <code>build_constituency_mapping.py</code>).
-This is illustrative; not a clinical estimate.
+The within-area risk weight is each constituency's <strong>predicted</strong> IHME
+blood-lead level, from a regression fitted on the England county/UA units:
+<code>BLL% ~ pre-1945 housing + IMD deprivation</code>. So the weights are
+<em>fitted to UK data</em>, not imported odds ratios; both predictors enter
+positively. The area's IHME child total is then allocated proportionally to
+predicted-risk × child population, so each area's total is preserved — this
+<em>re-levels</em> the model onto IHME baselines rather than inflating it. Built by
+<code>build_adjusted_ihme.py</code> (constituency&nbsp;→&nbsp;county mapping by
+<code>build_constituency_mapping.py</code>). Illustrative; not a clinical estimate.
+</p>
+<p style="font-size:0.85em; color:#555;">
+<strong>Topsoil Pb and historic mines were tested as predictors and left out of the
+headline figure</strong> (<code>regress_ihme_predictors.py</code>): mines show no
+positive association with IHME blood lead, and topsoil Pb predicts it only outside
+London — the signal collapses once London (highest soil Pb, but average modelled
+BLL) is included — so it would extrapolate poorly. Both remain available as
+standalone map layers.
 </p>
 <p style="font-size:0.85em; color:#555;">
 The earlier version scaled a single UK total by housing/IMD, discarding the

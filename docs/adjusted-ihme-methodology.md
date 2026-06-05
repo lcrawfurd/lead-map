@@ -40,44 +40,57 @@ England into one colour; (C) keep the old housing+IMD model on the map and
 downplay IHME — not an "adjusted IHME" figure, and ignores the genuine Welsh
 signal.
 
-## Model (one formula)
+## Model
 
-For each baseline area *A* (an English LAD/county, or a whole devolved nation):
+**Within-area risk weight — UK-fitted regression.** Rather than import US odds
+ratios, the weight is each constituency's *predicted* IHME blood-lead level from an
+OLS fitted on the England county/UA units:
 
-1. IHME gives area *A* a proportion `p_A` of children 0–19 with BLL ≥ 5, hence a
-   case total `cases_A = p_A × childpop_A`.
-2. Each constituency *i* in *A* carries the existing relative risk weight `r_i`
-   from pre-1945 housing share (OR 1.92) and IMD (OR 1.44). The current
-   `rate_per_1000` column is exactly `K · r_i` for a global constant `K`, so
-   **within-area ratios of `rate_per_1000` recover `r_i` exactly** — we reuse it
-   as the weight rather than re-deriving the (missing) original functional form.
-3. Allocate `cases_A` across the constituencies of *A* in proportion to
-   `r_i × childpop_i`, then
-   `adj_prop_i = allocated_cases_i / childpop_i`.
+```
+ihme_pct ~ pre1945_housing + imd_score          (n = 150, R² ≈ 0.16)
+```
 
-By construction the child-population-weighted mean of `adj_prop_i` over *A*
-equals `p_A` (re-allocation, not inflation — no double-counting of the level).
-Net effect: **the existing model's within-area ordering is unchanged; only the
-cross-area level is re-anchored to IHME.**
+Fitted: pre-1945 housing **+0.0079**, IMD score **+0.0179** — both positive. Missing
+predictors are imputed to the area/nation mean; predicted risk is floored at 0.1.
 
-IHME age group: **0–19** (matches `child_pop_0_19`). Both measures from
-`IHME_GBD_2021_LEAD_RISK_*PROP_ABOVE_5*.CSV`, `measure_name == "Proportion"`,
-`age_group_name == "<20"`.
+**Predictors tested and excluded** (see `regress_ihme_predictors.py`): *historic
+mines* — no positive signal (they cluster in rural seats IHME models as low-BLL);
+*topsoil Pb* — predicts blood lead across England only **once London is dropped**
+from the fit (r = +0.42 ex-London vs ≈0 pooled: London has the highest soil Pb but
+average modelled BLL), and applying that slope extrapolates poorly to Wales/Scotland
+(e.g. it pushed Swansea West to 6.5% off one coarse topsoil mean). Both stay as
+standalone overlay layers instead.
 
-### Expected output (prototype)
+**Allocation (preserves area totals).** For each baseline area *A* — an English
+county/UA, or a whole devolved nation — with IHME proportion `p_A`:
 
-Nation means (per 1,000): England **16.1**, Wales **47.1**, Scotland **32.3**,
-NI **34.3**. England retains a 9–35 spread; its worst seats (Blackpool 34.8,
-Hull, South Shields, Oldham, Barking) sit just below the devolved-nation band,
-so 5 English seats remain in the worst-100 (Wales 31 / Scotland 47 / NI 17 /
-England 5). Map and rankings now agree.
+1. each constituency *i* gets `risk_i` = predicted BLL%;
+2. allocate *A*'s child total proportionally:
+   `adj_prop_i = p_A × risk_i / Σ_w(risk over A)`, child-population-weighted.
+
+So the child-population-weighted mean of `adj_prop_i` over *A* equals `p_A` — this
+**re-levels** the model onto IHME baselines rather than inflating it. The cross-area
+level is IHME; the within-area distribution is the fitted risk.
+
+IHME age group: **0–19** (`age_group_name == "<20"`, `measure_name == "Proportion"`).
+
+### Expected output
+
+Nation means (per 1,000): England **16.7**, Wales **47.1**, Scotland **32.3**,
+NI **34.3** (IHME-anchored, so stable). Within-nation spread is coherent (Wales
+42–50, Scotland 28–41); top seats are deprived Welsh valleys/cities (Cardiff West,
+Llanelli, Blaenau Gwent, Pontypridd, Merthyr). Worst-100 split ≈ Wales 31 /
+Scotland 47 / NI 15 / England 7.
+Map and rankings agree.
 
 ## Changes
 
-- **`build_adjusted_ihme.py`** (new, committed): regenerates the figure from the
-  IHME CSV + constituency→county mapping + `rate_per_1000` weights and writes the
-  new columns. Restores reproducibility (the original `lead_exposure_model_FINAL.py`
-  is not in the repo).
+- **`build_adjusted_ihme.py`** (new, committed): fits the UK regression weights
+  (housing + IMD) and writes the new columns from the IHME CSV + constituency→county
+  mapping. **`regress_ihme_predictors.py`**: standalone regression diagnostics
+  (statsmodels) that justify the predictor choice (incl. testing soil & mines).
+  Restores reproducibility (the original `lead_exposure_model_FINAL.py` is not in
+  the repo).
 - **`constituency_profile.csv`**: add `adj_rate_per_1000`, `adj_children`,
   `adj_prop_pct`, `baseline_area`, `baseline_ihme_pct`.
 - **`constituencies.html`**:
@@ -107,5 +120,13 @@ England 5). Map and rankings now agree.
 
 ## Out of scope
 
-Re-deriving risk weights from primary inputs; changing housing/mines/topsoil
-layers; the global and county/UA (`index.html`) maps.
+Changing the standalone housing/mines/topsoil overlay layers; the global and
+county/UA (`index.html`) maps.
+
+## Update log
+
+- 2026-06-05: within-area weights switched from imported US odds ratios to a
+  UK-fitted regression on IHME (housing + IMD). Topsoil Pb and historic mines were
+  tested as predictors and excluded — mines no signal; soil predicts BLL only
+  ex-London and extrapolates poorly (Swansea West outlier). Both kept as overlays.
+  See `regress_ihme_predictors.py`.
