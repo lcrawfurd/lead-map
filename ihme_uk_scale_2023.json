@@ -1,0 +1,13 @@
+{
+  "target_year": "2023",
+  "metric": "proportion_BLL_ge_5ugdL",
+  "note": "UK national new-round / 2021 ratio; the county/UA map multiplies each age's GBD-2021 value by factors[age]. Ages absent here have no comparable GBD 2023 figure.",
+  "source_2021": "IHME_GBD_2021_LEAD_RISK_1990_2021_PROP_ABOVE_5_2021_BOTH_Y2024M06D05.CSV",
+  "source_new": "IHME_GBD_2023_LEAD_RISK_1990_2023_PROP_ABOVE_50_2023_BOTH_Y2026M03D03.CSV",
+  "factors": {
+    "<1": 0.411139,
+    "<5": 0.33978,
+    "<20": 0.586087,
+    "0 to 14": 0.48852
+  }
+}

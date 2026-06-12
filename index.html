@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UK Lead Exposure Map — IHME GBD 2021</title>
+    <title>UK Lead Exposure Map — IHME GBD 2021, re-leveled to GBD 2023</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://unpkg.com/papaparse@5.4.1/papaparse.min.js"></script>
@@ -66,7 +66,7 @@
 <div id="header">
     <div>
         <h1>UK Lead Exposure Map</h1>
-        <div class="subtitle">IHME Global Burden of Disease 2021 — Proportion with Blood Lead ≥ 5 µg/dL (County / UA level)</div>
+        <div class="subtitle">IHME GBD 2021 — Proportion with Blood Lead ≥ 5 µg/dL (County / UA level), re-leveled to the GBD 2023 UK national rate per age (×0.49 at 0–14; younger ages dropped more). GBD 2023 has no usable UK sub-national split, so the 2021 pattern is kept.</div>
     </div>
     <div class="controls">
         <a href="constituencies.html" style="color:#a0a0b0; font-size:0.82rem; text-decoration:none; border:1px solid #0f3460; padding:6px 12px; border-radius:6px;">View by Constituency</a>
@@ -91,6 +91,7 @@ let ageGroups = [];
 let selectedAge = '';
 let geoLayer = null;
 let dataScale = 100;
+let scaleFactors = {};   // per-age UK GBD-2023/2021 factors (ihme_uk_scale_2023.json)
 
 const NATIONS = ['England', 'Scotland', 'Wales', 'Northern Ireland'];
 
@@ -116,7 +117,7 @@ function fmtPct(val) {
 const map = L.map('map', { center: [55.3, -3.5], zoom: 6, zoomControl: true });
 
 L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/attributions">CARTO</a> | Data: <a href="https://ghdx.healthdata.org/record/ihme-data/gbd-2021-lead-exposure-estimates-1990-2021">IHME GBD 2021</a>',
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/attributions">CARTO</a> | Data: <a href="https://ghdx.healthdata.org/record/ihme-data/gbd-2021-lead-exposure-estimates-1990-2021">IHME GBD 2021</a> + <a href="https://ghdx.healthdata.org/record/ihme-data/gbd-2023-lead-exposure-estimates-1990-2023">GBD 2023</a>',
     subdomains: 'abcd', maxZoom: 14
 }).addTo(map);
 
@@ -145,6 +146,10 @@ info.update = function (props, data, source) {
     const fallbackWarning = isFallback
         ? `<p style="color:#e94560; font-size:0.78rem; margin-top:4px;">No local data — showing ${source}-level estimate</p>`
         : '';
+    const f = scaleFactors[selectedAge];
+    const levelNote = f
+        ? `<p class="ci" style="margin-top:4px; color:#7aa5d2;">GBD 2021 pattern, re-leveled to GBD 2023 (×${f.toFixed(2)})</p>`
+        : `<p class="ci" style="margin-top:4px; color:#c9a227;">Raw GBD 2021 — no GBD 2023 figure for this age</p>`;
     this._div.innerHTML = `
         <h4>${label}</h4>
         <p>Proportion with BLL ≥ 5 µg/dL</p>
@@ -152,6 +157,7 @@ info.update = function (props, data, source) {
         <p class="ci">95% UI: ${fmtPct(data.lower)} – ${fmtPct(data.upper)}</p>
         ${popStr}
         <p class="ci" style="margin-top:4px;">Age group: ${selectedAge || 'N/A'}</p>
+        ${levelNote}
         ${fallbackWarning}
         ${source ? `<p class="source-label">Source: ${source}-level data</p>` : ''}
     `;
@@ -181,20 +187,33 @@ function getDataForFeature(props) {
     const name = props.name;
     const nation = props.nation;
 
-    // Try exact match on county/UA name
+    let raw = null, source = null;
+    // Try exact match on county/UA name, then nation, then UK
     if (csvLocationData[name] && csvLocationData[name][selectedAge]) {
-        return { data: csvLocationData[name][selectedAge], source: 'direct' };
+        raw = csvLocationData[name][selectedAge]; source = 'direct';
+    } else if (nation && csvLocationData[nation] && csvLocationData[nation][selectedAge]) {
+        raw = csvLocationData[nation][selectedAge]; source = 'nation';
+    } else if (csvLocationData['United Kingdom'] && csvLocationData['United Kingdom'][selectedAge]) {
+        raw = csvLocationData['United Kingdom'][selectedAge]; source = 'national (UK)';
     }
-    // Fall back to nation-level data
-    if (nation && csvLocationData[nation] && csvLocationData[nation][selectedAge]) {
-        return { data: csvLocationData[nation][selectedAge], source: 'nation' };
+    if (!raw) return { data: null, source: null };
+
+    // Re-level the GBD-2021 value to GBD 2023 by the UK national factor for this
+    // age (younger ages dropped more). Ages with no 2023 figure stay un-scaled.
+    const f = scaleFactors[selectedAge];
+    if (f) {
+        return { data: { ...raw, mean: raw.mean * f, lower: raw.lower * f, upper: raw.upper * f },
+                 source, scaled: true };
     }
-    // Try "United Kingdom" as last resort
-    if (csvLocationData['United Kingdom'] && csvLocationData['United Kingdom'][selectedAge]) {
-        return { data: csvLocationData['United Kingdom'][selectedAge], source: 'national (UK)' };
-    }
-    return { data: null, source: null };
+    return { data: raw, source, scaled: false };
 }
+
+// ── Per-age UK GBD-2023 re-leveling factors (optional) ──────────────
+// Built by build_adjusted_ihme.py. Absent → map shows raw GBD 2021.
+fetch('ihme_uk_scale_2023.json')
+    .then(r => r.ok ? r.json() : null)
+    .then(j => { if (j && j.factors) { scaleFactors = j.factors; renderMap(); } })
+    .catch(() => {});
 
 // ── Load GeoJSON (external file) ────────────────────────────────────
 fetch('uk_counties.json')
