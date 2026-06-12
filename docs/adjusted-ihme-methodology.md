@@ -137,8 +137,40 @@ Library age bands × total population (within a few %); IMD and housing remain b
 and are imputed to the area/nation mean. A code-based (GSS) join upstream would
 remove the need for this.
 
+## Re-leveling to GBD 2023 (2026-06-12)
+
+GBD 2023 (released Oct 2025) lowered UK childhood lead, but it no longer resolves
+the UK sub-nationally in a usable way, so the 2021 round still supplies the
+**pattern** and only the **level** is updated.
+
+- **Why not per-nation.** GBD 2023's UK nation splits are erratic and barely
+  identified: ages 0–19 above 5 µg/dL read **England 0.03%** and **Wales 21.0%**
+  (Wales CI 5–48%), against 1.58% / 4.71% in 2021. Re-leveling per-nation would
+  scale Wales *up* 4.5× and England to ≈0 — not a credible spatial signal.
+- **What we do.** Scale every area by the single **UK national** ratio
+  `GBD 2023 / GBD 2021 = 1.0615% / 1.8112% = 0.5861`. This lowers the whole map
+  ~41% and preserves the entire 2021 within-UK pattern (England county variation
+  and the cross-nation gradient). Nation means fall to (per 1,000): England 9.8,
+  Wales 27.6, Scotland 18.9, NI 20.1 (from 16.7 / 47.1 / 32.3 / 34.3). The top of
+  the table is unchanged (deprived Welsh seats), now ≤ 2.94% rather than ≤ 5.0%.
+- **Mechanism.** `build_adjusted_ihme.py` reads the GBD 2023 "Proportion Above 50"
+  national CSV (`IHME_*PROP_ABOVE_*_2023_BOTH_*.CSV`) and writes additive
+  `adj2023_*` columns plus `scale_factor` / `scale_geo`; the original GBD-2021
+  `adj_*` columns are left intact. `SCALE_MODE` (`uk_national` | `best_geography`)
+  controls whether the factor is UK-wide or per-area — set to `uk_national` for the
+  reason above. `constituencies.html` reads `adj2023_*` when present (falling back
+  to `adj_*`) and keeps the GBD-2021 figures under `adj2021_*`. Drop a future
+  round's file in and rerun to re-level again.
+
+Source: IHME GBD 2023 — Lead Exposure Estimates 1990–2023, Proportion above
+50 µg/L, ages 0–19, year 2023, sex Both.
+
 ## Update log
 
+- 2026-06-12: re-leveled the headline figure to GBD 2023 by the UK national ratio
+  (×0.586); kept the 2021 sub-national pattern because GBD 2023's UK nation splits
+  are not usable (England 0.03%, Wales 21%). See the section above and
+  `build_adjusted_ihme.py` (`SCALE_MODE`, `adj2023_*` columns).
 - 2026-06-05: within-area weights switched from imported US odds ratios to a
   UK-fitted regression on IHME (housing + IMD). Topsoil Pb and historic mines were
   tested as predictors and excluded — mines no signal; soil predicts BLL only

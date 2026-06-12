@@ -121,6 +121,18 @@ predicted-risk × child population, so each area's total is preserved — this
 <code>build_adjusted_ihme.py</code> (constituency&nbsp;→&nbsp;county mapping by
 <code>build_constituency_mapping.py</code>). Illustrative; not a clinical estimate.
 </p>
+<p>
+<strong>Re-leveled to GBD 2023.</strong> The 2021 round is the last with UK
+sub-national lead detail, so it supplies the within-UK pattern. The level is then
+brought to the latest round: every area is scaled by the UK national ratio
+<code>GBD&nbsp;2023 / GBD&nbsp;2021 = 1.06% / 1.81% = 0.586</code>, lowering the whole
+map by ~41% while keeping the 2021 pattern. GBD 2023's own UK nation splits are not
+usable as a spatial signal — they read England 0.03% and Wales 21.0% above
+5&nbsp;µg/dL (Wales CI 5–48%), against 1.6% / 4.7% in 2021 — so only the UK-wide
+level is taken from 2023, not the per-nation values. Source:
+<a href="https://ghdx.healthdata.org/record/ihme-data/gbd-2023-lead-exposure-estimates-1990-2023">IHME GBD 2023 — Lead Exposure Estimates</a>
+(Proportion above 50&nbsp;µg/L, ages&nbsp;0–19, 2023).
+</p>
 <p style="font-size:0.85em; color:#555;">
 <strong>Topsoil Pb and historic mines were tested as predictors and left out of the
 headline figure</strong> (<code>regress_ihme_predictors.py</code>): mines show no
