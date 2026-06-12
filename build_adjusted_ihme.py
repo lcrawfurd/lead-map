@@ -68,6 +68,10 @@ ADJ2023_COLS = ["adj2023_prop_pct", "adj2023_rate_per_1000", "adj2023_children",
 SCALE_MODE = "uk_national"          # "uk_national" | "best_geography"
 SCALE_ANCHOR = "United Kingdom"
 
+# Per-age UK national factors for the county/UA map (index.html). Written from
+# the UK rows of both files; the map multiplies each age's GBD-2021 value by these.
+UK_SCALE_JSON = "ihme_uk_scale_2023.json"
+
 
 def fnum(x):
     try:
@@ -76,12 +80,20 @@ def fnum(x):
         return None
 
 
+def _ihme_2021_path():
+    """The GBD-2021 baseline file. Excludes the GBD-2023 'PROP_ABOVE_50' file,
+    which the bare 'PROP_ABOVE_5*' glob would otherwise also match (50 ⊃ 5)."""
+    m = [p for p in glob.glob("IHME_*PROP_ABOVE_5*.CSV")
+         + glob.glob("IHME_*PROP_ABOVE_5*.csv") if "PROP_ABOVE_50" not in p]
+    return sorted(m)[0] if m else None
+
+
 def load_ihme_props():
-    matches = glob.glob("IHME_*PROP_ABOVE_5*.CSV") + glob.glob("IHME_*PROP_ABOVE_5*.csv")
-    if not matches:
-        sys.exit("ERROR: IHME PROP_ABOVE_5 CSV not found in this directory.")
+    path = _ihme_2021_path()
+    if not path:
+        sys.exit("ERROR: IHME PROP_ABOVE_5 (GBD 2021) CSV not found in this directory.")
     prop = {}
-    with open(matches[0], newline="") as f:
+    with open(path, newline="", encoding="utf-8-sig") as f:
         for r in csv.DictReader(f):
             if r["measure_name"] == "Proportion" and r["age_group_name"] == AGE:
                 prop[r["location_name"]] = float(r["mean"])
@@ -161,6 +173,52 @@ def load_scale_props():
               f"{sorted(a for a in ages_seen if a)} -- check the codebook and "
               f"extend AGE_ALIASES / SCALE_YEAR if the schema differs.")
     return props, fn
+
+
+def _scale_path():
+    m = []
+    for g in SCALE_GLOBS:
+        m += glob.glob(g)
+    return sorted(dict.fromkeys(m))[-1] if m else None
+
+
+def _uk_props_by_age(path):
+    """UK national 'Proportion' by age group (fractions, sex Both) from one file."""
+    d = {}
+    with open(path, newline="", encoding="utf-8-sig") as f:
+        for r in csv.DictReader(f):
+            if (r.get("location_name") == "United Kingdom"
+                    and r.get("measure_name") == "Proportion"
+                    and r.get("sex") in (None, "", "Both")):
+                v = fnum(r.get("mean"))
+                if v is not None:
+                    d[r.get("age_group_name")] = v
+    return d
+
+
+def write_uk_age_scale():
+    """Write per-age UK national re-leveling factors (new round / 2021) to
+    UK_SCALE_JSON for the county/UA map. Only ages whose label is present in BOTH
+    files get a factor -- in practice the GBD-2023 child bands (<1, <5, 0 to 14,
+    <20). Ages with no newer-round figure are omitted and left un-re-leveled by
+    the map (and flagged there)."""
+    p21, p23 = _ihme_2021_path(), _scale_path()
+    if not (p21 and p23):
+        print(f"Skipping {UK_SCALE_JSON} (need both the 2021 and {SCALE_YEAR} files).")
+        return
+    base, new = _uk_props_by_age(p21), _uk_props_by_age(p23)
+    factors = {age: round(new[age] / base[age], 6)
+               for age in base if age in new and base[age] > 0}
+    out = {"target_year": SCALE_YEAR,
+           "metric": "proportion_BLL_ge_5ugdL",
+           "note": ("UK national new-round / 2021 ratio; the county/UA map "
+                    "multiplies each age's GBD-2021 value by factors[age]. Ages "
+                    f"absent here have no comparable GBD {SCALE_YEAR} figure."),
+           "source_2021": p21, "source_new": p23, "factors": factors}
+    with open(UK_SCALE_JSON, "w") as f:
+        json.dump(out, f, indent=2)
+    print(f"Wrote {UK_SCALE_JSON}: "
+          + ", ".join(f"{a}={v:.3f}" for a, v in sorted(factors.items())))
 
 
 def main():
@@ -295,6 +353,7 @@ def main():
         w.writeheader()
         w.writerows(rows)
 
+    write_uk_age_scale()   # per-age UK factors for the county/UA map (index.html)
     _sanity(rows)
 
 
