@@ -190,7 +190,7 @@
 <div id="header">
     <div>
         <h1>UK Constituency Map — Lead Risk Indicators</h1>
-        <div class="subtitle" id="header-subtitle">Adjusted IHME — IHME GBD 2021 blood-lead prevalence (England county/UA, devolved nations) re-allocated within each area by UK-fitted weights on housing age & deprivation</div>
+        <div class="subtitle" id="header-subtitle">Adjusted IHME — GBD 2021 gives the within-UK pattern (England county/UA + devolved nations), re-allocated by UK-fitted housing-age & deprivation weights, then re-leveled to the GBD 2023 UK national rate (1.06%, vs 1.81% in 2021). GBD 2023 has no usable UK sub-national split.</div>
     </div>
     <div class="controls">
         <a href="index.html" class="nav-link">View by County / UA</a>
@@ -246,7 +246,7 @@
             </div>
         </div>
         <div id="rankings-subtitle">
-            Adjusted-IHME estimates: each area's IHME GBD 2021 blood-lead total (England county/UA; Wales/Scotland/NI nation) re-allocated across its constituencies by housing age + IMD deprivation, on 2021 Census child population. Same figure as the default map layer. Click a column header to sort; click a row to open the constituency on the map.
+            Adjusted-IHME estimates: each area's IHME GBD 2021 blood-lead total (England county/UA; Wales/Scotland/NI nation) re-allocated across its constituencies by housing age + IMD deprivation, on 2021 Census child population, then re-leveled to the GBD 2023 UK national rate (×0.586). Same figure as the default map layer. Click a column header to sort; click a row to open the constituency on the map.
         </div>
         <div id="rankings-table-wrap">
             <table id="rankings-table">
@@ -271,7 +271,7 @@
         </div>
         <div id="rankings-footer">
             <div>Showing <span id="rankings-count">0</span> of <span id="rankings-total">0</span> constituencies</div>
-            <div>IMD decile: 1 = most deprived. Rate is adjusted-IHME modelled children BLL ≥ 5 µg/dL per 1,000 aged 0–19. Topsoil Pb: BGS UKTS mean (mg/kg); — = outside survey coverage (parts of Scotland).</div>
+            <div>IMD decile: 1 = most deprived. Rate is adjusted-IHME modelled children BLL ≥ 5 µg/dL per 1,000 aged 0–19, re-leveled to the GBD 2023 UK national rate. Topsoil Pb: BGS UKTS mean (mg/kg); — = outside survey coverage (parts of Scotland).</div>
         </div>
     </div>
 </div>
@@ -299,12 +299,12 @@ const NATIONS = ['England', 'Scotland', 'Wales', 'Northern Ireland'];
 const INDICATORS = {
     bll_adj: {
         label: 'Adjusted IHME — modelled BLL ≥ 5',
-        legendTitle: '% children BLL ≥ 5 (adjusted)',
-        subtitle: 'Adjusted IHME — IHME GBD 2021 blood-lead prevalence (England county/UA, devolved nations) re-allocated within each area by UK-fitted weights on housing age & deprivation',
+        legendTitle: '% children BLL ≥ 5 (adj., GBD-2023 level)',
+        subtitle: 'Adjusted IHME — GBD 2021 gives the within-UK pattern (England county/UA + devolved nations), re-allocated by UK-fitted housing-age & deprivation weights, then re-leveled to the GBD 2023 UK national rate (1.06%, vs 1.81% in 2021). GBD 2023 has no usable UK sub-national split.',
         unit: '%',
         colors: ['#ffffb2', '#fed976', '#feb24c', '#fd8d3c', '#f03b20', '#bd0026'],
         breaks: [0, 1, 2, 3, 4, 5],
-        source: 'IHME GBD 2021 + VOA/IMD model'
+        source: 'IHME GBD 2021 pattern, re-leveled to GBD 2023 + VOA/IMD model'
     },
     bll: {
         label: 'Blood lead ≥ 5 (raw IHME)',
@@ -395,7 +395,7 @@ function isHousingIndicator(ind) {
 const map = L.map('map', { center: [55.3, -3.5], zoom: 6, zoomControl: true });
 
 L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/attributions">CARTO</a> | Data: <a href="https://ghdx.healthdata.org/record/ihme-data/gbd-2021-lead-exposure-estimates-1990-2021">IHME GBD 2021</a> | <a href="https://www.bgs.ac.uk/datasets/uk-topsoil-geochemistry/">BGS UKTS</a> | Boundaries: <a href="https://geoportal.statistics.gov.uk/">ONS</a>',
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/attributions">CARTO</a> | Data: <a href="https://ghdx.healthdata.org/record/ihme-data/gbd-2021-lead-exposure-estimates-1990-2021">IHME GBD 2021</a> + <a href="https://ghdx.healthdata.org/record/ihme-data/gbd-2023-lead-exposure-estimates-1990-2023">GBD 2023</a> | <a href="https://www.bgs.ac.uk/datasets/uk-topsoil-geochemistry/">BGS UKTS</a> | Boundaries: <a href="https://geoportal.statistics.gov.uk/">ONS</a>',
     subdomains: 'abcd', maxZoom: 14
 }).addTo(map);
 
@@ -465,7 +465,7 @@ info.update = function (props, data, source, ladName) {
             <p class="value">${fmtVal(data.mean)}</p>
             ${childStr}
             <p class="ci" style="margin-top:4px;">Baseline: ${data.baselineArea || '?'}${data.baselinePct != null ? ` (${data.baselinePct}% IHME)` : ''}</p>
-            <p class="source-label">IHME GBD 2021 × housing/IMD (UK-fitted)</p>
+            <p class="source-label">IHME GBD 2021 × housing/IMD (UK-fitted), re-leveled to GBD 2023</p>
         `;
         return;
     }
@@ -667,7 +667,25 @@ function loadProfileCSV() {
             results.data.forEach(row => {
                 if (row.PCON24NM) profileData[row.PCON24NM] = row;
             });
-            console.log(`Loaded profile data for ${Object.keys(profileData).length} constituencies`);
+            // Re-level the headline figure to the GBD-2023 UK national level when
+            // the adj2023_* columns are present (build_adjusted_ihme.py scales the
+            // 2021 sub-national pattern by UK 2023/2021 ≈ 0.586). Downstream code
+            // reads adj_*; point those at the 2023-leveled values and keep the
+            // GBD-2021 figures under adj2021_* for reference.
+            let releveled = 0;
+            Object.values(profileData).forEach(p => {
+                if (p.adj2023_prop_pct != null && p.adj2023_prop_pct !== '') {
+                    p.adj2021_prop_pct = p.adj_prop_pct;
+                    p.adj2021_rate_per_1000 = p.adj_rate_per_1000;
+                    p.adj2021_children = p.adj_children;
+                    p.adj_prop_pct = p.adj2023_prop_pct;
+                    p.adj_rate_per_1000 = p.adj2023_rate_per_1000;
+                    p.adj_children = p.adj2023_children;
+                    releveled++;
+                }
+            });
+            console.log(`Loaded profile data for ${Object.keys(profileData).length} constituencies` +
+                        (releveled ? ` (${releveled} re-leveled to GBD-2023 UK national)` : ''));
             if (selectedIndicator === 'bll_adj') renderMap();  // default layer reads adj_* here
         })
         .catch(err => console.error('Could not load profile CSV:', err));
@@ -939,7 +957,7 @@ function openProfile(name) {
         if (p.adj_children) leadRows += row('Modelled children affected (0–19)',
             `<span class="warn">${fmtNum(p.adj_children)}</span>`);
         if (p.adj_rate_per_1000) leadRows += row('Rate per 1,000 children', (+p.adj_rate_per_1000).toFixed(1));
-        if (p.baseline_area) leadRows += row('IHME baseline area',
+        if (p.baseline_area) leadRows += row('IHME baseline area (GBD 2021)',
             `${p.baseline_area}${p.baseline_ihme_pct != null ? ' — ' + fmtPctVal(p.baseline_ihme_pct, 2) : ''}`);
     }
     if (bllRow) {
@@ -947,7 +965,7 @@ function openProfile(name) {
     }
     if (leadRows) html += `<section><h3>Estimated lead exposure</h3>${leadRows}
         <div style="font-size:0.7rem; color:#6c7a89; margin-top:6px;">
-            Adjusted IHME: the area's IHME GBD 2021 blood-lead total (England county/UA; Wales/Scotland/NI nation) re-allocated within-area by UK-fitted weights on housing age &amp; deprivation. Illustrative, not a clinical estimate.
+            Adjusted IHME: the area's IHME GBD 2021 blood-lead total (England county/UA; Wales/Scotland/NI nation) re-allocated within-area by UK-fitted weights on housing age &amp; deprivation, then re-leveled so the UK mean matches GBD 2023 (1.06%, down from 1.81% in 2021). GBD 2023 has no usable UK sub-national split, so the 2021 pattern is kept and only the level is updated. Illustrative, not a clinical estimate.
         </div></section>`;
 
     // ── Housing age ──

@@ -38,6 +38,36 @@ ADJ_COLS = ["adj_rate_per_1000", "adj_children", "adj_prop_pct",
 NATIONS = ("England", "Wales", "Scotland", "Northern Ireland")
 PREDICTORS = ("pre1945", "imd")
 
+# --- Optional re-leveling to a newer GBD round (e.g. GBD 2023) ----------------
+# The baselines above come from the GBD 2021 round -- the last round that resolved
+# UK lead sub-nationally. A newer round (GBD 2023) gives lower *national* levels
+# but no English sub-national detail. If a newer-round "proportion above 5 ug/dL"
+# (= 50 ug/L) national CSV is dropped into this directory, re-level each area's
+# 2021 baseline by the ratio new/2021 at the finest geography present in BOTH
+# files (area -> nation -> UK). This shifts the level while preserving the 2021
+# within-area pattern. Additive: writes adj2023_* columns and leaves adj_* as-is,
+# so the live map is unchanged until the newer file is present and we rebuild.
+SCALE_YEAR = "2023"
+# The GBD 2023 download is one file per (year, sex); target the year+Both slice.
+# (The 2021 baseline file carries "_2021_BOTH_", so it is never matched here.)
+SCALE_GLOBS = (f"IHME_*PROP_ABOVE_*_{SCALE_YEAR}_BOTH_*.CSV",
+               f"IHME_*PROP_ABOVE_*_{SCALE_YEAR}_BOTH_*.csv")
+AGE_ALIASES = {"<20", "<20 years", "0 to 19", "0-19", "0 to 19 years",
+               "0-19 years"}
+ADJ2023_COLS = ["adj2023_prop_pct", "adj2023_rate_per_1000", "adj2023_children",
+                "scale_factor", "scale_geo", "prop2023_pct"]
+
+# How to re-level. GBD 2023 only resolves the UK to nation level, and those
+# splits are erratic and barely identified -- in 2023, England reads 0.03% and
+# Wales 21.0% above 5 ug/dL (Wales CI 5-48%), vs 1.58% / 4.71% in 2021. Treating
+# them as a spatial signal would scale Wales UP 4.5x and England to ~zero. So we
+# re-level by the UK NATIONAL decline only (a single factor, 1.06%/1.81% = 0.586)
+# and keep the 2021 within-UK pattern -- which is exactly why the 2021 round is
+# used sub-nationally in the first place. Flip to "best_geography" only if a
+# future round publishes credible UK sub-national lead estimates.
+SCALE_MODE = "uk_national"          # "uk_national" | "best_geography"
+SCALE_ANCHOR = "United Kingdom"
+
 
 def fnum(x):
     try:
@@ -97,13 +127,50 @@ def fit_weights(rows, prop, c2c):
             "r2": 1 - ss_res / ss_tot, "n": len(y)}
 
 
+def load_scale_props():
+    """Load a newer-round 'proportion above 5 ug/dL' national file, if present.
+
+    Returns (props_by_location, filename): proportions (as fractions) for
+    SCALE_YEAR, ages 0-19, sex Both. ({}, None) when no such file is in the dir.
+    The 2021 baseline file is not matched (its name carries 2021, not 2023)."""
+    matches = []
+    for g in SCALE_GLOBS:
+        matches += glob.glob(g)
+    matches = sorted(dict.fromkeys(matches))   # latest release (Y-date) sorts last
+    if not matches:
+        return {}, None
+    fn = matches[-1]
+    props, ages_seen = {}, set()
+    with open(fn, newline="", encoding="utf-8-sig") as f:
+        for r in csv.DictReader(f):
+            if r.get("measure_name") != "Proportion":
+                continue
+            if r.get("sex") not in (None, "", "Both"):
+                continue
+            if r.get("year_id") not in (None, "", SCALE_YEAR):
+                continue
+            ages_seen.add(r.get("age_group_name"))
+            if r.get("age_group_name") not in AGE_ALIASES:
+                continue
+            v = fnum(r.get("mean"))
+            if v is not None:
+                props[r["location_name"]] = v
+    if not props:
+        print(f"WARNING: {fn} parsed 0 matching rows (year {SCALE_YEAR}, "
+              f"ages 0-19, sex Both). Age labels present: "
+              f"{sorted(a for a in ages_seen if a)} -- check the codebook and "
+              f"extend AGE_ALIASES / SCALE_YEAR if the schema differs.")
+    return props, fn
+
+
 def main():
     prop = load_ihme_props()
     c2c = load_constituency_to_county()
 
     with open("constituency_profile.csv", newline="") as f:
         reader = csv.DictReader(f)
-        base_fields = [c for c in reader.fieldnames if c not in ADJ_COLS]
+        base_fields = [c for c in reader.fieldnames
+                       if c not in ADJ_COLS and c not in ADJ2023_COLS]
         rows = list(reader)
 
     for r in rows:
@@ -175,11 +242,54 @@ def main():
         r["baseline_area"] = r["_area"]
         r["baseline_ihme_pct"] = round(r["_p"] * 100, 2)
 
+    # Optional: re-level the 2021 baselines to a newer GBD round, if a newer
+    # national "proportion above 5" file is present. Scales each area by
+    # new/2021 at the finest geography in both files; preserves within-area shape.
+    scale_props, scale_fn = load_scale_props()
+    scaled_any = False
+    if scale_props:
+        def area_factor(r):
+            geos = ((SCALE_ANCHOR,) if SCALE_MODE == "uk_national"
+                    else (r["_area"], r["nation"], "United Kingdom"))
+            for geo in geos:
+                p_new, p_old = scale_props.get(geo), prop.get(geo)
+                if p_new is not None and p_old not in (None, 0):
+                    return p_new / p_old, geo, p_new
+            return None, None, None
+        factors_by_geo = {}
+        for r in rows:
+            if r.get("adj_prop_pct") in (None, ""):
+                for c in ADJ2023_COLS:
+                    r[c] = ""
+                continue
+            f_, geo, p_new = area_factor(r)
+            if f_ is None:
+                for c in ADJ2023_COLS:
+                    r[c] = ""
+                continue
+            ap = r["adj_prop_pct"] * f_
+            r["adj2023_prop_pct"] = round(ap, 2)
+            r["adj2023_rate_per_1000"] = round(ap * 10, 1)
+            r["adj2023_children"] = int(round(ap / 100 * r["_cp"]))
+            r["scale_factor"] = round(f_, 4)
+            r["scale_geo"] = geo
+            r["prop2023_pct"] = round(p_new * 100, 3)
+            factors_by_geo[geo] = round(f_, 4)
+            scaled_any = True
+        print(f"\nRe-leveled to {SCALE_YEAR} from {scale_fn} "
+              f"({len(scale_props)} locations).")
+        print(f"  scale factors (new/2021) by geography: {factors_by_geo}")
+    else:
+        print(f"\nNo {SCALE_YEAR} 'proportion above 5' national file found "
+              f"(looked for {SCALE_GLOBS[0]} etc.). adj2023_* not written -- the "
+              f"map keeps the GBD-2021 levels. Drop the GBD {SCALE_YEAR} "
+              f"'Proportion Above 50' national CSV in here and rerun to re-level.")
+
     for r in rows:
         for k in [k for k in r if k.startswith("_")]:
             del r[k]
 
-    out_fields = base_fields + ADJ_COLS
+    out_fields = base_fields + ADJ_COLS + (ADJ2023_COLS if scaled_any else [])
     with open("constituency_profile.csv", "w", newline="") as f:
         w = csv.DictWriter(f, fieldnames=out_fields)
         w.writeheader()
@@ -207,6 +317,20 @@ def _sanity(rows):
         print(f"    {r['adj_rate_per_1000']:5.1f}  {r['nation']:8} {r['PCON24NM']}")
     worst100 = sorted(data, key=lambda r: -r["adj_rate_per_1000"])[:100]
     print("\n  Worst-100 nation split:", dict(Counter(r["nation"] for r in worst100)))
+
+    data23 = [r for r in rows if r.get("adj2023_rate_per_1000") not in (None, "")]
+    if data23:
+        print(f"\n  --- re-leveled to {SCALE_YEAR} (nation means per 1,000) ---")
+        for nat in NATIONS:
+            sub = [r for r in data23 if r["nation"] == nat]
+            if not sub:
+                continue
+            den = sum(fnum(r["child_pop_0_19"]) for r in sub)
+            new = sum(r["adj2023_rate_per_1000"] * fnum(r["child_pop_0_19"])
+                      for r in sub) / den
+            old = sum(r["adj_rate_per_1000"] * fnum(r["child_pop_0_19"])
+                      for r in sub) / den
+            print(f"  {nat:18} {new:5.1f}  (GBD-2021 level was {old:5.1f})")
 
 
 if __name__ == "__main__":
